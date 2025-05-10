@@ -29,7 +29,7 @@ const page = () => {
       const data = await response.json();
       localStorage.setItem("accessToken", data.accessToken);
       console.log("Logged in");
-      router.push("/");
+      router.push("/home");
     } else {
       console.log("asdasdasd wtf");
     }

@@ -1,8 +1,10 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Link from "next/link";
 import { FaAngleRight, FaHome, FaUniversity } from "react-icons/fa";
 import { FaCalendarDay, FaCreditCard, FaList } from "react-icons/fa6";
 const page = () => {
+  const [selectedPage, setSelectedPage] = useState("Home");
   return (
     <div className="flex">
       <div className="w-1/5">
@@ -18,29 +20,83 @@ const page = () => {
         </ul>
 
         <ul className="space-y-4 bg-primary text-xl">
-          <li className="w-full flex items-center p-4 gap-4 rounded-full">
-            <FaHome />
-            Home
+          <li className="">
+            <button
+              className={` ${
+                selectedPage === "Home" && "bg-gray-500"
+              } w-full flex items-center p-4 gap-4 rounded-full`}
+              onClick={() => {
+                setSelectedPage("Home");
+                console.log(selectedPage);
+              }}
+            >
+              <FaHome />
+              Home
+            </button>
           </li>
-          <li className="w-full flex items-center p-4 gap-4 rounded-full">
-            <FaCreditCard />
-            Cards
+          <li className="">
+            <button
+              className="w-full flex items-center p-4 gap-4 rounded-full"
+              onClick={() => {
+                setSelectedPage("Cards");
+                console.log(selectedPage);
+              }}
+            >
+              {" "}
+              <FaCreditCard />
+              Cards{" "}
+            </button>
           </li>
-          <li className="w-full flex items-center p-4 gap-4 rounded-full">
-            <FaList />
-            Transactions
+          <li className="">
+            <button
+              className="w-full flex items-center p-4 gap-4 rounded-full"
+              onClick={() => {
+                setSelectedPage("Transactions");
+                console.log(selectedPage);
+              }}
+            >
+              {" "}
+              <FaList />
+              Transactions{" "}
+            </button>
           </li>
-          <li className="w-full flex items-center p-4 gap-4 rounded-full">
-            <FaList />
-            Payments
+          <li className="">
+            <button
+              className="w-full flex items-center p-4 gap-4 rounded-full"
+              onClick={() => {
+                setSelectedPage("Payments");
+                console.log(selectedPage);
+              }}
+            >
+              {" "}
+              <FaList />
+              Payments{" "}
+            </button>
           </li>
-          <li className="w-full flex items-center p-4 gap-4 rounded-full">
-            <FaList />
-            Recipients
+          <li className="">
+            <button
+              className="w-full flex items-center p-4 gap-4 rounded-full"
+              onClick={() => {
+                setSelectedPage("Recipients");
+                console.log(selectedPage);
+              }}
+            >
+              {" "}
+              <FaList />
+              Recipients
+            </button>
           </li>
-          <li className="w-full flex items-center p-4 gap-4 rounded-full">
-            <FaList />
-            Insights
+          <li className="">
+            <button
+              className="w-full flex items-center p-4 gap-4 rounded-full"
+              onClick={() => {
+                setSelectedPage("Home");
+                console.log(selectedPage);
+              }}
+            >
+              {" "}
+              <FaList /> Insights
+            </button>
           </li>
         </ul>
       </div>
