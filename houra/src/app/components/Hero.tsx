@@ -15,16 +15,16 @@ const Hero = () => {
           </p>
         </div>
         <h1 className="font-sans font-black text-9xl uppercase text-center">
-          One timer to save and spend time
+          Time is Currency. Spend It Wisely.
         </h1>
         <p className="text-2xl font-semibold text-gray-500 px-54 py-8 text-center">
-          Make your money work worldwide, for less. Send, spend and get paid. 40
-          currencies. All at your fingertips.
+          A timer app that works like a bank. Buy, spend, and save time for any
+          activity.
         </p>
 
         <div className="flex justify-center gap-8 font-semibold text-lg">
           <button className="rounded-full px-8 py-4 bg-primary">
-            Open an account
+            Start Managing Your Time
           </button>
           <button className="underline underline-offset-4">
             How does it work?
@@ -81,14 +81,18 @@ const Hero = () => {
       </div>
       <div className="bg-primary h-screen flex py-36 justify-center items-center">
         <div className="flex-col w-2/3 p-46">
-          <h4 className="text-4xl font-bold py-6">Save on fees when sending money abroad</h4>
-          <p className="pb-8" >
+          <h4 className="text-4xl font-bold py-6">
+            Save on fees when sending money abroad
+          </h4>
+          <p className="pb-8">
             Whether it’s 50 euros or 50,000 dollars, sending money shouldn't
             cost the earth. Wise lets you transfer money internationally, free
             from hidden fees. Try our calculator to see how much you can save
             versus high street banks.
           </p>
-          <button className="bg-secondary px-8 py-4 text-primary font-bold rounded-full">Learn how to send money</button>
+          <button className="bg-secondary px-8 py-4 text-primary font-bold rounded-full">
+            Learn how to send money
+          </button>
         </div>
         <div className="bg-white h-full w-1/3 mx-12">asd asd asd asd </div>
       </div>
