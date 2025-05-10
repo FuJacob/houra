@@ -40,7 +40,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${work_sans.variable} antialiased max-w-7xl mx-auto px-2`}
       >
-        <Navigation />
+        {/* <Navigation /> */}
         {children}
       </body>
     </html>

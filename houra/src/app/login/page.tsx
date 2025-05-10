@@ -28,7 +28,7 @@ const page = () => {
     if (response.ok) {
       const data = await response.json();
       localStorage.setItem("accessToken", data.accessToken);
-      console.log("YEAS");
+      console.log("Logged in");
       router.push("/");
     } else {
       console.log("asdasdasd wtf");
