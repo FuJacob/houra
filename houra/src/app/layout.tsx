@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Poppins, Inter } from "next/font/google";
+import { League_Spartan, Inter } from "next/font/google";
 import Navigation from "./components/Navigation";
 import "./globals.css";
 
-const work_sans = Poppins({
+const work_sans = League_Spartan({
   variable: "--font-work-sans",
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],

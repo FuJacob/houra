@@ -35,6 +35,7 @@ router.post("/signup", async (req, res) => {
     console.log(hashedPassword);
 
     const user = new User({
+      name: data.name,
       email: data.email,
       password: hashedPassword,
     });
@@ -65,16 +66,7 @@ router.post("/login", async (req, res) => {
         const user = { email: data.email };
         const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
 
-        //   // storing JWT in HTTP only cookie
-        //   res.cookie("accessToken", accessToken, {
-        //       httpOnly: true,
-        //       sameSite: "Strict"
-        //   });
-
-          console.log("Success login ");
-
-          // buggged af here btw do not do this
-        // localStorage.setItem("accessToken", accessToken);
+        console.log("Success login ");
         return res
           .status(200)
           .json({ message: "Logged in succesfully", accessToken: accessToken });
