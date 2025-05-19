@@ -10,10 +10,8 @@ interface Account {
 
 export default function AddAccountModal({
   setShowAddAccountModal,
-  setAccounts,
 }: {
   setShowAddAccountModal: Dispatch<SetStateAction<boolean>>;
-  setAccounts: Dispatch<SetStateAction<Account[]>>;
 }) {
   const [newAccount, setNewAccount] = useState<Account>({
     accountName: "",
@@ -21,9 +19,22 @@ export default function AddAccountModal({
     reloadFreq: "",
   });
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setAccounts((prev) => [...prev, newAccount]);
+    const response = await fetch("/api/user/addAccount", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newAccount),
+    });
+
+    const data = await response.json();
+    if (data.error) {
+      console.error(data.error);
+      return;
+    }
+    console.log("Account created successfully", data);
     setShowAddAccountModal(false);
   };
 

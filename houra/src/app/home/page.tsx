@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import Link from "next/link";
 import { FaAngleRight, FaHome, FaUniversity } from "react-icons/fa";
 import { FaCalendarDay, FaCreditCard, FaList } from "react-icons/fa6";
@@ -22,27 +22,59 @@ interface Account {
   accountBalance: number;
   reloadFreq: string;
 }
-const tempDataSet = [
-  {
-    accountName: "VALORANT",
-    accountBalance: 30,
-    reloadReq: "monthly",
-  },
-];
 
-const page = () => {
+interface User {
+  name: string;
+  email: string;
+  password: string;
+  accounts: Account[];
+}
+
+// const tempDataSet = [
+//   {
+//     accountName: "VALORANT",
+//     accountBalance: 30,
+//     reloadReq: "monthly",
+//   },
+// ];
+
+const Page = () => {
   const [selectedPage, setSelectedPage] = useState("Home");
-  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [currentUser, setCurrentUser] = useState<User>({
+    name: "",
+    email: "",
+    password: "",
+    accounts: [],
+  });
   const [newAccount, setNewAccount] = useState<Account>({
     accountName: "",
     accountBalance: 0,
     reloadFreq: "",
   });
   const [showAddAccountModal, setShowAddAccountModal] = useState(false);
-  const addAccount = () => {
-    try {
-    } catch (error) {}
-  };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const accessToken = localStorage.getItem("accessToken");
+      console.log("Access Token:", accessToken);
+      const response = await fetch("http://localhost:4500/api/auth/getUser", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const data = await response.json();
+      console.log(data);
+      if (data.error) {
+        console.error(data.error);
+        return;
+      }
+      setCurrentUser(data.user);
+    };
+    fetchUser();
+  }, []);
+
   return (
     <HomeContext.Provider value={{ selectedPage, setSelectedPage }}>
       <div className="flex">
@@ -58,7 +90,7 @@ const page = () => {
                   src=""
                   alt=""
                 />
-                Jacob Fu
+                {currentUser?.name || "User"}
                 <FaAngleRight />
               </li>
             </ul>
@@ -86,9 +118,9 @@ const page = () => {
             {showAddAccountModal && (
               <AddAccountModal
                 setShowAddAccountModal={setShowAddAccountModal}
-                setAccounts={setAccounts}
               />
             )}
+
             <div className="py-12">
               <h2 className="text-2xl pb-4">Tasks</h2>
               <div className="bg-gray-200 w-full flex items-center justify-between p-4 rounded-2xl">
@@ -127,4 +159,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

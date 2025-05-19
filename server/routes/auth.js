@@ -4,29 +4,11 @@ const User = require("../models/users");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const authenticateToken = require("../middleware/authenticateToken").default; // Corrected import
 router.get("/test", (req, res) => {
   res.send("Hello");
 });
 
-function authenticateToken(req, res, nex) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-
-  if (token == NULL) {
-    return res
-      .status(401)
-      .json({ message: "Error with auth token. Did not exist" });
-  }
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) {
-      return res
-        .status(401)
-        .json({ message: "Unsuccessful authorization with JWT." });
-    }
-    req.user = user;
-    next();
-  });
-}
 router.post("/signup", async (req, res) => {
   try {
     const salt = await bcrypt.genSalt();
@@ -49,6 +31,23 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+router.get("/getUser", authenticateToken, async (req, res) => {
+  try {
+    const currentUser = req.user;
+    console.log("CURRENT USER:", currentUser);
+
+    res.status(200).json({
+      message: "Successfully got user.",
+      user: currentUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error with getting user.",
+      error: error,
+    });
+  }
+});
+
 router.post("/login", async (req, res) => {
   try {
     const data = req.body;
@@ -63,10 +62,10 @@ router.post("/login", async (req, res) => {
       console.log(passwordMatch);
       if (passwordMatch) {
         // creat the JWT
-        const user = { email: data.email };
+        const user = { name: userExists.name, email: data.email };
         const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
 
-        console.log("Success login ");
+        console.log("Success login, here is the JWT token: ", accessToken);
         return res
           .status(200)
           .json({ message: "Logged in succesfully", accessToken: accessToken });
