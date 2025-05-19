@@ -5,6 +5,8 @@ import { FaAngleRight, FaHome, FaUniversity } from "react-icons/fa";
 import { FaCalendarDay, FaCreditCard, FaList } from "react-icons/fa6";
 import Timer from "./components/Timer";
 import Sidebar from "./components/Sidebar";
+import AccountBox from "./components/AccountBox";
+import AddAccountModal from "./components/AddAccountModal";
 interface HomeContextType {
   selectedPage: string;
   setSelectedPage: React.Dispatch<React.SetStateAction<string>>;
@@ -14,8 +16,33 @@ export const HomeContext = createContext<HomeContextType>({
   selectedPage: "Home",
   setSelectedPage: () => {},
 });
+
+interface Account {
+  accountName: string;
+  accountBalance: number;
+  reloadFreq: string;
+}
+const tempDataSet = [
+  {
+    accountName: "VALORANT",
+    accountBalance: 30,
+    reloadReq: "monthly",
+  },
+];
+
 const page = () => {
   const [selectedPage, setSelectedPage] = useState("Home");
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [newAccount, setNewAccount] = useState<Account>({
+    accountName: "",
+    accountBalance: 0,
+    reloadFreq: "",
+  });
+  const [showAddAccountModal, setShowAddAccountModal] = useState(false);
+  const addAccount = () => {
+    try {
+    } catch (error) {}
+  };
   return (
     <HomeContext.Provider value={{ selectedPage, setSelectedPage }}>
       <div className="flex">
@@ -47,24 +74,21 @@ const page = () => {
               <li>Request</li>
             </ul>
 
-            <ul className="">
-              <li className="p-4 bg-gray-200 w-64 h-54 rounded-2xl flex-col flex justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="rounded-full w-12 h-12 bg-white flex justify-center items-center ">
-                    CAD
-                  </div>{" "}
-                  <h2 className="text-xl font-semibold">CAD</h2>
-                </div>{" "}
-                <div className="">
-                  <p className="flex items-center gap-2 text-gray-500 pb-1">
-                    <FaUniversity />
-                    31231231
-                  </p>
-                  <h3 className="font-semibold text-2xl">30.00</h3>
-                </div>
-              </li>
+            <ul className="flex items-center gap-4">
+              <AccountBox accountBalance={30.0} accountName="VALORANT" />
+              <button
+                onClick={() => setShowAddAccountModal((prev) => !prev)}
+                className="flex justify-center items-center bg-primary w-12 h-12 rounded-full"
+              >
+                +
+              </button>
             </ul>
-
+            {showAddAccountModal && (
+              <AddAccountModal
+                setShowAddAccountModal={setShowAddAccountModal}
+                setAccounts={setAccounts}
+              />
+            )}
             <div className="py-12">
               <h2 className="text-2xl pb-4">Tasks</h2>
               <div className="bg-gray-200 w-full flex items-center justify-between p-4 rounded-2xl">
