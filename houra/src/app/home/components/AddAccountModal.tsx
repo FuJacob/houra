@@ -1,22 +1,17 @@
 "use client";
-import { Dispatch, SetStateAction } from "react";
-import { FaX } from "react-icons/fa6";
 import { useState } from "react";
-interface Account {
-  accountName: string;
-  accountBalance: number;
-  reloadFreq: string;
-}
+import { FaX } from "react-icons/fa6";
+import { Account, AddAccountModalProps } from "@/types/types";
 
 export default function AddAccountModal({
   setShowAddAccountModal,
-}: {
-  setShowAddAccountModal: Dispatch<SetStateAction<boolean>>;
-}) {
+}: AddAccountModalProps) {
   const [newAccount, setNewAccount] = useState<Account>({
+    accountNumber: 0,
     accountName: "",
     accountBalance: 0,
     reloadFreq: "",
+    timeLeft: 0,
   });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -34,26 +29,21 @@ export default function AddAccountModal({
       console.error(data.error);
       return;
     }
-    console.log("Account created successfully", data);
     setShowAddAccountModal(false);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-
-    setNewAccount((prev) => {
-      return {
-        ...prev,
-        [name]: value,
-      };
-    });
+    setNewAccount((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
     <div className="fixed inset-0 flex justify-center items-center">
       <div className="inset-0 fixed bg-gray-700 opacity-30" />
       <form
-        action=""
         onSubmit={handleSubmit}
         className="flex flex-col gap-2 bg-white rounded-2xl shadow-xl opacity-100 z-50 p-12 w-1/4"
       >
@@ -77,21 +67,33 @@ export default function AddAccountModal({
             className="border-1 p-2 rounded-xl mb-2"
           />
 
-          <label htmlFor="accountBalance">Account balance</label>
+          <label htmlFor="accountBalance">Account balance (hours)</label>
           <input
+            onChange={handleChange}
             name="accountBalance"
-            id="accountName"
+            id="accountBalance"
             type="number"
-            placeholder="YouTube"
+            placeholder="2"
             className="border-1 p-2 rounded-xl mb-2"
           />
 
           <label htmlFor="reloadFreq">Reload Frequency</label>
           <input
+            onChange={handleChange}
             name="reloadFreq"
             id="reloadFreq"
             type="text"
-            placeholder="YouTube"
+            placeholder="daily"
+            className="border-1 p-2 rounded-xl mb-2"
+          />
+
+          <label htmlFor="timeLeft">Time Left (seconds)</label>
+          <input
+            onChange={handleChange}
+            name="timeLeft"
+            id="timeLeft"
+            type="number"
+            placeholder="7200"
             className="border-1 p-2 rounded-xl mb-2"
           />
         </div>
@@ -102,7 +104,7 @@ export default function AddAccountModal({
           >
             Create Account
           </button>
-        </div>{" "}
+        </div>
       </form>
     </div>
   );

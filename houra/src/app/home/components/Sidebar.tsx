@@ -49,7 +49,7 @@ export default function Sidebar() {
       <ul className="py-12">
         <li className="font-black font-sans text-4xl italic">HOURA</li>
       </ul>
-      <ul className="space-y-2 bg-primary text-xl">
+      <ul className="text-xl rounded-full mr-3">
         {sidebarItems.map((item) => (
           <SidebarButton
             key={item.id}

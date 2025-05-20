@@ -1,27 +1,17 @@
 import { useContext } from "react";
 import { HomeContext } from "../page";
-
-import { IconType } from "react-icons";
-
-interface SidebarButtonProps {
-  id: string;
-  icon: any;
-  label: string;
-}
+import { SidebarButtonProps } from "@/types/types";
 
 const SidebarButton = ({ id, icon: Icon, label }: SidebarButtonProps) => {
   const { selectedPage, setSelectedPage } = useContext(HomeContext);
+
   return (
     <li>
-       
       <button
-        className={` ${
-          selectedPage === id && "bg-gray-500"
+        className={`${
+          selectedPage === id && "bg-gray-200"
         } w-full flex items-center p-4 gap-4 rounded-full`}
-        onClick={() => {
-          setSelectedPage(id);
-          console.log(selectedPage);
-        }}
+        onClick={() => setSelectedPage(id)}
       >
         <Icon />
         {label}
@@ -29,4 +19,5 @@ const SidebarButton = ({ id, icon: Icon, label }: SidebarButtonProps) => {
     </li>
   );
 };
+
 export default SidebarButton;
