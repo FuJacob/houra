@@ -78,8 +78,22 @@ router.post("/addAccount", authenticateToken, async (req, res) => {
       // Return appropriate success or error response
       return res.status(400).json({ message: "Missing account fields." });
     }
+
+    let accountNumber;
+    while (true) {
+      const randomNumber = generateAccountNumber();
+
+      const userExists = await User.findOne({
+        "accounts.accountNumber": randomNumber,
+      });
+      if (!userExists) {
+        accountNumber = randomNumber;
+        break;
+      }
+    }
+
     const newAccount = {
-      accountNumber: generateAccountNumber(),
+      accountNumber: accountNumber,
       accountName: data.accountName,
       accountBalance: data.accountBalance, // Make sure 'balance' is the correct field name from the request
       reloadFreq: data.reloadFreq,
@@ -160,4 +174,43 @@ router.delete("/deleteAccount", authenticateToken, async (req, res) => {
   }
 });
 // Export the router to be used in server configuration
+
+router.post("/updateAccount", authenticateToken, async (req, res) => {
+  // POST /updateAccount - Updates an account by accountNumber for the authenticated user
+  try {
+    const email = req.user.email;
+    const { accountNumber, accountBalance } = req.body;
+
+    if (!accountNumber || accountBalance == null) {
+      return res.status(400).json({ message: "Missing account fields." });
+    }
+
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const account = user.accounts.find(
+      (acc) => acc.accountNumber === accountNumber
+    );
+    if (!account) {
+      return res.status(404).json({ message: "Account not found." });
+    }
+
+    account.accountBalance = accountBalance;
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Account updated successfully.",
+      user: user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error with updating account.",
+      error: error,
+    });
+  }
+});
+
 module.exports = router;

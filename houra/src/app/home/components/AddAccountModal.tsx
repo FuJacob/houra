@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FaX } from "react-icons/fa6";
 import { Account, AddAccountModalProps } from "@/types/types";
-
+import { CurrentUserContext } from "@/app/home/page";
 export default function AddAccountModal({
   setShowAddAccountModal,
 }: AddAccountModalProps) {
@@ -11,25 +11,40 @@ export default function AddAccountModal({
     accountName: "",
     accountBalance: 0,
     reloadFreq: "",
-    timeLeft: 0,
   });
 
+  const { setCurrentUser } = useContext(CurrentUserContext);
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const response = await fetch("/api/user/addAccount", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newAccount),
-    });
 
-    const data = await response.json();
-    if (data.error) {
-      console.error(data.error);
-      return;
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await fetch(
+        "http://localhost:4500/api/accounts/addAccount",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(newAccount),
+        }
+      );
+
+      const data = await response.json();
+      if (data.error) {
+        console.error(data.error);
+        return;
+      }
+      setCurrentUser((prev) => ({
+        ...prev,
+        accounts: [...prev.accounts, newAccount],
+      }));
+
+      setShowAddAccountModal(false);
+    } catch (error) {
+      console.error(error);
     }
-    setShowAddAccountModal(false);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,16 +99,6 @@ export default function AddAccountModal({
             id="reloadFreq"
             type="text"
             placeholder="daily"
-            className="border-1 p-2 rounded-xl mb-2"
-          />
-
-          <label htmlFor="timeLeft">Time Left (seconds)</label>
-          <input
-            onChange={handleChange}
-            name="timeLeft"
-            id="timeLeft"
-            type="number"
-            placeholder="7200"
             className="border-1 p-2 rounded-xl mb-2"
           />
         </div>

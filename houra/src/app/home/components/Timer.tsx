@@ -10,7 +10,6 @@ import { FaUniversity } from "react-icons/fa";
 export default function Timer() {
   // Account interface defines the expected structure of an account object
   interface Account {
-    email: string;
     accountNumber: number;
     accountName: string;
     accountBalance: number;
@@ -33,30 +32,10 @@ export default function Timer() {
   );
   const [secondsLeft, setSecondsLeft] = useState(state.timeLeft % 60);
 
-
   useEffect(() => {
-    const fetchAccount = async () => {
-      try {
-        console.log("Fetching account");
-        const response = await fetch(
-          `/api/accounts/getAccount?accountNumber=${selectedAccount}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await response.json();
-        console.log(data);
-        dispatch(setTimeLeft(data.account.timeLeft));
-      } catch (error) {
-        console.error(error);
-        return;
-      }
-    };
-
-    fetchAccount();
+    dispatch(setTimeLeft(selectedAccount.accountNumber));
+    console.log(selectedAccount);
+    dispatch(setRunning(false));
   }, [selectedAccount]);
   // Effect runs every second when the timer is running
   useEffect(() => {
@@ -79,6 +58,16 @@ export default function Timer() {
     return () => clearInterval(interval);
   }, [state.running, state.timeLeft]);
 
+  useEffect(() => {
+    /**
+     * 
+     * asdasd
+     * asdasd
+     * asd
+     * asd
+     */
+  }, [state.timeLeft]);
+
   return (
     <div className="flex flex-col justify-center items-center w-full bg-primary rounded-xl p-12">
       {/* Informative label showing how much time is left */}
@@ -100,25 +89,25 @@ export default function Timer() {
       >
         <div className="flex items-center gap-2">
           <div className="rounded-full w-12 h-12 bg-white flex justify-center items-center text-red-600">
-            {/* {accountName?.slice(0, 3)} */}
+            {selectedAccount.accountName?.slice(0, 3)}
           </div>
-          {/* <h2 className="text-xl">{accountName}</h2> */}
+          <h2 className="text-xl">{selectedAccount.accountName}</h2>
         </div>
         <div>
           <p className="flex items-center gap-2 text-red-200 pb-1">
             <FaUniversity />
-            {/* {accountNumber} */}
+            {selectedAccount.accountNumber}
           </p>
-          {/* <h3 className="text-2xl">{accountBalance}h</h3> */}
+          <h3 className="text-2xl">{selectedAccount.accountBalance}h</h3>
         </div>
       </button>{" "}
       {/* Start/Pause toggle button */}
-      {/* <button
+      <button
         onClick={() => dispatch(setRunning(!state.running))}
         className="bg-background px-8 py-4 rounded-full text-2xl font-semibold"
       >
         {state.running ? "Pause" : "Start"}
-      </button>{" "} */}
+      </button>{" "}
     </div>
   );
 }

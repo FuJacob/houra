@@ -11,6 +11,7 @@ import AccountMenuButton from "./components/AccountMenuButton";
 import {
   HomeContextType,
   AccountContextType,
+  CurrentUserContextType,
   User,
   Account,
 } from "@/types/types";
@@ -21,12 +22,33 @@ export const HomeContext = createContext<HomeContextType>({
 });
 
 export const selectedAccountContext = createContext<AccountContextType>({
-  selectedAccount: 0,
+  selectedAccount: {
+    accountNumber: 0,
+    accountName: "",
+    accountBalance: 0,
+    reloadFreq: "",
+  },
   setSelectedAccount: () => {},
 });
 
+export const CurrentUserContext = createContext<CurrentUserContextType>({
+  currentUser: {
+    name: "",
+    email: "",
+    password: "",
+    accounts: [],
+  },
+  setCurrentUser: () => {},
+});
+
 const Page = () => {
-  const [selectedAccount, setSelectedAccount] = useState<number>(0);
+  const [selectedAccount, setSelectedAccount] = useState<Account>({
+    accountNumber: 0,
+    accountName: "",
+    accountBalance: 0,
+    reloadFreq: "",
+  });
+
   const [selectedPage, setSelectedPage] = useState("Home");
   const [currentUser, setCurrentUser] = useState<User>({
     name: "",
@@ -39,8 +61,9 @@ const Page = () => {
     accountName: "",
     accountBalance: 0,
     reloadFreq: "",
-    timeLeft: 0,
   });
+
+  const [accounts, setAccounts] = useState<Account[]>([]);
   const [showAddAccountModal, setShowAddAccountModal] = useState(false);
 
   useEffect(() => {
@@ -100,82 +123,82 @@ const Page = () => {
       <selectedAccountContext.Provider
         value={{ selectedAccount, setSelectedAccount }}
       >
-        <div className="flex">
-          <Sidebar />
-          <div className="w-4/5 flex-col">
-            <nav className="flex justify-end items-center py-12">
-              <ul className="flex items-center justify-center gap-8">
-                <li className="bg-primary px-4 py-2 rounded-full">
-                  Earn CA$115
-                </li>
-                <AccountMenuButton name={currentUser?.name || "User"} />
-              </ul>
-            </nav>
+        <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
+          <div className="flex">
+            <Sidebar />
+            <div className="w-4/5 flex-col">
+              <nav className="flex justify-end items-center py-12">
+                <ul className="flex items-center justify-center gap-8">
+                  <li className="bg-primary px-4 py-2 rounded-full">
+                    Earn CA$115
+                  </li>
+                  <AccountMenuButton name={currentUser?.name || "User"} />
+                </ul>
+              </nav>
 
-            <div className="flex-col w-full">
-              <Timer />
+              <div className="flex-col w-full">
+                <Timer />
 
-              <ul className="flex items-center gap-4 overflow-x-auto">
-                {currentUser.accounts?.map((account, index) => (
-                  <AccountBox
-                    key={`${account.accountNumber}-${index}`}
-                    accountNumber={account.accountNumber}
-                    accountBalance={account.accountBalance}
-                    accountName={account.accountName}
+                <ul className="flex items-center gap-4 overflow-x-auto">
+                  {currentUser.accounts?.map((account, index) => (
+                    <AccountBox
+                      key={`${account.accountNumber}-${index}`}
+                      account={account}
+                    />
+                  ))}
+                  <button
+                    onClick={() => setShowAddAccountModal((prev) => !prev)}
+                    className="flex justify-center items-center bg-primary w-12 h-12 rounded-full"
+                  >
+                    +
+                  </button>
+                </ul>
+
+                {showAddAccountModal && (
+                  <AddAccountModal
+                    setShowAddAccountModal={setShowAddAccountModal}
                   />
-                ))}
-                <button
-                  onClick={() => setShowAddAccountModal((prev) => !prev)}
-                  className="flex justify-center items-center bg-primary w-12 h-12 rounded-full"
-                >
-                  +
-                </button>
-              </ul>
+                )}
 
-              {showAddAccountModal && (
-                <AddAccountModal
-                  setShowAddAccountModal={setShowAddAccountModal}
-                />
-              )}
-
-              <div className="py-12">
-                <h2 className="text-2xl pb-4">Tasks</h2>
-                <div className="bg-gray-200 w-full flex items-center justify-between p-4 rounded-2xl">
-                  <div className="flex items-center gap-4">
-                    <div className="bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
-                      +
+                <div className="py-12">
+                  <h2 className="text-2xl pb-4">Tasks</h2>
+                  <div className="bg-gray-200 w-full flex items-center justify-between p-4 rounded-2xl">
+                    <div className="flex items-center gap-4">
+                      <div className="bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
+                        +
+                      </div>
+                      <div className="flex-col">
+                        <h3>Adding money paused</h3>
+                        <p>We couldn't add money to your balances</p>
+                      </div>
                     </div>
-                    <div className="flex-col">
-                      <h3>Adding money paused</h3>
-                      <p>We couldn't add money to your balances</p>
+                    <div className="rounded-full px-4 py-2 bg-primary">
+                      Review
                     </div>
-                  </div>
-                  <div className="rounded-full px-4 py-2 bg-primary">
-                    Review
                   </div>
                 </div>
-              </div>
 
-              <div className="py-12">
-                <h2 className="text-2xl pb-4">Transactions</h2>
-                <div className="bg-gray-200 w-full flex items-center justify-between p-4 rounded-2xl">
-                  <div className="flex items-center gap-4">
-                    <div className="bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
-                      +
+                <div className="py-12">
+                  <h2 className="text-2xl pb-4">Transactions</h2>
+                  <div className="bg-gray-200 w-full flex items-center justify-between p-4 rounded-2xl">
+                    <div className="flex items-center gap-4">
+                      <div className="bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
+                        +
+                      </div>
+                      <div className="flex-col">
+                        <h3>Adding money paused</h3>
+                        <p>We couldn't add money to your balances</p>
+                      </div>
                     </div>
-                    <div className="flex-col">
-                      <h3>Adding money paused</h3>
-                      <p>We couldn't add money to your balances</p>
+                    <div className="rounded-full px-4 py-2 bg-primary">
+                      Review
                     </div>
-                  </div>
-                  <div className="rounded-full px-4 py-2 bg-primary">
-                    Review
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </CurrentUserContext.Provider>
       </selectedAccountContext.Provider>
     </HomeContext.Provider>
   );

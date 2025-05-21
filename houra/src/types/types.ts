@@ -7,15 +7,14 @@ export interface HomeContextType {
 }
 
 export interface AccountContextType {
-  selectedAccount: number;
-  setSelectedAccount: React.Dispatch<React.SetStateAction<number>>;
+  selectedAccount: Account;
+  setSelectedAccount: React.Dispatch<React.SetStateAction<Account>>;
 }
 
 export interface Account {
   accountNumber: number;
   accountName: string;
   accountBalance: number;
-  timeLeft: number;
   reloadFreq: string;
 }
 
@@ -40,4 +39,9 @@ export interface AccountBoxProps {
 
 export interface AddAccountModalProps {
   setShowAddAccountModal: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface CurrentUserContextType {
+  currentUser: User;
+  setCurrentUser: Dispatch<SetStateAction<User>>;
 }
