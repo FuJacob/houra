@@ -4,8 +4,7 @@ import { useReducer, useEffect, useState } from "react";
 import { reducer, setRunning, setTimeLeft } from "./TimeReducer";
 import { useContext } from "react";
 import { selectedAccountContext } from "../page";
-import { FaUniversity } from "react-icons/fa";
-import AccountBox from "./AccountBox";
+
 
 interface Account {
   accountNumber: number;
@@ -27,9 +26,9 @@ export default function Timer() {
   });
 
   // Separate state values for hours, minutes, and seconds display
-  let hoursLeft = Math.floor(state.timeLeft / 3600);
-  let minutesLeft = Math.floor((state.timeLeft % 3600) / 60);
-  let secondsLeft = state.timeLeft % 60;
+  const hoursLeft = Math.floor(state.timeLeft / 3600);
+  const minutesLeft = Math.floor((state.timeLeft % 3600) / 60);
+  const secondsLeft = state.timeLeft % 60;
 
   // changed selected Account?
   useEffect(() => {
