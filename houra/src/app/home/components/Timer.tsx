@@ -5,7 +5,6 @@ import { reducer, setRunning, setTimeLeft } from "./TimeReducer";
 import { useContext } from "react";
 import { selectedAccountContext } from "../page";
 
-
 interface Account {
   accountNumber: number;
   accountName: string;
@@ -89,13 +88,19 @@ export default function Timer() {
   // update time
   return (
     <div
-      className={`flex flex-col items-center justify-center py-20 px-4 border-background  border-6 transition-all duration-300 rounded-2xl`}
+      className={`flex flex-col items-center justify-center p-12 border-background border-6 transition-all duration-300 rounded-2xl`}
       style={{
         borderColor: selectedAccount.colour,
       }}
     >
+      <div className="text-5xl font-light flex justify-between w-full h-[60px]">
+        {selectedAccount.accountNumber === 0
+          ? ""
+          : selectedAccount.accountName}
+      </div>
+
       {/* Main timer display */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-8 p-16">
         <h1 className="font-mono text-[200px] leading-none tracking-tighter text-gray-900 font-light">
           {hoursLeft < 10 ? `0${hoursLeft}` : hoursLeft}:
           {minutesLeft < 10 ? `0${minutesLeft}` : minutesLeft}:
@@ -113,18 +118,31 @@ export default function Timer() {
         <button
           onClick={() => dispatch(setRunning(!state.running))}
           className={`
-  px-12 py-4 rounded-full text-lg font-medium transition-all
-  ${
-    selectedAccount.accountNumber === 0
-      ? "bg-gray-50 text-gray-200 cursor-not-allowed"
-      : state.running
-      ? "bg-red-50 text-red-600 hover:bg-red-100"
-      : "bg-green-50 text-green-600 hover:bg-green-100"
-  }
-`}
+            px-12 py-4 rounded-full text-lg font-medium transition-all
+            ${
+              selectedAccount.accountNumber === 0
+                ? "bg-gray-50 text-gray-200 cursor-not-allowed"
+                : state.running
+                ? "bg-red-50 text-red-600 hover:bg-red-100"
+                : "bg-green-50 text-green-600 hover:bg-green-100"
+            }
+          `}
         >
           {state.running ? "Pause" : "Start"}
         </button>
+      </div>
+
+      <div className="flex text-2xl justify-between items-end w-full mt-8">
+        <div className="flex items-center text-foreground/60">
+          <span>
+            {selectedAccount.accountNumber === 0
+              ? "••••"
+              : `•••• ${selectedAccount.accountNumber.toString().slice(-4)}`}
+          </span>
+        </div>
+        <h3 className="text-foreground font-light">
+          {selectedAccount.accountNumber === 0 ? "" : "Current in use"}
+        </h3>
       </div>
     </div>
   );

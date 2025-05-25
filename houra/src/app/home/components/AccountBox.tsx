@@ -28,7 +28,13 @@ const AccountBox = ({ account }: { account: Account }) => {
           setSelectedAccount(account);
         }
       }}
-      className="w-full h-52 relative group transition-all duration-300 transform hover:scale-105"
+      className={`w-full h-58 relative group transition-all duration-300 transform hover:scale-105 ${
+        selectedAccount.accountNumber === 0
+          ? ""
+          : selectedAccount.accountNumber === account.accountNumber
+          ? "opacity-100"
+          : "opacity-20"
+      }`}
     >
       {/* Card background with gradient */}
       <div
@@ -51,12 +57,14 @@ const AccountBox = ({ account }: { account: Account }) => {
             </div>
           </div>
         </div>
-
+        <div>
+          {" "}
+          <img src="chip.png" className="w-14 h-10" />
+        </div>
         {/* Bottom section */}
-        <div className="space-y-3">
+        <div className="flex justify-between items-end">
           <div className="flex items-center text-foreground/60 text-sm">
-            <FaUniversity className="mr-2" />
-            <span>#{account.accountNumber.toString().padStart(4, "0")}</span>
+            <span>•••• {account.accountNumber.toString().slice(-4)}</span>
           </div>
           <h3 className="text-foreground text-2xl font-light">
             {hours}h {minutes}m {seconds}s
