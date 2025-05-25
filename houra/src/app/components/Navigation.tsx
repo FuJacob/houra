@@ -1,44 +1,55 @@
 import React from "react";
 import Link from "next/link";
+
 const Navigation = () => {
   return (
-    <div className="sticky top-0 z-50 flex-col flex justify-center items-center">
-      <nav className=" py-8 font-semibold bg-background w-screen flex items-center justify-center">
-        <div className="max-w-7xl w-full px-4">
-          <div className="flex justify-between items-center">
-            <ul className="flex gap-4 items-center">
-              <li className="font-black font-sans text-2xl italic mr-6">
-                <Link href="">HOURA</Link>
-              </li>
-              <li className="rounded-full px-4 py-1 bg-primary">
-                <Link href="">Home</Link>
-              </li>
-              <li>
-                <Link href="">Features</Link>
-              </li>
-              <li>
-                <Link href="">Support the Team</Link>
-              </li>
-            </ul>
-            <ul className="flex gap-4 items-center">
-              <li>
-                <Link href="">How it works</Link>
-              </li>
-              <li>
-                <Link href="">About</Link>
-              </li>
-              <li>
-                <Link href="/login">Log in</Link>
-              </li>
-              <li>
-                <Link
-                  href="/signup"
-                  className="bg-primary px-4 py-2 rounded-full"
-                >
-                  Register
-                </Link>
-              </li>
-            </ul>
+    <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-100">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 justify-between items-center">
+          {/* Logo */}
+          <Link
+            href="/"
+            className="text-xl font-light tracking-tight text-gray-900"
+          >
+            houra
+          </Link>
+
+          {/* Main Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            <Link
+              href="#features"
+              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              Features
+            </Link>
+            <Link
+              href="#how-it-works"
+              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              How it works
+            </Link>
+            <Link
+              href="/about"
+              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              About
+            </Link>
+          </div>
+
+          {/* Auth Buttons */}
+          <div className="flex items-center space-x-4">
+            <Link
+              href="/login"
+              className="text-sm text-gray-900 hover:text-gray-600 transition-colors"
+            >
+              Log in
+            </Link>
+            <Link
+              href="/signup"
+              className="text-sm px-4 py-2 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors"
+            >
+              Get Started
+            </Link>
           </div>
         </div>
       </nav>

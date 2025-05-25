@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { FaX } from "react-icons/fa6";
 import { Account, AddAccountModalProps } from "@/types/types";
 import { CurrentUserContext } from "@/app/home/page";
+
 export default function AddAccountModal({
   setShowAddAccountModal,
 }: AddAccountModalProps) {
@@ -11,9 +12,11 @@ export default function AddAccountModal({
     accountName: "",
     accountBalance: 0,
     reloadFreq: "",
+    colour: "",
   });
 
   const { setCurrentUser } = useContext(CurrentUserContext);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -56,61 +59,105 @@ export default function AddAccountModal({
   };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center">
-      <div className="inset-0 fixed bg-gray-700 opacity-30" />
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-2 bg-white rounded-2xl shadow-xl opacity-100 z-50 p-12 w-1/4"
-      >
-        <div className="flex justify-between items-center">
-          <h1 className="font-bold text-2xl mb-4">Create an Account</h1>
-          <button
-            onClick={() => setShowAddAccountModal(false)}
-            className="bg-gray-100 p-4 rounded-full"
-          >
-            <FaX className="text-xs" />
-          </button>
-        </div>
-        <div className="flex flex-col gap-2 mb-4">
-          <label htmlFor="accountName">Account name</label>
-          <input
-            onChange={handleChange}
-            name="accountName"
-            id="accountName"
-            type="text"
-            placeholder="YouTube"
-            className="border-1 p-2 rounded-xl mb-2"
-          />
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div
+        className="absolute inset-0 bg-black/20 backdrop-blur-sm"
+        onClick={() => setShowAddAccountModal(false)}
+      />
 
-          <label htmlFor="accountBalance">Account balance (hours)</label>
-          <input
-            onChange={handleChange}
-            name="accountBalance"
-            id="accountBalance"
-            type="number"
-            placeholder="2"
-            className="border-1 p-2 rounded-xl mb-2"
-          />
+      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md mx-4">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-light text-gray-900">New Account</h2>
+            <button
+              onClick={() => setShowAddAccountModal(false)}
+              className="text-gray-400 hover:text-gray-500 transition-colors"
+            >
+              <FaX className="w-4 h-4" />
+            </button>
+          </div>
 
-          <label htmlFor="reloadFreq">Reload Frequency</label>
-          <input
-            onChange={handleChange}
-            name="reloadFreq"
-            id="reloadFreq"
-            type="text"
-            placeholder="daily"
-            className="border-1 p-2 rounded-xl mb-2"
-          />
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-4">
+              <div>
+                <label
+                  htmlFor="accountName"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Account Name
+                </label>
+                <input
+                  onChange={handleChange}
+                  name="accountName"
+                  id="accountName"
+                  type="text"
+                  placeholder="e.g. YouTube"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="accountBalance"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Time Balance (hours)
+                </label>
+                <input
+                  onChange={handleChange}
+                  name="accountBalance"
+                  id="accountBalance"
+                  type="number"
+                  placeholder="2"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="reloadFreq"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Reload Frequency
+                </label>
+                <input
+                  onChange={handleChange}
+                  name="reloadFreq"
+                  id="reloadFreq"
+                  type="text"
+                  placeholder="daily"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="colour"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Colour
+              </label>
+              <input
+                onChange={handleChange}
+                name="colour"
+                id="colour"
+                type="color"
+                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all"
+              />
+            </div>
+
+            <div className="flex justify-end pt-4">
+              <button
+                type="submit"
+                className="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                Create Account
+              </button>
+            </div>
+          </form>
         </div>
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className="rounded-full bg-primary px-6 py-3 font-semibold"
-          >
-            Create Account
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 }

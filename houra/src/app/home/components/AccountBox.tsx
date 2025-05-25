@@ -1,37 +1,67 @@
 "use client";
 import { FaUniversity } from "react-icons/fa";
-import { FaGamepad } from "react-icons/fa6";
+import { FaClock } from "react-icons/fa6";
 import { selectedAccountContext } from "../page";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Account } from "@/types/types";
 
 const AccountBox = ({ account }: { account: Account }) => {
-  const { setSelectedAccount } = useContext(selectedAccountContext);
-  const [seconds, setSeconds] = useState(account.accountBalance % 60);
-  const [minutes, setMinutes] = useState(
-    Math.floor(account.accountBalance / 60) % 60
+  const { selectedAccount, setSelectedAccount } = useContext(
+    selectedAccountContext
   );
-  const [hours, setHours] = useState(Math.floor(account.accountBalance / 3600));
-
+  const seconds = account.accountBalance % 60;
+  const minutes = Math.floor(account.accountBalance / 60) % 60;
+  const hours = Math.floor(account.accountBalance / 3600);
+  console.log(account.colour);
   return (
     <button
-      onClick={() => setSelectedAccount(account)}
-      className="font-semibold w-96 h-52 min-w-96 max-w-96 border p-4 rounded-xl bg-red-600 text-background flex flex-col justify-between"
+      onClick={() => {
+        if (selectedAccount.accountNumber == account.accountNumber) {
+          setSelectedAccount({
+            accountNumber: 0,
+            accountName: "",
+            accountBalance: 0,
+            reloadFreq: "",
+            colour: "background",
+          });
+        } else {
+          setSelectedAccount(account);
+        }
+      }}
+      className="w-full h-52 relative group transition-all duration-300 transform hover:scale-105"
     >
-      <div className="flex items-center gap-2">
-        <div className="rounded-full w-12 h-12 bg-white flex justify-center items-center text-red-600">
-          {account.accountName?.slice(0, 3)}
+      {/* Card background with gradient */}
+      <div
+        className="absolute inset-0 rounded-xl shadow-lg"
+        style={{
+          background: `linear-gradient(to bottom right, ${account.colour}, ${account.colour}80)`,
+        }}
+      />
+
+      {/* Card content */}
+      <div className="relative h-full p-6 flex flex-col justify-between text-left">
+        {/* Top section */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-foreground text-xl font-medium tracking-wide">
+              {account.accountName}
+            </h2>
+            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+              <FaClock className="text-foreground/80" />
+            </div>
+          </div>
         </div>
-        <h2 className="text-xl">{account.accountName}</h2>
-      </div>
-      <div>
-        <p className="flex items-center gap-2 text-red-200 pb-1">
-          <FaUniversity />
-          {account.accountNumber}
-        </p>
-        <h3 className="text-2xl">
-          {hours}h {minutes}m {seconds}s
-        </h3>
+
+        {/* Bottom section */}
+        <div className="space-y-3">
+          <div className="flex items-center text-foreground/60 text-sm">
+            <FaUniversity className="mr-2" />
+            <span>#{account.accountNumber.toString().padStart(4, "0")}</span>
+          </div>
+          <h3 className="text-foreground text-2xl font-light">
+            {hours}h {minutes}m {seconds}s
+          </h3>
+        </div>
       </div>
     </button>
   );

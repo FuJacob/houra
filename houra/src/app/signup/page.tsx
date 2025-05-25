@@ -3,7 +3,8 @@ import React, { FormEvent } from "react";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-const page = () => {
+
+const Page = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
@@ -29,11 +30,8 @@ const page = () => {
       body: JSON.stringify(formData),
     });
 
-    console.log(formData);
     if (response.ok) {
       console.log("User created successfully");
-
-      // sign in the user now
 
       const response = await fetch("http://localhost:4500/api/auth/login", {
         method: "POST",
@@ -51,73 +49,103 @@ const page = () => {
       console.log("Error creating user");
     }
   };
+
   return (
-    <div className="flex flex-col items-center justify-center py-24">
-      <h1 className="text-2xl font-semibold pb-4">
-        Create your Houra account.
-      </h1>
-      <p className="text-gray-500 pb-8">
-        Already have an account?{" "}
-        <Link href="/login" className="underline">
-          Log in
-        </Link>
-      </p>
+    <div className="min-h-screen w-full bg-white">
+      <div className="flex justify-center w-full">
+        <div className="w-full max-w-lg px-4 py-24">
+          <div className="text-center mb-12">
+            <h1 className="text-3xl font-light text-gray-900 mb-4">
+              Create your Houra account
+            </h1>
+            <p className="text-gray-500">
+              Already have an account?{" "}
+              <Link
+                href="/login"
+                className="text-gray-900 hover:text-gray-700 transition-colors"
+              >
+                Log in
+              </Link>
+            </p>
+          </div>
 
-      {step === 1 ? (
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col w-full max-w-lg mx-auto"
-        >
-          <label htmlFor="email" className="pb-1">
-            First, enter your email address
-          </label>
-          <input
-            required
-            onChange={handleInputChange}
-            id="email"
-            name="email"
-            type="email"
-            className="border px-3 py-2 mb-6 rounded-xl"
-          />
+          {step === 1 ? (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm text-gray-700 mb-2"
+                >
+                  First, enter your email address
+                </label>
+                <input
+                  required
+                  onChange={handleInputChange}
+                  id="email"
+                  name="email"
+                  type="email"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-colors"
+                  placeholder="you@example.com"
+                />
+              </div>
 
-          <label htmlFor="email" className="pb-1">
-            Now, enter your password
-          </label>
-          <input
-            required
-            onChange={handleInputChange}
-            id="password"
-            name="password"
-            type="password"
-            className="border px-3 py-2 mb-6 rounded-xl"
-          />
-          <button type="submit" className="bg-primary px-6 py-4 rounded-full">
-            Next
-          </button>
-        </form>
-      ) : (
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col w-full max-w-lg mx-auto"
-        >
-          <label htmlFor="email" className="pb-1">
-            Finally, enter your name.
-          </label>
-          <input
-            required
-            onChange={handleInputChange}
-            id="name"
-            name="name"
-            type="text"
-            className="border px-3 py-2 mb-6 rounded-xl"
-          />
-          <button type="submit" className="bg-primary px-6 py-4 rounded-full">
-            Next
-          </button>
-        </form>
-      )}
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm text-gray-700 mb-2"
+                >
+                  Now, enter your password
+                </label>
+                <input
+                  required
+                  onChange={handleInputChange}
+                  id="password"
+                  name="password"
+                  type="password"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-colors"
+                  placeholder="••••••••"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full px-8 py-4 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors text-sm font-medium"
+              >
+                Continue
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-sm text-gray-700 mb-2"
+                >
+                  Finally, enter your name
+                </label>
+                <input
+                  required
+                  onChange={handleInputChange}
+                  id="name"
+                  name="name"
+                  type="text"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-colors"
+                  placeholder="Your name"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full px-8 py-4 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors text-sm font-medium"
+              >
+                Create Account
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
 
-export default page;
+export default Page;

@@ -175,8 +175,7 @@ router.delete("/deleteAccount", authenticateToken, async (req, res) => {
 });
 // Export the router to be used in server configuration
 
-router.post("/updateAccount", authenticateToken, async (req, res) => {
-  // POST /updateAccount - Updates an account by accountNumber for the authenticated user
+router.patch("/updateAccount", authenticateToken, async (req, res) => {
   try {
     const email = req.user.email;
     const { accountNumber, accountBalance } = req.body;
@@ -185,25 +184,28 @@ router.post("/updateAccount", authenticateToken, async (req, res) => {
       return res.status(400).json({ message: "Missing account fields." });
     }
 
-    const user = await User.findOne({ email: email });
-    if (!user) {
-      return res.status(404).json({ message: "User not found." });
-    }
-
-    const account = user.accounts.find(
-      (acc) => acc.accountNumber === accountNumber
+    // Use findOneAndUpdate with positional operator
+    const result = await User.findOneAndUpdate(
+      {
+        email: email,
+        "accounts.accountNumber": accountNumber,
+      },
+      {
+        $set: { "accounts.$.accountBalance": accountBalance },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
     );
-    if (!account) {
-      return res.status(404).json({ message: "Account not found." });
+
+    if (!result) {
+      return res.status(404).json({ message: "User or account not found." });
     }
-
-    account.accountBalance = accountBalance;
-
-    await user.save();
 
     res.status(200).json({
       message: "Account updated successfully.",
-      user: user,
+      user: result,
     });
   } catch (error) {
     res.status(500).json({

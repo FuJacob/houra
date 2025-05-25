@@ -16,6 +16,7 @@ export interface Account {
   accountName: string;
   accountBalance: number;
   reloadFreq: string;
+  colour: string;
 }
 
 export interface User {

@@ -15,6 +15,18 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-sans: var(--font-work-sans);
+
+      --color-account-blue: #3B82F6;
+      --color-account-green: #22C55E;
+      --color-account-yellow: #EAB308;
+      --color-account-coral: #F97316;
+      --color-account-red: #EF4444;
+      --color-account-lavender: #C4B5FD;
+      --color-account-peach: #FBCFE8;
+      --color-account-mint: #D1FAE5;
+      --color-account-blush-pink: #FBCFE8;
+      --color-account-pale-orange: #FDE68A;
+
 }
 
 /* @media (prefers-color-scheme: dark) {
