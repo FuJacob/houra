@@ -13,6 +13,7 @@ export default function AddAccountModal({
     accountBalance: 0,
     reloadFreq: "",
     colour: "",
+    type: "",
     transactions: [],
   });
 
@@ -105,7 +106,34 @@ export default function AddAccountModal({
                   className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all"
                 />
               </div>
-
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Account Type
+                </label>
+                <div className="flex gap-4">
+                  {["growth", "burn"].map((type) => (
+                    <button
+                      key={type}
+                      type="button"
+                      onClick={() =>
+                        setNewAccount((prev) => ({
+                          ...prev,
+                          type,
+                        }))
+                      }
+                      className={`px-4 py-2 rounded-lg border transition-colors ${
+                        newAccount.type === type
+                          ? type === "growth"
+                            ? "bg-green-100 text-green-800 border-green-300"
+                            : "bg-red-100 text-red-800 border-red-300"
+                          : "bg-white text-gray-700 border-gray-200 hover:border-gray-400"
+                      }`}
+                    >
+                      {type.charAt(0).toUpperCase() + type.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
               <label
                 htmlFor="accountBalance"
                 className="block text-sm font-medium text-gray-700 mb-1"

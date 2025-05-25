@@ -24,6 +24,7 @@ const AccountBox = ({ account }: { account: Account }) => {
             reloadFreq: "",
             colour: "background",
             transactions: [],
+            type: "",
           });
         } else {
           setSelectedAccount(account);
@@ -37,13 +38,29 @@ const AccountBox = ({ account }: { account: Account }) => {
           : "opacity-20"
       }`}
     >
-      {/* Card background with gradient */}
-      <div
-        className="absolute inset-0 rounded-xl shadow-lg"
-        style={{
-          background: `linear-gradient(to bottom right, ${account.colour}, ${account.colour}80)`,
-        }}
-      />
+      {/* Card background with creative slashes */}
+      <div className="absolute inset-0 rounded-xl shadow-lg bg-background overflow-hidden">
+        {/* Account colour slash */}
+        <div
+          className="absolute -left-1/2 top-0 w-full h-full rotate-12"
+          style={{
+            background: account.colour,
+            opacity: 0.08,
+          }}
+        />
+
+        {/* Type slash */}
+        {account.type === "growth" && (
+          <div className="absolute -left-1/2 top-0 w-full h-full rotate-12">
+            <div className="w-full h-full bg-[url('/leaf.png')] bg-no-repeat bg-[length:auto_100%] bg-right opacity-50" />
+          </div>
+        )}
+        {account.type === "burn" && (
+          <div className="absolute -left-1/2 top-0 w-full h-full rotate-12">
+            <div className="w-full h-full bg-red-400/20 bg-[url('/fire.png')] bg-no-repeat bg-center bg-contain opacity-50" />
+          </div>
+        )}
+      </div>
 
       {/* Card content */}
       <div className="relative h-full p-6 flex flex-col justify-between text-left">

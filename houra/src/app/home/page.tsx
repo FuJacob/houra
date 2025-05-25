@@ -32,6 +32,7 @@ export const selectedAccountContext = createContext<AccountContextType>({
     reloadFreq: "",
     colour: "gray-900",
     transactions: [],
+    type: "",
   },
   setSelectedAccount: () => {},
 });
@@ -54,6 +55,7 @@ const Page = () => {
     reloadFreq: "",
     colour: "gray-900",
     transactions: [],
+    type: "",
   });
 
   const [selectedPage, setSelectedPage] = useState("Home");
@@ -70,6 +72,7 @@ const Page = () => {
     reloadFreq: "",
     colour: "gray-900",
     transactions: [],
+    type: "",
   });
 
   const [accounts, setAccounts] = useState<Account[]>([]);

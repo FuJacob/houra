@@ -18,6 +18,7 @@ export interface Account {
   reloadFreq: string;
   colour: string;
   transactions: Transaction[];
+  type: string;
 }
 
 export interface Transaction {
