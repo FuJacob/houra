@@ -5,10 +5,24 @@ const userSchema = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  accounts: {
-    type: Array,
-    required: false,
-  },
+  accounts: [
+    {
+      accountNumber: { type: Number, required: true },
+      accountName: { type: String, required: true },
+      accountBalance: { type: Number, required: true },
+      reloadFreq: { type: String, required: true },
+      colour: { type: String, required: true },
+      transactions: [
+        {
+          transactionId: { type: String, required: true },
+          transactionAmount: { type: Number, required: true },
+          transactionDate: { type: Date, required: true },
+          startTime: { type: Date, required: true },
+          endTime: { type: Date, required: true },
+        },
+      ],
+    },
+  ],
 });
 
 const User = mongoose.model("Users", userSchema);

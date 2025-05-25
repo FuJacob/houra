@@ -23,6 +23,7 @@ const AccountBox = ({ account }: { account: Account }) => {
             accountBalance: 0,
             reloadFreq: "",
             colour: "background",
+            transactions: [],
           });
         } else {
           setSelectedAccount(account);
@@ -59,7 +60,7 @@ const AccountBox = ({ account }: { account: Account }) => {
         </div>
         <div>
           {" "}
-          <img src="chip.png" className="w-14 h-10" />
+          <img src="chip.png" className="w-14 h-12" />
         </div>
         {/* Bottom section */}
         <div className="flex justify-between items-end">

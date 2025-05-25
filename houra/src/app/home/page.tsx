@@ -8,18 +8,21 @@ import Sidebar from "./components/Sidebar";
 import AccountBox from "./components/AccountBox";
 import AddAccountModal from "./components/AddAccountModal";
 import AccountMenuButton from "./components/AccountMenuButton";
+import AllAccounts from "./components/AllAccounts";
+import AccountHistory from "./components/AccountHistory";
 import {
-  HomeContextType,
   AccountContextType,
   CurrentUserContextType,
   User,
   Account,
+  showAddAccountModalContextType,
 } from "@/types/types";
 
-export const HomeContext = createContext<HomeContextType>({
-  selectedPage: "Home",
-  setSelectedPage: () => {},
-});
+export const showAddAccountModalContext =
+  createContext<showAddAccountModalContextType>({
+    showAddAccountModal: false,
+    setShowAddAccountModal: () => {},
+  });
 
 export const selectedAccountContext = createContext<AccountContextType>({
   selectedAccount: {
@@ -28,6 +31,7 @@ export const selectedAccountContext = createContext<AccountContextType>({
     accountBalance: 0,
     reloadFreq: "",
     colour: "gray-900",
+    transactions: [],
   },
   setSelectedAccount: () => {},
 });
@@ -49,6 +53,7 @@ const Page = () => {
     accountBalance: 0,
     reloadFreq: "",
     colour: "gray-900",
+    transactions: [],
   });
 
   const [selectedPage, setSelectedPage] = useState("Home");
@@ -64,6 +69,7 @@ const Page = () => {
     accountBalance: 0,
     reloadFreq: "",
     colour: "gray-900",
+    transactions: [],
   });
 
   const [accounts, setAccounts] = useState<Account[]>([]);
@@ -122,90 +128,60 @@ const Page = () => {
   }, []);
 
   return (
-    <selectedAccountContext.Provider
-      value={{ selectedAccount, setSelectedAccount }}
+    <showAddAccountModalContext.Provider
+      value={{ showAddAccountModal, setShowAddAccountModal }}
     >
-      <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
-        <div className="min-h-screen bg-white">
-          {/* Header */}
-          <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-b border-gray-100 z-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex justify-between items-center h-16">
-                <h1 className="text-xl font-light tracking-tight text-gray-900">
-                  houra
-                </h1>
-                <div className="flex items-center space-x-8">
-                  <button className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                    Earn Points
-                  </button>
-                  <div className="h-4 w-px bg-gray-200"></div>
-                  <AccountMenuButton name={currentUser?.name || "User"} />
+      <selectedAccountContext.Provider
+        value={{ selectedAccount, setSelectedAccount }}
+      >
+        <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
+          <div className="min-h-screen bg-white">
+            {/* Header */}
+            <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-b border-gray-100 z-50">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between items-center h-16">
+                  <h1 className="text-xl font-light tracking-tight text-gray-900">
+                    houra
+                  </h1>
+                  <div className="flex items-center space-x-8">
+                    <button className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                      Earn Points
+                    </button>
+                    <div className="h-4 w-px bg-gray-200"></div>
+                    <AccountMenuButton name={currentUser?.name || "User"} />
+                  </div>
                 </div>
               </div>
-            </div>
-          </nav>
+            </nav>
 
-          {/* Main Content */}
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24">
-            <div className="py-12">
-              {/* Welcome Section */}
-              <div className="text-center ">
-                <h2 className="text-4xl font-light text-gray-900">
-                  Glad to see you, {currentUser.name.split(" ")[0]}
-                </h2>
-              </div>
-
-              {/* Timer Section */}
-              <div className="mb-24">
-                <Timer />
-              </div>
-
-              {/* Accounts Section */}
-              <div className="mb-16">
-                <div className="flex justify-between items-center mb-8">
-                  <h2 className="text-xl font-light text-gray-900">
-                    Your Time Accounts
+            {/* Main Content */}
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24">
+              <div className="py-12">
+                {/* Welcome Section */}
+                <div className="text-center ">
+                  <h2 className="text-2xl font-light text-gray-900">
+                    Glad to see you, {currentUser.name.split(" ")[0]}
                   </h2>
-                  <button
-                    onClick={() => setShowAddAccountModal(true)}
-                    className="text-sm text-gray-900 hover:text-gray-700 transition-colors flex items-center gap-2"
-                  >
-                    <span>Add Account</span>
-                    <span className="w-5 h-5 rounded-full bg-gray-900 text-white flex items-center justify-center text-lg leading-none">
-                      +
-                    </span>
-                  </button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {currentUser.accounts?.map((account) => (
-                    <AccountBox key={account.accountNumber} account={account} />
-                  ))}
-                  {currentUser.accounts?.length === 0 && (
-                    <div className="col-span-full text-center py-12">
-                      <p className="text-gray-500 mb-4">No time accounts yet</p>
-                      <button
-                        onClick={() => setShowAddAccountModal(true)}
-                        className="text-sm text-gray-900 hover:text-gray-700 transition-colors inline-flex items-center gap-2"
-                      >
-                        Create your first account
-                        <span className="w-5 h-5 rounded-full bg-gray-900 text-white flex items-center justify-center text-lg leading-none">
-                          +
-                        </span>
-                      </button>
-                    </div>
-                  )}
+                {/* Timer Section */}
+                <div className="mb-24">
+                  <Timer />
                 </div>
+                <AccountHistory />
+                <AllAccounts />
               </div>
-            </div>
-          </main>
+            </main>
 
-          {showAddAccountModal && (
-            <AddAccountModal setShowAddAccountModal={setShowAddAccountModal} />
-          )}
-        </div>
-      </CurrentUserContext.Provider>
-    </selectedAccountContext.Provider>
+            {showAddAccountModal && (
+              <AddAccountModal
+                setShowAddAccountModal={setShowAddAccountModal}
+              />
+            )}
+          </div>
+        </CurrentUserContext.Provider>
+      </selectedAccountContext.Provider>
+    </showAddAccountModalContext.Provider>
   );
 };
 

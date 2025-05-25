@@ -13,6 +13,15 @@ export default function AddAccountModal({
     accountBalance: 0,
     reloadFreq: "",
     colour: "",
+    transactions: [],
+  });
+
+  // Separate state for time inputs
+  const [timeInputs, setTimeInputs] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
   });
 
   const { setCurrentUser } = useContext(CurrentUserContext);
@@ -92,25 +101,51 @@ export default function AddAccountModal({
                   id="accountName"
                   type="text"
                   placeholder="e.g. YouTube"
+                  required
                   className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all"
                 />
               </div>
 
-              <div>
-                <label
-                  htmlFor="accountBalance"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Time Balance (hours)
-                </label>
-                <input
-                  onChange={handleChange}
-                  name="accountBalance"
-                  id="accountBalance"
-                  type="number"
-                  placeholder="2"
-                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all"
-                />
+              <label
+                htmlFor="accountBalance"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Time Balance
+              </label>
+              <div className="flex gap-2 items-center">
+                {["days", "hours", "minutes", "seconds"].map((unit, index) => (
+                  <div key={unit} className="flex items-center gap-1">
+                    <input
+                      type="number"
+                      placeholder={unit}
+                      min={0}
+                      required
+                      className="w-full px-2 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all text-sm text-center"
+                      onChange={(e) => {
+                        const value = Number(e.target.value) || 0;
+                        const updatedTimeInputs = {
+                          ...timeInputs,
+                          [unit]: value,
+                        };
+                        setTimeInputs(updatedTimeInputs);
+
+                        const totalSeconds =
+                          (updatedTimeInputs.days || 0) * 86400 +
+                          (updatedTimeInputs.hours || 0) * 3600 +
+                          (updatedTimeInputs.minutes || 0) * 60 +
+                          (updatedTimeInputs.seconds || 0);
+
+                        setNewAccount((prev) => ({
+                          ...prev,
+                          accountBalance: totalSeconds,
+                        }));
+                      }}
+                    />
+                    {index < 3 && (
+                      <span className="text-gray-500">{" : "}</span>
+                    )}
+                  </div>
+                ))}
               </div>
 
               <div>
@@ -126,6 +161,7 @@ export default function AddAccountModal({
                   id="reloadFreq"
                   type="text"
                   placeholder="daily"
+                  required
                   className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all"
                 />
               </div>
@@ -138,23 +174,58 @@ export default function AddAccountModal({
               >
                 Colour
               </label>
-              <input
-                onChange={handleChange}
-                name="colour"
-                id="colour"
-                type="color"
-                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all"
-              />
+              <div className="grid grid-cols-5 gap-2">
+                {[
+                  "#F87171", // red
+                  "#FBBF24", // yellow
+                  "#34D399", // green
+                  "#60A5FA", // blue
+                  "#A78BFA", // purple
+                  "#F472B6", // pink
+                  "#FDBA74", // orange
+                  "#4ADE80", // emerald
+                  "#C084FC", // violet
+                  "#FACC15", // amber
+                ].map((hex) => (
+                  <button
+                    key={hex}
+                    type="button"
+                    className="w-full h-10 rounded-md border border-gray-200 hover:scale-105 transition-transform"
+                    style={{ backgroundColor: hex }}
+                    onClick={() =>
+                      setNewAccount((prev) => ({
+                        ...prev,
+                        colour: hex,
+                      }))
+                    }
+                  />
+                ))}
+              </div>
+              <div className="mt-4">
+                <label
+                  htmlFor="customColour"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Or pick your own
+                </label>
+                <input
+                  type="color"
+                  id="customColour"
+                  name="colour"
+                  className="w-12 h-10 rounded-md border border-gray-200 cursor-pointer"
+                  value={newAccount.colour}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
 
-            <div className="flex justify-end pt-4">
-              <button
-                type="submit"
-                className="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
-              >
-                Create Account
-              </button>
-            </div>
+            <button
+              type="submit"
+              className="w-full py-3 px-4 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+            >
+              Create Account
+            </button>
           </form>
         </div>
       </div>

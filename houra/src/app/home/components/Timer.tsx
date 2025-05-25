@@ -55,6 +55,7 @@ export default function Timer() {
   useEffect(() => {
     const updateAccount = async () => {
       try {
+        if (selectedAccount.accountNumber === 0) return;
         const accessToken = localStorage.getItem("accessToken");
 
         const response = await fetch(
@@ -89,19 +90,25 @@ export default function Timer() {
   return (
     <div
       className={`flex flex-col items-center justify-center p-12 border-background border-6 transition-all duration-300 rounded-2xl`}
-      style={{
-        borderColor: selectedAccount.colour,
-      }}
     >
-      <div className="text-5xl font-light flex justify-between w-full h-[60px]">
+      <div className="text-5xl font-light flex justify-center w-full h-[60px]">
         {selectedAccount.accountNumber === 0
-          ? ""
+          ? "Select an Account to begin "
           : selectedAccount.accountName}
       </div>
 
       {/* Main timer display */}
       <div className="text-center mb-8 p-16">
-        <h1 className="font-mono text-[200px] leading-none tracking-tighter text-gray-900 font-light">
+        <h1
+          className="font-mono text-[200px] leading-none tracking-tighter text-gray-900 font-light"
+          style={{
+            color: `${
+              selectedAccount.accountNumber === 0
+                ? "#111827"
+                : selectedAccount.colour
+            }`,
+          }}
+        >
           {hoursLeft < 10 ? `0${hoursLeft}` : hoursLeft}:
           {minutesLeft < 10 ? `0${minutesLeft}` : minutesLeft}:
           {secondsLeft < 10 ? `0${secondsLeft}` : secondsLeft}
@@ -135,9 +142,9 @@ export default function Timer() {
       <div className="flex text-2xl justify-between items-end w-full mt-8">
         <div className="flex items-center text-foreground/60">
           <span>
-            {selectedAccount.accountNumber === 0
-              ? "••••"
-              : `•••• ${selectedAccount.accountNumber.toString().slice(-4)}`}
+            {selectedAccount.accountNumber !== 0
+              ? `•••• ${selectedAccount.accountNumber.toString().slice(-4)}`
+              : "\u00A0"}
           </span>
         </div>
         <h3 className="text-foreground font-light">

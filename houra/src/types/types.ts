@@ -1,9 +1,9 @@
 import { IconType } from "react-icons";
 import { Dispatch, SetStateAction } from "react";
 
-export interface HomeContextType {
-  selectedPage: string;
-  setSelectedPage: React.Dispatch<React.SetStateAction<string>>;
+export interface showAddAccountModalContextType {
+  showAddAccountModal: boolean;
+  setShowAddAccountModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface AccountContextType {
@@ -17,8 +17,16 @@ export interface Account {
   accountBalance: number;
   reloadFreq: string;
   colour: string;
+  transactions: Transaction[];
 }
 
+export interface Transaction {
+  transactionId: string;
+  transactionAmount: number;
+  transactionDate: Date;
+  startTime: Date;
+  endTime: Date;
+}
 export interface User {
   name: string;
   email: string;
