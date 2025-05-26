@@ -89,18 +89,24 @@ export default function Timer() {
   // update time
   return (
     <div
-      className={`flex flex-col items-center justify-center p-12 border-background border-6 transition-all duration-300 rounded-2xl`}
+      className={`flex flex-col items-center justify-center p-4 sm:p-12 transition-all duration-300 rounded-2xl`}
+      style={{
+        backgroundColor:
+          selectedAccount.accountNumber === 0
+            ? "background"
+            : `${selectedAccount.colour}20`,
+      }}
     >
-      <div className="text-5xl font-light flex justify-center w-full h-[60px]">
+      <div className="text-3xl sm:text-5xl font-light flex justify-center w-full h-[60px] text-center">
         {selectedAccount.accountNumber === 0
           ? "Select an Account to begin "
           : selectedAccount.accountName}
       </div>
 
       {/* Main timer display */}
-      <div className="text-center mb-8 p-16">
+      <div className="text-center mb-8 p-4 sm:p-16">
         <h1
-          className="font-mono text-[200px] leading-none tracking-tighter text-gray-900 font-light"
+          className="font-mono text-[120px] sm:text-[200px] leading-none tracking-tighter text-gray-900 font-light"
           style={{
             color: `${
               selectedAccount.accountNumber === 0
@@ -113,7 +119,7 @@ export default function Timer() {
           {minutesLeft < 10 ? `0${minutesLeft}` : minutesLeft}:
           {secondsLeft < 10 ? `0${secondsLeft}` : secondsLeft}
         </h1>
-        <p className="text-gray-500 mt-4 text-lg">
+        <p className="text-gray-500 mt-4 text-base sm:text-lg">
           {state.timeLeft < 60
             ? `${hoursLeft} hours, ${minutesLeft} minutes, ${secondsLeft} seconds remaining`
             : `${hoursLeft} hours, ${minutesLeft} minutes remaining`}
