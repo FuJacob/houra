@@ -22,11 +22,9 @@ export interface Account {
 }
 
 export interface Transaction {
-  transactionId: string;
-  transactionAmount: number;
-  transactionDate: Date;
-  startTime: Date;
-  endTime: Date;
+  startTime: number;
+  endTime: number;
+  duration: number;
 }
 export interface User {
   name: string;

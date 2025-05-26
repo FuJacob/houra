@@ -9,7 +9,7 @@ import AccountBox from "./components/AccountBox";
 import AddAccountModal from "./components/AddAccountModal";
 import AccountMenuButton from "./components/AccountMenuButton";
 import AllAccounts from "./components/AllAccounts";
-import AccountHistory from "./components/AccountHistory";
+import AccountHistory from "./components/AccountTransactions";
 import {
   AccountContextType,
   CurrentUserContextType,

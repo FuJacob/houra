@@ -90,7 +90,6 @@ export default function Timer() {
           if (response.ok) {
             const data = await response.json();
             console.log("data", data);
-
           } else {
             console.error(
               "Failed to add account transaction",
