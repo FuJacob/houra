@@ -174,7 +174,6 @@ router.delete("/deleteAccount", authenticateToken, async (req, res) => {
   }
 });
 // Export the router to be used in server configuration
-
 router.patch("/updateAccount", authenticateToken, async (req, res) => {
   try {
     const email = req.user.email;
@@ -184,35 +183,103 @@ router.patch("/updateAccount", authenticateToken, async (req, res) => {
       return res.status(400).json({ message: "Missing account fields." });
     }
 
-    // Use findOneAndUpdate with positional operator
-    const result = await User.findOneAndUpdate(
-      {
-        email: email,
-        "accounts.accountNumber": accountNumber,
-      },
-      {
-        $set: { "accounts.$.accountBalance": accountBalance },
-      },
-      {
-        new: true,
-        runValidators: true,
-      }
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const account = user.accounts.find(
+      (acc) => acc.accountNumber == accountNumber
     );
 
-    if (!result) {
-      return res.status(404).json({ message: "User or account not found." });
+    if (!account) {
+      return res.status(404).json({ message: "Account not found." });
     }
+
+    account.accountBalance = accountBalance;
+
+    const updatedUser = await user.save();
 
     res.status(200).json({
       message: "Account updated successfully.",
-      user: result,
+      user: updatedUser,
     });
   } catch (error) {
     res.status(500).json({
       message: "Error with updating account.",
-      error: error,
+      error: error.message,
     });
   }
 });
 
+router.patch("/asd", authenticateToken, async (req, res) => {
+  try {
+    const email = req.user.email;
+    const users = await User.find();
+
+    for (const user of users) {
+      let changed = false;
+
+      user.accounts.forEach((acc) => {
+        console.log("acc", acc);
+
+        if (!acc.transactions) {
+          acc.transactions = [];
+          console.log("transactions added", acc);
+          changed = true;
+        }
+      });
+
+      if (changed) await user.save();
+    }
+
+    return res.status(200).json({
+      message: "Accounts updated successfully.",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error with updating account balance.",
+      error: error.message,
+    });
+  }
+});
+
+router.patch("/addAccountTransaction", authenticateToken, async (req, res) => {
+  try {
+    const email = req.user.email;
+    const { accountNumber, startTime, endTime, duration } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const account = user.accounts.find(
+      (acc) => acc.accountNumber == accountNumber
+    );
+
+    if (!account) {
+      return res.status(400).json({ message: "Account not found." });
+    }
+
+    account.transactions.push({
+      startTime: startTime,
+      endTime: endTime,
+      duration: duration,
+    });
+
+    const updatedUser = await user.save();
+    return res.status(200).json({
+      message: "Account transaction added successfully.",
+      user: updatedUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error with adding account transaction.",
+      error: error.message,
+    });
+  }
+});
 module.exports = router;

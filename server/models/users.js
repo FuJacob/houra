@@ -15,11 +15,9 @@ const userSchema = new Schema({
       type: { type: String, required: true },
       transactions: [
         {
-          transactionId: { type: String, required: true },
-          transactionAmount: { type: Number, required: true },
-          transactionDate: { type: Date, required: true },
-          startTime: { type: Date, required: true },
-          endTime: { type: Date, required: true },
+          duration: { type: Number, required: true },
+          startTime: { type: Number, required: true },
+          endTime: { type: Number, required: true },
         },
       ],
     },

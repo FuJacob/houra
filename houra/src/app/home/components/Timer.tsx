@@ -13,6 +13,8 @@ interface Account {
 }
 // Timer component displays and controls a countdown timer
 export default function Timer() {
+  const [startTime, setStartTime] = useState(0);
+
   // Account interface defines the expected structure of an account object
 
   // Accessing the selected account from context
@@ -55,8 +57,48 @@ export default function Timer() {
   useEffect(() => {
     const updateAccount = async () => {
       try {
-        if (selectedAccount.accountNumber === 0) return;
         const accessToken = localStorage.getItem("accessToken");
+
+        if (selectedAccount.accountNumber === 0) return;
+
+        if (startTime === 0 && state.running === true) {
+          setStartTime(new Date().getTime());
+        } else if (state.running === false && startTime !== 0) {
+          const endTime = new Date().getTime();
+          const response = await fetch(
+            "http://localhost:4500/api/accounts/addAccountTransaction",
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+              },
+              body: JSON.stringify({
+                accountNumber: selectedAccount.accountNumber,
+                startTime: startTime,
+                endTime: endTime,
+                duration: endTime - startTime,
+              }),
+            }
+          );
+          console.log({
+            accountNumber: selectedAccount.accountNumber,
+            startTime: startTime,
+            endTime: endTime,
+            duration: endTime - startTime,
+          });
+          if (response.ok) {
+            const data = await response.json();
+            console.log("data", data);
+
+          } else {
+            console.error(
+              "Failed to add account transaction",
+              response.statusText
+            );
+          }
+          setStartTime(0);
+        }
 
         const response = await fetch(
           "http://localhost:4500/api/accounts/updateAccount",
