@@ -4,7 +4,8 @@ import { FaBars, FaX } from "react-icons/fa6";
 
 const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const accessToken = localStorage.getItem("accessToken");
+  const isNotLoggedIn = !accessToken;
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-100 max-w-7xl mx-auto rounded-full mt-4">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -52,20 +53,22 @@ const Navigation = () => {
           </div>
 
           {/* Desktop Auth Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Link
-              href="/login"
-              className="text-sm text-gray-900 hover:text-gray-600 transition-colors"
-            >
-              Log in
-            </Link>
-            <Link
-              href="/signup"
-              className="text-sm px-4 py-2 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors"
-            >
-              Get Started
-            </Link>
-          </div>
+          {isNotLoggedIn && (
+            <div className="hidden md:flex items-center space-x-4">
+              <Link
+                href="/login"
+                className="text-sm text-gray-900 hover:text-gray-600 transition-colors"
+              >
+                Log in
+              </Link>
+              <Link
+                href="/signup"
+                className="text-sm px-4 py-2 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors"
+              >
+                Get Started
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Mobile Menu */}

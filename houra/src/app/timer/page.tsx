@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useReducer, useState } from "react";
-import Navigation from "../../app/components/Navigation.tsx";
+import Navigation from "../../app/components/Navigation";
 import AccountHistory from "../home/components/AccountTransactions";
 import DummyAllAccounts from "../home/components/DummyAllAccounts";
 import {
