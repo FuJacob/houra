@@ -2,9 +2,12 @@
 import React, { FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 const Page = () => {
   const router = useRouter();
+  const { setAccessToken } = useAuth();
+  
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -22,7 +25,7 @@ const Page = () => {
 
     if (response.ok) {
       const data = await response.json();
-      localStorage.setItem("accessToken", data.accessToken);
+      setAccessToken(data.accessToken);
       router.push("/home");
     } else {
       console.log("Login failed");

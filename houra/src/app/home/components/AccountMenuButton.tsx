@@ -3,14 +3,16 @@ import React from "react";
 import { FaAngleDown } from "react-icons/fa";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 const AccountMenuButton = ({ name }: { name: string }) => {
   const [showAccountMenuModal, setShowAccountMenuModal] = useState(false);
   const router = useRouter();
+  const { removeAccessToken } = useAuth();
 
   const logOut = () => {
     try {
-      localStorage.removeItem("accessToken");
+      removeAccessToken();
       router.push("/");
     } catch (error) {
       console.log(error);

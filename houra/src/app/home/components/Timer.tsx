@@ -4,10 +4,12 @@ import { useReducer, useEffect, useState } from "react";
 import { reducer, setRunning, setTimeLeft } from "./TimeReducer";
 import { useContext } from "react";
 import { selectedAccountContext } from "../contexts";
+import { useAuth } from "@/hooks/useAuth";
 
 // Timer component displays and controls a countdown timer
 export default function Timer() {
   const [startTime, setStartTime] = useState(0);
+  const { getAccessToken } = useAuth();
 
   // Account interface defines the expected structure of an account object
 
@@ -51,7 +53,7 @@ export default function Timer() {
   useEffect(() => {
     const updateAccount = async () => {
       try {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = getAccessToken();
 
         if (selectedAccount.accountNumber === 0) return;
 
@@ -119,7 +121,7 @@ export default function Timer() {
       }
     };
     updateAccount();
-  }, [state.running, selectedAccount.accountNumber, startTime, state.timeLeft]);
+  }, [state.running, selectedAccount.accountNumber, startTime, state.timeLeft, getAccessToken]);
 
   // update time
   return (

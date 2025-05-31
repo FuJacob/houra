@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { FaBars, FaX } from "react-icons/fa6";
+import { useAuth } from "@/hooks/useAuth";
 
 const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const accessToken = localStorage.getItem("accessToken");
-  const isNotLoggedIn = !accessToken;
+  const { isAuthenticated } = useAuth();
+  const isNotLoggedIn = !isAuthenticated();
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-100 max-w-7xl mx-auto rounded-full mt-4">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

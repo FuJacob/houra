@@ -6,6 +6,7 @@ import AllAccounts from "./components/AllAccounts";
 import AccountHistory from "./components/AccountTransactions";
 import { User, Account } from "@/types/types";
 import Navigation from "../components/Navigation";
+import { useAuth } from "@/hooks/useAuth";
 import {
   showAddAccountModalContext,
   selectedAccountContext,
@@ -14,6 +15,8 @@ import {
 } from "./contexts";
 
 const Page = () => {
+  const { getAccessToken } = useAuth();
+  
   const [selectedAccount, setSelectedAccount] = useState<Account>({
     accountNumber: 0,
     accountName: "",
@@ -36,7 +39,7 @@ const Page = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const accessToken = localStorage.getItem("accessToken");
+      const accessToken = getAccessToken();
       if (!accessToken) return;
 
       const response = await fetch("http://localhost:4500/api/auth/getUser", {
@@ -57,7 +60,7 @@ const Page = () => {
 
     const getAccounts = async () => {
       try {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = getAccessToken();
         if (!accessToken) return;
 
         const response = await fetch(
@@ -84,7 +87,7 @@ const Page = () => {
 
     fetchUser();
     getAccounts();
-  }, []);
+  }, [getAccessToken]);
 
   return (
     <HomeContext.Provider value={{ selectedPage, setSelectedPage }}>

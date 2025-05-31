@@ -3,9 +3,12 @@ import React, { FormEvent } from "react";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 const Page = () => {
   const router = useRouter();
+  const { setAccessToken } = useAuth();
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -49,7 +52,7 @@ const Page = () => {
 
       if (loginResponse.ok) {
         const data = await loginResponse.json();
-        localStorage.setItem("accessToken", data.accessToken);
+        setAccessToken(data.accessToken);
         console.log("Logged in");
         router.push("/home");
       } else {

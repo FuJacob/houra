@@ -3,14 +3,17 @@ import Navigation from "./components/Navigation";
 import Hero from "./components/Hero";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+
 export default function Home() {
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
+  
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
+    if (isAuthenticated()) {
       router.push("/home");
     }
-  }, [router]);
+  }, [router, isAuthenticated]);
   return (
     <>
       <Navigation />

@@ -3,10 +3,13 @@ import { useContext, useState } from "react";
 import { FaX } from "react-icons/fa6";
 import { Account, AddAccountModalProps } from "@/types/types";
 import { CurrentUserContext } from "../contexts";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function AddAccountModal({
   setShowAddAccountModal,
 }: AddAccountModalProps) {
+  const { getAccessToken } = useAuth();
+  
   const [newAccount, setNewAccount] = useState<Account>({
     accountNumber: 0,
     accountName: "",
@@ -31,7 +34,7 @@ export default function AddAccountModal({
     event.preventDefault();
 
     try {
-      const accessToken = localStorage.getItem("accessToken");
+      const accessToken = getAccessToken();
       const response = await fetch(
         "http://localhost:4500/api/accounts/addAccount",
         {
