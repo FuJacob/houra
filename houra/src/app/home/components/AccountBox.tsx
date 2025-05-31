@@ -12,7 +12,6 @@ const AccountBox = ({ account }: { account: Account }) => {
   const seconds = account.accountBalance % 60;
   const minutes = Math.floor(account.accountBalance / 60) % 60;
   const hours = Math.floor(account.accountBalance / 3600);
-  console.log(account.colour);
   return (
     <button
       onClick={() => {
@@ -54,8 +53,11 @@ const AccountBox = ({ account }: { account: Account }) => {
             <h2 className="text-foreground text-lg sm:text-xl font-medium tracking-wide">
               {account.accountName}
             </h2>
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/10 flex items-center justify-center">
+            <div className=" px-4 py-2 gap-4  rounded-full bg-white/10 flex items-center justify-center">
               <FaClock className="text-foreground/80 w-4 h-4 sm:w-5 sm:h-5" />
+              <p>
+                Reloads<span className="font-bold"> {account.reloadFreq}</span>
+              </p>
             </div>
           </div>
         </div>
