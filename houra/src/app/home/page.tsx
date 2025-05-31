@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import Timer from "./components/Timer";
 import AddAccountModal from "./components/AddAccountModal";
-import AccountMenuButton from "./components/AccountMenuButton";
 import AllAccounts from "./components/AllAccounts";
 import AccountHistory from "./components/AccountTransactions";
 import { User, Account } from "@/types/types";
