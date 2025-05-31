@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
 const HeroSection = () => {
   const [seconds, setSeconds] = useState(0);
   const [time, setTime] = useState(
@@ -39,19 +38,27 @@ const HeroSection = () => {
           helps you track where your time goes, set intentional limits, and make
           every second count.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+        <div className="flex flex-col gap-4 justify-center items-center mb-16 max-w-2xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-center w-full">
+            <Link
+              href="/signup"
+              className="w-full flex-1 max-w-2/3 sm:w-auto px-4 py-4 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors text-sm font-medium"
+            >
+              It's been <span className="font-bold">{seconds} seconds</span>.
+              Start Managing Your Time
+            </Link>
+            <Link
+              href="#how-it-works"
+              className=" text-center w-1/3 text-center text-sm text-gray-500 hover:text-gray-900 transition-colors"
+            >
+              Learn how it works →
+            </Link>
+          </div>
           <Link
-            href="/signup"
-            className="w-full sm:w-auto px-8 py-4 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors text-sm font-medium"
+            href="/timer"
+            className="w-full px-8 py-4 border-2 border-gray-300  text-gray-700 rounded-full hover:border-gray-400 hover:text-gray-900 transition-colors text-1xl font-medium"
           >
-            It's been <span className="font-bold">{seconds} seconds</span>.
-            Start Managing Your Time
-          </Link>
-          <Link
-            href="#how-it-works"
-            className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
-          >
-            Learn how it works →
+            Try timer as a guest
           </Link>
         </div>
 

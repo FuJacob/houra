@@ -16,11 +16,6 @@ export default function Home() {
   }, []);
   return (
     <>
-      {isLoading && (
-        <div className="h-screen xfixed inset-0 absolute flex justify-center items-center bg-background">
-          Loading...
-        </div>
-      )}
       <Navigation />
       <main className="min-h-screen">
         <Hero />
