@@ -1,7 +1,7 @@
 import React from "react";
 import { FaClock } from "react-icons/fa";
 import { Transaction } from "@/types/types";
-import { selectedAccountContext } from "../page";
+import { selectedAccountContext } from "../contexts";
 import { useContext } from "react";
 type TransactionCardProps = {
   transaction: Transaction;

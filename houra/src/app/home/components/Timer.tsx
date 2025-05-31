@@ -3,14 +3,8 @@
 import { useReducer, useEffect, useState } from "react";
 import { reducer, setRunning, setTimeLeft } from "./TimeReducer";
 import { useContext } from "react";
-import { selectedAccountContext } from "../page";
+import { selectedAccountContext } from "../contexts";
 
-interface Account {
-  accountNumber: number;
-  accountName: string;
-  accountBalance: number;
-  reloadFreq: string;
-}
 // Timer component displays and controls a countdown timer
 export default function Timer() {
   const [startTime, setStartTime] = useState(0);
@@ -125,7 +119,7 @@ export default function Timer() {
       }
     };
     updateAccount();
-  }, [state.running]);
+  }, [state.running, selectedAccount.accountNumber, startTime, state.timeLeft]);
 
   // update time
   return (

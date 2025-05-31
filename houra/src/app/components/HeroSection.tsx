@@ -44,8 +44,9 @@ const HeroSection = () => {
               href="/signup"
               className="w-full flex-1 max-w-2/3 sm:w-auto px-4 py-4 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors text-sm font-medium"
             >
-              It's been <span className="font-bold">{seconds} seconds</span>.
-              Start Managing Your Time
+              It&apos;s been{" "}
+              <span className="font-bold">{seconds} seconds</span>. Start
+              Managing Your Time
             </Link>
             <Link
               href="#how-it-works"

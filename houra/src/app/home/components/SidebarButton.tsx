@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { HomeContext } from "../page";
+import { HomeContext } from "../contexts";
 import { SidebarButtonProps } from "@/types/types";
 
 const SidebarButton = ({ id, icon: Icon, label }: SidebarButtonProps) => {

@@ -1,9 +1,9 @@
 "use client";
-import { FaUniversity } from "react-icons/fa";
 import { FaClock } from "react-icons/fa6";
-import { selectedAccountContext } from "../page";
+import { selectedAccountContext } from "../contexts";
 import { useContext } from "react";
 import { Account } from "@/types/types";
+import Image from "next/image";
 
 const AccountBox = ({ account }: { account: Account }) => {
   const { selectedAccount, setSelectedAccount } = useContext(
@@ -62,7 +62,13 @@ const AccountBox = ({ account }: { account: Account }) => {
           </div>
         </div>
         <div>
-          <img src="chip.png" className="w-10 h-8 sm:w-14 sm:h-12" alt="chip" />
+          <Image
+            src="/chip.png"
+            className="w-10 h-8 sm:w-14 sm:h-12"
+            alt="chip"
+            width={56}
+            height={48}
+          />
         </div>
         {/* Bottom section */}
         <div className="flex justify-between items-end">

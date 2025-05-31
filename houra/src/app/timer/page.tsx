@@ -1,11 +1,9 @@
 "use client"; // Enables client-side rendering for this component
 
 import Link from "next/link";
-import { useContext, useEffect, useReducer, useState } from "react";
-import { MdAccountBalance } from "react-icons/md";
+import { useEffect, useReducer, useState } from "react";
 
 import AccountHistory from "../home/components/AccountTransactions";
-import AllAccounts from "../home/components/AllAccounts";
 import DummyAllAccounts from "../home/components/DummyAllAccounts";
 import {
   reducer,
@@ -29,8 +27,6 @@ export default function Timer() {
     accountBalance: 1500, // 25 minutes default
     colour: "#3B82F6", // Default color for the timer
   };
-
-  const [startTime, setStartTime] = useState(0);
 
   // Setup reducer for timer state management
   // state.running indicates if timer is active

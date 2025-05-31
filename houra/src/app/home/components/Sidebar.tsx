@@ -1,14 +1,5 @@
 "use client";
-import Link from "next/link";
-import { useContext } from "react";
-import {
-  FaAngleRight,
-  FaHome,
-  FaUniversity,
-  FaCreditCard,
-  FaList,
-} from "react-icons/fa";
-import { HomeContext } from "../page";
+import { FaHome, FaCreditCard, FaList } from "react-icons/fa";
 import SidebarButton from "./SidebarButton";
 const sidebarItems = [
   {
@@ -43,7 +34,6 @@ const sidebarItems = [
   },
 ];
 export default function Sidebar() {
-  const { selectedPage, setSelectedPage } = useContext(HomeContext);
   return (
     <div className="w-1/5">
       <ul className="py-12">

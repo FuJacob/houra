@@ -1,8 +1,6 @@
 import React from "react";
-import AccountBox from "./AccountBox";
 import { useContext } from "react";
-import { selectedAccountContext } from "../page";
-import { FaClock } from "react-icons/fa";
+import { selectedAccountContext } from "../contexts";
 import TransactionCard from "./TransactionCard";
 
 const AccountTransactions = () => {

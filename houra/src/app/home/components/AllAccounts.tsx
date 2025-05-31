@@ -1,7 +1,7 @@
 import React from "react";
 import AccountBox from "./AccountBox";
 import { useContext } from "react";
-import { CurrentUserContext, showAddAccountModalContext } from "../page";
+import { CurrentUserContext, showAddAccountModalContext } from "../contexts";
 
 const AllAccounts = () => {
   const { currentUser } = useContext(CurrentUserContext);

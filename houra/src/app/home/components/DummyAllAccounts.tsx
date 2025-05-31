@@ -1,7 +1,7 @@
 import React from "react";
 import AccountBox from "./AccountBox";
 import { useContext } from "react";
-import { CurrentUserContext, showAddAccountModalContext } from "../page";
+import { showAddAccountModalContext } from "../contexts";
 
 // Define the Account interface locally
 import { Account } from "../../../types/types";
@@ -64,7 +64,6 @@ const dummyAccounts: Account[] = [
 ];
 
 const AllAccounts = () => {
-  const { currentUser } = useContext(CurrentUserContext);
   const { setShowAddAccountModal } = useContext(showAddAccountModalContext);
   return (
     <div className="mb-16">

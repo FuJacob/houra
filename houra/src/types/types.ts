@@ -53,3 +53,8 @@ export interface CurrentUserContextType {
   currentUser: User;
   setCurrentUser: Dispatch<SetStateAction<User>>;
 }
+
+export interface HomeContextType {
+  selectedPage: string;
+  setSelectedPage: React.Dispatch<React.SetStateAction<string>>;
+}

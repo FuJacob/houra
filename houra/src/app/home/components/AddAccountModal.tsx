@@ -2,7 +2,7 @@
 import { useContext, useState } from "react";
 import { FaX } from "react-icons/fa6";
 import { Account, AddAccountModalProps } from "@/types/types";
-import { CurrentUserContext } from "@/app/home/page";
+import { CurrentUserContext } from "../contexts";
 
 export default function AddAccountModal({
   setShowAddAccountModal,

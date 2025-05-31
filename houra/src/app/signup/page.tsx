@@ -33,18 +33,28 @@ const Page = () => {
     if (response.ok) {
       console.log("User created successfully");
 
-      const response = await fetch("http://localhost:4500/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-      console.log("Logged in");
-      router.push("/home");
+      const loginResponse = await fetch(
+        "http://localhost:4500/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        }
+      );
+
+      if (loginResponse.ok) {
+        const data = await loginResponse.json();
+        localStorage.setItem("accessToken", data.accessToken);
+        console.log("Logged in");
+        router.push("/home");
+      } else {
+        console.log("Error logging in after signup");
+      }
     } else {
       console.log("Error creating user");
     }
