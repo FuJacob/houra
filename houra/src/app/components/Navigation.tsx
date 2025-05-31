@@ -12,7 +12,7 @@ const Navigation = () => {
           {/* Logo */}
           <Link
             href="/"
-            className="text-xl font-light tracking-tight text-gray-900"
+            className="text-xl font-light tracking-tight text-gray-900 underline decoration-transparent hover:decoration-gray-900 underline-offset-4 transition-all duration-300 ease-in-out"
           >
             houra
           </Link>

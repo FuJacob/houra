@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useReducer, useState } from "react";
-
+import Navigation from "../../app/components/Navigation.tsx";
 import AccountHistory from "../home/components/AccountTransactions";
 import DummyAllAccounts from "../home/components/DummyAllAccounts";
 import {
@@ -80,21 +80,7 @@ export default function Timer() {
       >
         <div className="w-full max-w-7xl">
           {/* Header */}
-          <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-b border-gray-100 z-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex justify-between items-center h-16">
-                <h1 className="text-xl font-light tracking-tight text-gray-900">
-                  houra
-                </h1>
-                <div className="flex items-center space-x-8">
-                  <button className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                    Earn Points
-                  </button>
-                  <div className="h-4 w-px bg-gray-200"></div>
-                </div>
-              </div>
-            </div>
-          </nav>
+          <Navigation />
 
           {/* Main Content */}
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24">
