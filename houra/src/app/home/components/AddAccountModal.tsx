@@ -9,14 +9,14 @@ export default function AddAccountModal({
   setShowAddAccountModal,
 }: AddAccountModalProps) {
   const { getAccessToken } = useAuth();
-  
+
   const [newAccount, setNewAccount] = useState<Account>({
     accountNumber: 0,
     accountName: "",
     accountBalance: 0,
     reloadFreq: "",
-    colour: "",
-    type: "",
+    colour: "#F87171", // Default to the first color (red)
+    type: "Growth", // Default to "Growth"
     transactions: [],
   });
 
@@ -32,6 +32,9 @@ export default function AddAccountModal({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    console.log("Submitting newAccount state:", newAccount);
+    console.log("Submitting newAccount JSON:", JSON.stringify(newAccount));
 
     try {
       const accessToken = getAccessToken();
@@ -114,69 +117,97 @@ export default function AddAccountModal({
                   Account Type
                 </label>
                 <div className="flex gap-4">
-                  {["growth", "burn"].map((type) => (
-                    <button
-                      key={type}
-                      type="button"
-                      onClick={() =>
+                  <label className="flex items-center space-x-2 p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="accountType" // Changed name to avoid conflict if 'option' is used elsewhere
+                      value="Growth" // Corrected value
+                      checked={newAccount.type === "Growth"}
+                      onChange={(e) =>
                         setNewAccount((prev) => ({
                           ...prev,
-                          type,
+                          type: e.target.value,
                         }))
                       }
-                      className={`px-4 py-2 rounded-lg border transition-colors ${
-                        newAccount.type === type
-                          ? type === "growth"
-                            ? "bg-green-100 text-green-800 border-green-300"
-                            : "bg-red-100 text-red-800 border-red-300"
-                          : "bg-white text-gray-700 border-gray-200 hover:border-gray-400"
-                      }`}
-                    >
-                      {type.charAt(0).toUpperCase() + type.slice(1)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <label
-                htmlFor="accountBalance"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Time Balance
-              </label>
-              <div className="flex gap-2 items-center">
-                {["days", "hours", "minutes", "seconds"].map((unit, index) => (
-                  <div key={unit} className="flex items-center gap-1">
+                      className="form-radio h-4 w-4 text-gray-600 transition duration-150 ease-in-out"
+                    />
+                    <span>Growth</span>
+                  </label>
+                  <label className="flex items-center space-x-2 p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
                     <input
-                      type="number"
-                      placeholder={unit}
-                      min={0}
-                      required
-                      className="w-full px-2 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all text-sm text-center"
-                      onChange={(e) => {
-                        const value = Number(e.target.value) || 0;
-                        const updatedTimeInputs = {
-                          ...timeInputs,
-                          [unit]: value,
-                        };
-                        setTimeInputs(updatedTimeInputs);
-
-                        const totalSeconds =
-                          (updatedTimeInputs.days || 0) * 86400 +
-                          (updatedTimeInputs.hours || 0) * 3600 +
-                          (updatedTimeInputs.minutes || 0) * 60 +
-                          (updatedTimeInputs.seconds || 0);
-
+                      type="radio"
+                      name="accountType" // Changed name to avoid conflict
+                      value="Burn" // Corrected value
+                      checked={newAccount.type === "Burn"}
+                      onChange={(e) =>
                         setNewAccount((prev) => ({
                           ...prev,
-                          accountBalance: totalSeconds,
-                        }));
-                      }}
+                          type: e.target.value,
+                        }))
+                      }
+                      className="form-radio h-4 w-4 text-gray-600 transition duration-150 ease-in-out"
                     />
-                    {index < 3 && (
-                      <span className="text-gray-500">{" : "}</span>
-                    )}
-                  </div>
-                ))}
+                    <span>Burn</span>
+                  </label>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Time Balance
+                </label>
+                <div className="grid grid-cols-4 gap-3">
+                  {(
+                    [
+                      { unit: "days", max: 365 },
+                      { unit: "hours", max: 23 },
+                      { unit: "minutes", max: 59 },
+                      { unit: "seconds", max: 59 },
+                    ] as const
+                  ).map(({ unit, max }) => (
+                    <div key={unit}>
+                      <label
+                        htmlFor={unit}
+                        className="block text-xs font-medium text-gray-500 mb-1 capitalize"
+                      >
+                        {unit}
+                      </label>
+                      <input
+                        type="number"
+                        id={unit}
+                        name={unit}
+                        placeholder="0"
+                        min={0}
+                        max={max} // Optional: Add max values for better UX
+                        required
+                        className="w-full px-2 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all text-sm text-center"
+                        value={timeInputs[unit] === 0 ? "" : timeInputs[unit]} // Show empty string if 0 for better placeholder visibility
+                        onChange={(e) => {
+                          let value = Number(e.target.value);
+                          if (isNaN(value)) value = 0;
+                          // Optional: Clamp value to max if you added max attribute
+                          // if (value > max) value = max;
+
+                          const updatedTimeInputs = {
+                            ...timeInputs,
+                            [unit]: value,
+                          };
+                          setTimeInputs(updatedTimeInputs);
+
+                          const totalSeconds =
+                            (updatedTimeInputs.days || 0) * 86400 +
+                            (updatedTimeInputs.hours || 0) * 3600 +
+                            (updatedTimeInputs.minutes || 0) * 60 +
+                            (updatedTimeInputs.seconds || 0);
+
+                          setNewAccount((prev) => ({
+                            ...prev,
+                            accountBalance: totalSeconds,
+                          }));
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div>
@@ -245,8 +276,8 @@ export default function AddAccountModal({
                   name="colour"
                   className="w-12 h-10 rounded-md border border-gray-200 cursor-pointer"
                   value={newAccount.colour}
-                  onChange={handleChange}
-                  required
+                  onChange={handleChange} // Changed to use generic handleChange
+                  // Removed 'required' from here as one of the preset colors can be chosen
                 />
               </div>
             </div>

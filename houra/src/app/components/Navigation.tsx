@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { FaBars, FaX } from "react-icons/fa6";
 import { useAuth } from "@/hooks/useAuth";
+import AccountMenuButton from "../home/components/AccountMenuButton";
 
 const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -14,8 +15,9 @@ const Navigation = () => {
           {/* Logo */}
           <Link
             href="/"
-            className="text-xl font-light tracking-tight text-gray-900 underline decoration-transparent hover:decoration-gray-900 underline-offset-4 transition-all duration-300 ease-in-out"
+            className="flex gap-1 text-xl font-semibold tracking-tight text-gray-900 underline decoration-transparent hover:decoration-gray-900 underline-offset-4 transition-all duration-300 ease-in-out"
           >
+            <img src="/logo.svg" className="w-5" />
             houra
           </Link>
 
@@ -54,7 +56,7 @@ const Navigation = () => {
           </div>
 
           {/* Desktop Auth Buttons */}
-          {isNotLoggedIn && (
+          {isNotLoggedIn ? (
             <div className="hidden md:flex items-center space-x-4">
               <Link
                 href="/login"
@@ -69,9 +71,10 @@ const Navigation = () => {
                 Get Started
               </Link>
             </div>
+          ) : (
+            <AccountMenuButton name="Account" />
           )}
         </div>
-
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden">

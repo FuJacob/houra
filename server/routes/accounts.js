@@ -97,6 +97,8 @@ router.post("/addAccount", authenticateToken, async (req, res) => {
       accountName: data.accountName,
       accountBalance: data.accountBalance, // Make sure 'balance' is the correct field name from the request
       reloadFreq: data.reloadFreq,
+      colour: data.colour, // Add this line
+      type: data.type, // Add this line
     };
 
     // Query the database for user data

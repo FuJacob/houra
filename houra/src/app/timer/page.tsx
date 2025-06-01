@@ -48,17 +48,13 @@ export default function Timer() {
 
   // Effect hook to handle countdown timer when running
   useEffect(() => {
-    // Stop timer if timeLeft reaches zero or below
-    if (state.timeLeft <= 0) {
-      dispatch(setRunning(false));
-    }
-
-    if (state.running) {
+    if (state.running && state.timeLeft > 0) {
       const interval = setInterval(() => {
-        // Decrease timeLeft by 1 every second
         dispatch(setTimeLeft(state.timeLeft - 1));
       }, 1000);
       return () => clearInterval(interval);
+    } else if (state.timeLeft <= 0) {
+      dispatch(setRunning(false));
     }
   }, [state.running, state.timeLeft]);
 
