@@ -5,6 +5,8 @@ import { reducer, setRunning, setTimeLeft } from "./TimeReducer";
 import { useContext } from "react";
 import { selectedAccountContext } from "../contexts";
 import { useAuth } from "@/hooks/useAuth";
+import { FaArrowDown, FaArrowRight } from "react-icons/fa6";
+import Link from "next/link";
 
 // Timer component displays and controls a countdown timer
 export default function Timer() {
@@ -14,7 +16,7 @@ export default function Timer() {
   // Account interface defines the expected structure of an account object
 
   // Accessing the selected account from context
-  const { selectedAccount } = useContext(selectedAccountContext);
+  const { selectedAccount, goToAccounts } = useContext(selectedAccountContext);
 
   // Reducer state contains whether the timer is running and the time left in seconds
   const [state, dispatch] = useReducer(reducer, {
@@ -121,7 +123,13 @@ export default function Timer() {
       }
     };
     updateAccount();
-  }, [state.running, selectedAccount.accountNumber, startTime, state.timeLeft, getAccessToken]);
+  }, [
+    state.running,
+    selectedAccount.accountNumber,
+    startTime,
+    state.timeLeft,
+    getAccessToken,
+  ]);
 
   // update time
   return (
@@ -134,10 +142,20 @@ export default function Timer() {
             : `${selectedAccount.colour}20`,
       }}
     >
-      <div className="text-3xl sm:text-5xl font-light flex justify-center w-full h-[60px] text-center">
-        {selectedAccount.accountNumber === 0
-          ? "Select an Account to begin "
-          : selectedAccount.accountName}
+      <div className="text-xl text-gray-500 font-medium  flex justify-center w-full h-[60px] text-center">
+        {selectedAccount.accountNumber === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full space-y-2">
+            <p>Account Mode</p>{" "}
+            <Link
+              href="/timer"
+              className="text-sm flex items-center justify-center underline decoration-1 underline-offset-2"
+            >
+              Or go enter free mode →
+            </Link>
+          </div>
+        ) : (
+          selectedAccount.accountName
+        )}
       </div>
 
       {/* Main timer display */}
@@ -190,8 +208,19 @@ export default function Timer() {
               : "\u00A0"}
           </span>
         </div>
+        <button
+          onClick={goToAccounts}
+          className="flex flex-col justify-center items-center gap-2 px-4 py-2 transition-colors group"
+        >
+          {/* <span className="font-medium text-gray-900 text-sm">
+            Go to my accounts
+          </span> */}
+          <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full group-hover:bg-gray-200 transition-colors">
+            <FaArrowDown className="w-5 h-5 text-black group-hover:translate-y-0.5 transition-transform" />
+          </div>{" "}
+        </button>
         <h3 className="text-foreground font-light">
-          {selectedAccount.accountNumber === 0 ? "" : "Current in use"}
+          {selectedAccount.accountNumber === 0 ? "" : "Being used"}
         </h3>
       </div>
     </div>

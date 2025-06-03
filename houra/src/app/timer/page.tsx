@@ -19,6 +19,7 @@ import {
 } from "./getTimeFromSeconds";
 
 import { Account } from "@/types/types";
+import { FaArrowRight } from "react-icons/fa6";
 
 // Timer component displays and controls a countdown timer
 export default function Timer() {
@@ -89,8 +90,16 @@ export default function Timer() {
                     backgroundColor: `${currentAccount.colour}20`,
                   }}
                 >
-                  <div className="text-3xl sm:text-3xl font-light flex justify-center w-full h-[60px] text-center">
-                    Timer
+                  <div className="text-xl text-gray-500 font-medium  flex justify-center w-full h-[60px] text-center">
+                    <div className="flex flex-col items-center justify-center h-full space-y-2">
+                      <p>Free-mode </p>
+                      <Link
+                        href="/home"
+                        className="text-sm flex items-center justify-center underline decoration-1 underline-offset-2"
+                      >
+                        Or go enter account mode →
+                      </Link>
+                    </div>
                   </div>
 
                   {/* Main timer display */}

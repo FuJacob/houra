@@ -11,6 +11,15 @@ export interface AccountContextType {
   setSelectedAccount: React.Dispatch<React.SetStateAction<Account>>;
 }
 
+export interface SelectedAccountContextType {
+  selectedAccount: Account;
+  setSelectedAccount: React.Dispatch<React.SetStateAction<Account>>;
+  timerRef: React.RefObject<HTMLDivElement | null>;
+  accountsRef: React.RefObject<HTMLDivElement | null>;
+  bringToTimer: () => void;
+  goToAccounts: () => void;
+}
+
 export interface Account {
   accountNumber: number;
   accountName: string;

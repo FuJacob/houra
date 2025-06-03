@@ -1,6 +1,6 @@
 import { createContext } from "react";
 import {
-  AccountContextType,
+  SelectedAccountContextType,
   CurrentUserContextType,
   showAddAccountModalContextType,
   HomeContextType,
@@ -12,18 +12,29 @@ export const showAddAccountModalContext =
     setShowAddAccountModal: () => {},
   });
 
-export const selectedAccountContext = createContext<AccountContextType>({
-  selectedAccount: {
-    accountNumber: 0,
-    accountName: "",
-    accountBalance: 0,
-    reloadFreq: "",
-    colour: "background",
-    transactions: [],
-    type: "",
-  },
-  setSelectedAccount: () => {},
+// Create default refs for context
+const createDefaultRef = (): React.RefObject<HTMLDivElement | null> => ({
+  current: null,
 });
+
+export const selectedAccountContext = createContext<SelectedAccountContextType>(
+  {
+    selectedAccount: {
+      accountNumber: 0,
+      accountName: "",
+      accountBalance: 0,
+      reloadFreq: "",
+      colour: "background",
+      transactions: [],
+      type: "",
+    },
+    setSelectedAccount: () => {},
+    timerRef: createDefaultRef(),
+    accountsRef: createDefaultRef(),
+    bringToTimer: () => {},
+    goToAccounts: () => {},
+  }
+);
 
 export const CurrentUserContext = createContext<CurrentUserContextType>({
   currentUser: {

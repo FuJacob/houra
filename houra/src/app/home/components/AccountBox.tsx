@@ -6,29 +6,31 @@ import { Account } from "@/types/types";
 import Image from "next/image";
 
 const AccountBox = ({ account }: { account: Account }) => {
-  const { selectedAccount, setSelectedAccount } = useContext(
+  const { selectedAccount, setSelectedAccount, bringToTimer } = useContext(
     selectedAccountContext
   );
   const seconds = account.accountBalance % 60;
   const minutes = Math.floor(account.accountBalance / 60) % 60;
   const hours = Math.floor(account.accountBalance / 3600);
+  const handleClick = () => {
+    if (selectedAccount.accountNumber == account.accountNumber) {
+      setSelectedAccount({
+        accountNumber: 0,
+        accountName: "",
+        accountBalance: 0,
+        reloadFreq: "",
+        colour: "background",
+        transactions: [],
+        type: "",
+      });
+    } else {
+      setSelectedAccount(account);
+      bringToTimer();
+    }
+  };
   return (
     <button
-      onClick={() => {
-        if (selectedAccount.accountNumber == account.accountNumber) {
-          setSelectedAccount({
-            accountNumber: 0,
-            accountName: "",
-            accountBalance: 0,
-            reloadFreq: "",
-            colour: "background",
-            transactions: [],
-            type: "",
-          });
-        } else {
-          setSelectedAccount(account);
-        }
-      }}
+      onClick={handleClick}
       className={`w-full h-48 sm:h-58 relative group transition-all duration-300 transform hover:scale-105 ${
         selectedAccount.accountNumber === 0
           ? ""

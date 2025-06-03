@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Timer from "./components/Timer";
 import AddAccountModal from "./components/AddAccountModal";
 import AllAccounts from "./components/AllAccounts";
@@ -14,9 +14,19 @@ import {
   HomeContext,
 } from "./contexts";
 
+const scrollToElement = (element: HTMLDivElement | null) => {
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth" });
+  }
+};
+
 const Page = () => {
   const { getAccessToken } = useAuth();
-  
+  const timerRef = useRef<HTMLDivElement | null>(null);
+  const accountsRef = useRef<HTMLDivElement | null>(null);
+
+  const bringToTimer = () => scrollToElement(timerRef.current);
+  const goToAccounts = () => scrollToElement(accountsRef.current);
   const [selectedAccount, setSelectedAccount] = useState<Account>({
     accountNumber: 0,
     accountName: "",
@@ -95,7 +105,14 @@ const Page = () => {
         value={{ showAddAccountModal, setShowAddAccountModal }}
       >
         <selectedAccountContext.Provider
-          value={{ selectedAccount, setSelectedAccount }}
+          value={{
+            selectedAccount,
+            setSelectedAccount,
+            timerRef,
+            accountsRef,
+            bringToTimer,
+            goToAccounts,
+          }}
         >
           <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
             <div className="min-h-screen flex flex-col justify-center items-center">
@@ -107,6 +124,7 @@ const Page = () => {
                       ? "background"
                       : `${selectedAccount.colour}10`,
                 }}
+                ref={timerRef}
               >
                 <div className="w-full max-w-7xl">
                   {/* Header */}
@@ -120,7 +138,9 @@ const Page = () => {
                         <Timer />
                       </div>
                       <AccountHistory />
-                      <AllAccounts />
+                      <div ref={accountsRef}>
+                        <AllAccounts />
+                      </div>
                     </div>
                   </main>
 
