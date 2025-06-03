@@ -179,10 +179,10 @@ router.delete("/deleteAccount", authenticateToken, async (req, res) => {
 router.patch("/updateAccount", authenticateToken, async (req, res) => {
   try {
     const email = req.user.email;
-    const { accountNumber, accountBalance } = req.body;
+    const { accountNumber, accountBalance, accountName, reloadFreq, colour, type } = req.body;
 
-    if (!accountNumber || accountBalance == null) {
-      return res.status(400).json({ message: "Missing account fields." });
+    if (!accountNumber) {
+      return res.status(400).json({ message: "Missing account number." });
     }
 
     const user = await User.findOne({ email });
@@ -199,7 +199,12 @@ router.patch("/updateAccount", authenticateToken, async (req, res) => {
       return res.status(404).json({ message: "Account not found." });
     }
 
-    account.accountBalance = accountBalance;
+    // Update only provided fields
+    if (accountBalance != null) account.accountBalance = accountBalance;
+    if (accountName) account.accountName = accountName;
+    if (reloadFreq) account.reloadFreq = reloadFreq;
+    if (colour) account.colour = colour;
+    if (type) account.type = type;
 
     const updatedUser = await user.save();
 

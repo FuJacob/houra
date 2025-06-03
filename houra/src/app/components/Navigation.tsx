@@ -96,7 +96,6 @@ const Navigation = () => {
           ) : (
             <AccountMenuButton name={name} />
           )}
-          {name}
         </div>
         {/* Mobile Menu */}
         {isMobileMenuOpen && (

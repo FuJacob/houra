@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 const Page = () => {
   const router = useRouter();
   const { setAccessToken } = useAuth();
-  
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -33,38 +33,46 @@ const Page = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-white">
-      <div className="flex justify-center w-full">
-        <div className="w-full max-w-lg px-4 py-24">
-          <div className="text-center mb-12">
-            <h1 className="text-3xl font-light text-gray-900 mb-4">
-              Welcome back
+    <div className="min-h-screen w-full bg-background flex items-center justify-center">
+      <div className="w-full max-w-md px-6">
+        {/* Logo and Title */}
+        <div className="text-center mb-10">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <img src="/logo.svg" className="w-12 h-12" alt="Houra logo" />
+            <h1 className="text-4xl font-light text-gray-900 tracking-tight">
+              houra
             </h1>
-            <p className="text-gray-500">
-              New to Houra?{" "}
-              <Link
-                href="/signup"
-                className="text-gray-900 hover:text-gray-700 transition-colors"
-              >
-                Sign up
-              </Link>
-            </p>
           </div>
+          <h2 className="text-2xl font-light text-gray-900 mb-3">
+            Welcome back
+          </h2>
+          <p className="text-gray-500">
+            New to Houra?{" "}
+            <Link
+              href="/signup"
+              className="text-gray-900 hover:text-gray-700 transition-colors font-medium"
+            >
+              Sign up
+            </Link>
+          </p>
+        </div>
 
+        {/* Login Form Card */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm text-gray-700 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Your email address
+                Email address
               </label>
               <input
                 required
                 id="email"
                 name="email"
                 type="email"
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
                 placeholder="you@example.com"
               />
             </div>
@@ -72,23 +80,23 @@ const Page = () => {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm text-gray-700 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Your password
+                Password
               </label>
               <input
                 required
                 id="password"
                 name="password"
                 type="password"
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
                 placeholder="••••••••"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full px-8 py-4 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors text-sm font-medium"
+              className="w-full px-8 py-4 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-medium"
             >
               Log in
             </button>
