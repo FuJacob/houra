@@ -5,12 +5,18 @@ import { reducer, setRunning, setTimeLeft } from "./TimeReducer";
 import { useContext } from "react";
 import { selectedAccountContext } from "../contexts";
 import { useAuth } from "@/hooks/useAuth";
-import { FaArrowDown, FaArrowRight } from "react-icons/fa6";
+import {
+  FaArrowDown,
+  FaArrowRight,
+  FaExpand,
+  FaCompress,
+} from "react-icons/fa6";
 import Link from "next/link";
 
 // Timer component displays and controls a countdown timer
 export default function Timer() {
   const [startTime, setStartTime] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const { getAccessToken } = useAuth();
 
   // Account interface defines the expected structure of an account object
@@ -131,10 +137,44 @@ export default function Timer() {
     getAccessToken,
   ]);
 
+  // Fullscreen functionality
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement
+        .requestFullscreen()
+        .then(() => {
+          setIsFullscreen(true);
+        })
+        .catch((err) => {
+          console.error("Error attempting to enable fullscreen:", err);
+        });
+    } else {
+      document
+        .exitFullscreen()
+        .then(() => {
+          setIsFullscreen(false);
+        })
+        .catch((err) => {
+          console.error("Error attempting to exit fullscreen:", err);
+        });
+    }
+  };
+
+  // Listen for fullscreen changes
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () =>
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
+
   // update time
   return (
     <div
-      className={`flex flex-col items-center justify-center p-4 sm:p-12 transition-all duration-300 rounded-2xl`}
+      className={`relative flex flex-col items-center justify-center p-4 sm:p-12 transition-all duration-300 rounded-2xl`}
       style={{
         backgroundColor:
           selectedAccount.accountNumber === 0
@@ -199,6 +239,19 @@ export default function Timer() {
           {state.running ? "Pause" : "Start"}
         </button>
       </div>
+
+      {/* Fullscreen Button */}
+      <button
+        onClick={toggleFullscreen}
+        className="absolute bottom-4 right-4 p-3 bg-white/80 hover:bg-white/90 rounded-full shadow-lg transition-all duration-200 hover:scale-105 border border-gray-200"
+        title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+      >
+        {isFullscreen ? (
+          <FaCompress className="w-4 h-4 text-gray-700" />
+        ) : (
+          <FaExpand className="w-4 h-4 text-gray-700" />
+        )}
+      </button>
 
       <div className="flex text-2xl justify-between items-end w-full mt-8">
         <div className="flex items-center text-foreground/60">

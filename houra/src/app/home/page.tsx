@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Timer from "./components/Timer";
 import AddAccountModal from "./components/AddAccountModal";
 import AllAccounts from "./components/AllAccounts";
@@ -21,6 +22,7 @@ const scrollToElement = (element: HTMLDivElement | null) => {
 };
 
 const Page = () => {
+  const router = useRouter();
   const { getAccessToken } = useAuth();
   const timerRef = useRef<HTMLDivElement | null>(null);
   const accountsRef = useRef<HTMLDivElement | null>(null);
@@ -45,6 +47,10 @@ const Page = () => {
     accounts: [],
   });
 
+  useEffect(() => {
+    const accessToken = getAccessToken();
+    if (!accessToken) router.push("/login");
+  }, []);
   const [showAddAccountModal, setShowAddAccountModal] = useState(false);
 
   useEffect(() => {

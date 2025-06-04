@@ -56,26 +56,28 @@ const Navigation = () => {
           </button>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link
-              href="#features"
-              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              Features
-            </Link>
-            <Link
-              href="#how-it-works"
-              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              How it works
-            </Link>
-            <Link
-              href="/about"
-              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              About
-            </Link>
-          </div>
+          {isNotLoggedIn && (
+            <div className="hidden md:flex items-center space-x-8">
+              <Link
+                href="#features"
+                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Features
+              </Link>
+              <Link
+                href="#how-it-works"
+                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                How it works
+              </Link>
+              <Link
+                href="/about"
+                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                About
+              </Link>
+            </div>
+          )}
 
           {/* Desktop Auth Buttons */}
           {isNotLoggedIn ? (
@@ -101,38 +103,44 @@ const Navigation = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link
-                href="#features"
-                className="block px-3 py-2 text-base text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                Features
-              </Link>
-              <Link
-                href="#how-it-works"
-                className="block px-3 py-2 text-base text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                How it works
-              </Link>
-              <Link
-                href="/about"
-                className="block px-3 py-2 text-base text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                About
-              </Link>
-              <div className="pt-4 flex flex-col space-y-2">
-                <Link
-                  href="/login"
-                  className="block px-3 py-2 text-base text-gray-900 hover:text-gray-600 transition-colors"
-                >
-                  Log in
-                </Link>
-                <Link
-                  href="/signup"
-                  className="block px-3 py-2 text-base text-white bg-gray-900 rounded-full hover:bg-gray-800 transition-colors text-center"
-                >
-                  Get Started
-                </Link>
-              </div>
+              {isNotLoggedIn && (
+                <>
+                  <Link
+                    href="#features"
+                    className="block px-3 py-2 text-base text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    Features
+                  </Link>
+                  <Link
+                    href="#how-it-works"
+                    className="block px-3 py-2 text-base text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    How it works
+                  </Link>
+                  <Link
+                    href="/about"
+                    className="block px-3 py-2 text-base text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    About
+                  </Link>
+                </>
+              )}
+              {isNotLoggedIn && (
+                <div className="pt-4 flex flex-col space-y-2">
+                  <Link
+                    href="/login"
+                    className="block px-3 py-2 text-base text-gray-900 hover:text-gray-600 transition-colors"
+                  >
+                    Log in
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="block px-3 py-2 text-base text-white bg-gray-900 rounded-full hover:bg-gray-800 transition-colors text-center"
+                  >
+                    Get Started
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         )}
