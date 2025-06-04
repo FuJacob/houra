@@ -1,16 +1,35 @@
 "use client";
 import React, { use, useState } from "react";
 import Link from "next/link";
-import { FaBars, FaX } from "react-icons/fa6";
+import { FaBars, FaX, FaClock, FaRocket, FaUser } from "react-icons/fa6";
 import { useAuth } from "@/hooks/useAuth";
 import AccountMenuButton from "../home/components/AccountMenuButton";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [currentTime, setCurrentTime] = useState("");
   const { isAuthenticated } = useAuth();
   const { getAccessToken } = useAuth();
   const isNotLoggedIn = !isAuthenticated();
   const [name, setName] = useState("");
+  const router = useRouter();
+
+  // Update current time every second
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      setCurrentTime(
+        now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+      );
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     const fetchAccount = async () => {
       const accessToken = getAccessToken();
