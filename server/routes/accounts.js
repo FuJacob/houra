@@ -14,6 +14,7 @@ const jwt = require("jsonwebtoken");
 const authenticateToken = require("../middleware/authenticateToken").default;
 const generateAccountNumber =
   require("./utils/generateAccountNumber.tsx").default;
+const reloadMap = require("./utils/reloadMap.ts").default;
 router.get("/getAccount", authenticateToken, async (req, res) => {
   // GET /getAccount - Retrieves a specific account by accountNumber for the authenticated user
   try {
@@ -179,7 +180,14 @@ router.delete("/deleteAccount", authenticateToken, async (req, res) => {
 router.patch("/updateAccount", authenticateToken, async (req, res) => {
   try {
     const email = req.user.email;
-    const { accountNumber, accountBalance, accountName, reloadFreq, colour, type } = req.body;
+    const {
+      accountNumber,
+      accountBalance,
+      accountName,
+      reloadFreq,
+      colour,
+      type,
+    } = req.body;
 
     if (!accountNumber) {
       return res.status(400).json({ message: "Missing account number." });
@@ -289,4 +297,156 @@ router.patch("/addAccountTransaction", authenticateToken, async (req, res) => {
     });
   }
 });
+
+router.patch("/reloadAccounts", authenticateToken, async (req, res) => {
+  try {
+    const email = req.user.email;
+    const user = await User.findOne({ email });
+    const currentTime = new Date().getTime();
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    user.accounts.forEach((acc) => {
+      const reloadInterval = reloadMap.get(acc.reloadFreq);
+      if (currentTime - lastReload >= reloadInterval) {
+        acc.accountBalance = acc.accountBalance + acc.reloadAmount;
+        acc.lastReload = currentTime;
+      }
+    });
+    const updatedUser = await user.save();
+    return res.status(200).json({
+      message: "Accounts reloaded successfully.",
+      user: updatedUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error with reloading accounts.",
+      error: error.message,
+    });
+  }
+});
+
+router.post("/generateMockAccounts", authenticateToken, async (req, res) => {
+  // POST /generateMockAccounts - Generates 8 mock timer activities for the authenticated user
+  try {
+    const email = req.user.email;
+    const currentTime = new Date().getTime();
+
+    // Mock data arrays for generating realistic timer activities
+    const activityNames = [
+      "Deep Work Session",
+      "Exercise & Fitness",
+      "Reading Time",
+      "Meditation & Mindfulness",
+      "Creative Writing",
+      "Learning & Study",
+      "Project Planning",
+      "Social Media Break",
+    ];
+
+    const activityTypes = [
+      "work",
+      "health",
+      "learning",
+      "break",
+      "creative",
+      "planning",
+    ];
+    const reloadFrequencies = [
+      "hourly",
+      "12hourly",
+      "daily",
+      "weekly",
+      "monthly",
+      "yearly",
+    ];
+    const colours = [
+      "#FF6B6B",
+      "#4ECDC4",
+      "#45B7D1",
+      "#96CEB4",
+      "#FFEAA7",
+      "#DDA0DD",
+      "#98D8C8",
+      "#F7DC6F",
+    ];
+
+    const mockActivities = [];
+
+    // Generate 8 mock timer activities
+    for (let i = 0; i < 8; i++) {
+      // Generate unique account number (activity ID)
+      let accountNumber;
+      while (true) {
+        const randomNumber = generateAccountNumber();
+        const userExists = await User.findOne({
+          "accounts.accountNumber": randomNumber,
+        });
+        if (!userExists) {
+          accountNumber = randomNumber;
+          break;
+        }
+      }
+
+      const mockActivity = {
+        accountNumber,
+        accountName: activityNames[i],
+        accountBalance: Math.floor(Math.random() * 7200000) + 1800000, // 30 minutes to 2 hours in milliseconds
+        reloadFreq:
+          reloadFrequencies[
+            Math.floor(Math.random() * reloadFrequencies.length)
+          ],
+        lastReload: currentTime - Math.floor(Math.random() * 86400000), // Within last 24 hours
+        reloadAmount: Math.floor(Math.random() * 3600000) + 900000, // 15 minutes to 1 hour in milliseconds
+        colour: colours[i],
+        type: activityTypes[Math.floor(Math.random() * activityTypes.length)],
+        transactions: [], // Empty array as requested
+      };
+
+      mockActivities.push(mockActivity);
+    }
+
+    // Add all mock activities to the user
+    const updatedUser = await User.findOneAndUpdate(
+      { email: email },
+      { $push: { accounts: { $each: mockActivities } } },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json({
+      message: "8 mock timer activities generated successfully.",
+      activitiesAdded: mockActivities.length,
+      user: updatedUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error generating mock timer activities.",
+      error: error.message,
+    });
+  }
+});
+
+// Delete all user documents endpoint
+router.delete("/deleteAllAccounts", authenticateToken, async (req, res) => {
+  try {
+    const email = req.user.email;
+    const user = await User.findOne({ email });
+    user.accounts = [];
+    await user.save();
+    return res
+      .status(200)
+      .json({ message: "All accounts removed successfully." });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error deleting user documents.",
+      error: error.message,
+    });
+  }
+});
+
 module.exports = router;

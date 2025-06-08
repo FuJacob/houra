@@ -8,6 +8,7 @@ import AccountHistory from "./components/AccountTransactions";
 import { User, Account } from "@/types/types";
 import Navigation from "../components/Navigation";
 import { useAuth } from "@/hooks/useAuth";
+import { dummyAccount } from "./utils/dummyAccount";
 import {
   showAddAccountModalContext,
   selectedAccountContext,
@@ -29,15 +30,7 @@ const Page = () => {
 
   const bringToTimer = () => scrollToElement(timerRef.current);
   const goToAccounts = () => scrollToElement(accountsRef.current);
-  const [selectedAccount, setSelectedAccount] = useState<Account>({
-    accountNumber: 0,
-    accountName: "",
-    accountBalance: 0,
-    reloadFreq: "",
-    colour: "gray-900",
-    transactions: [],
-    type: "",
-  });
+  const [selectedAccount, setSelectedAccount] = useState<Account>(dummyAccount);
 
   const [selectedPage, setSelectedPage] = useState("Home");
   const [currentUser, setCurrentUser] = useState<User>({
@@ -46,6 +39,31 @@ const Page = () => {
     password: "",
     accounts: [],
   });
+
+  useEffect(() => {
+    const reloadAccounts = async () => {
+      try {
+        const accessToken = getAccessToken();
+        if (!accessToken) return;
+
+        const response = await fetch(
+          "http://localhost:4500/api/accounts/reloadAccounts",
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error("Error reloading accounts:", error);
+      }
+    };
+    reloadAccounts();
+  }, []);
 
   useEffect(() => {
     const accessToken = getAccessToken();

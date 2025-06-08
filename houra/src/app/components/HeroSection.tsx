@@ -26,7 +26,7 @@ const HeroSection = () => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="w-screen bg-[url('/bg.svg')] bg-cover bg-center bg-no-repeat ">
+      <div className="w-screen">
         <section className="pt-24 md:pt-48 pb-16 px-4">
           <div className="max-w-7xl mx-auto text-center">
             <p className="text-2xl md:text-4xl text-gray-500 max-w-2xl mx-auto mb-4">

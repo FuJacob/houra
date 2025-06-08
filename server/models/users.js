@@ -11,6 +11,8 @@ const userSchema = new Schema({
       accountName: { type: String, required: true },
       accountBalance: { type: Number, required: true },
       reloadFreq: { type: String, required: true },
+      lastReload: { type: Number, required: true },
+      reloadAmount: { type: Number, required: true },
       colour: { type: String, required: true },
       type: { type: String, required: true },
       transactions: [

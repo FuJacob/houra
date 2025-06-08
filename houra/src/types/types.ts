@@ -25,6 +25,8 @@ export interface Account {
   accountName: string;
   accountBalance: number;
   reloadFreq: string;
+  lastReload: number;
+  reloadAmount: number;
   colour: string;
   transactions: Transaction[];
   type: string;
