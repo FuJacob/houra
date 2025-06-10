@@ -22,7 +22,11 @@ const Navigation = () => {
     const updateTime = () => {
       const now = new Date();
       setCurrentTime(
-        now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+        now.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        })
       );
     };
     updateTime();
@@ -49,121 +53,96 @@ const Navigation = () => {
     };
     fetchAccount();
   }, [isAuthenticated]);
+
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-100 max-w-7xl mx-auto rounded-full mt-4">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 justify-between items-center">
-          {/* Logo */}
-          <Link
-            href="/"
-            className="flex gap-1 text-xl font-semibold tracking-tight text-gray-900 underline decoration-transparent hover:decoration-gray-900 underline-offset-4 transition-all duration-300 ease-in-out"
-          >
-            <img src="/logo.svg" className="w-5" />
-            houra
-          </Link>
+    <div className="fixed top-0 left-0 right-0 z-50 px-4 pt-6">
+      <div className="max-w-2xl mx-auto">
+        <nav className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full shadow-lg shadow-black/5">
+          <div className="flex h-14 items-center px-6 relative justify-between w-full">
+            {/* Logo */}
+            <Link
+              href="/"
+              className="flex items-center gap-2 text-lg font-medium tracking-tight text-gray-900 hover:text-gray-700 transition-colors duration-200"
+            >
+              <img src="/logo.svg" className="w-4 h-4" alt="Houra" />
+              <span>houra</span>
+            </Link>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? (
-              <FaX className="h-6 w-6 text-gray-900" />
-            ) : (
-              <FaBars className="h-6 w-6 text-gray-900" />
-            )}
-          </button>
-
-          {/* Desktop Navigation */}
-          {isNotLoggedIn && (
-            <div className="hidden md:flex items-center space-x-8">
-              <Link
-                href="#features"
-                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                Features
-              </Link>
-              <Link
-                href="#how-it-works"
-                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                How it works
-              </Link>
-              <Link
-                href="/about"
-                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                About
-              </Link>
+            {/* Current Time - Centered */}
+            <div className="absolute left-1/2 transform -translate-x-1/2">
+              <div className="flex items-center gap-1 px-3 py-1.5 rounded-full">
+                <span className="text-2xl font-mono  text-gray-800 tabular-nums">
+                  {currentTime}
+                </span>
+              </div>
             </div>
-          )}
 
-          {/* Desktop Auth Buttons */}
-          {isNotLoggedIn ? (
-            <div className="hidden md:flex items-center space-x-4">
-              <Link
-                href="/login"
-                className="text-sm text-gray-900 hover:text-gray-600 transition-colors"
-              >
-                Log in
-              </Link>
-              <Link
-                href="/signup"
-                className="text-sm px-4 py-2 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors"
-              >
-                Get Started
-              </Link>
-            </div>
-          ) : (
-            <AccountMenuButton name={name} />
-          )}
-        </div>
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1">
+            {/* Desktop Auth */}
+            <div className="hidden md:flex items-center gap-3 ml-auto">
               {isNotLoggedIn && (
                 <>
                   <Link
-                    href="#features"
-                    className="block px-3 py-2 text-base text-gray-600 hover:text-gray-900 transition-colors"
-                  >
-                    Features
-                  </Link>
-                  <Link
-                    href="#how-it-works"
-                    className="block px-3 py-2 text-base text-gray-600 hover:text-gray-900 transition-colors"
-                  >
-                    How it works
-                  </Link>
-                  <Link
-                    href="/about"
-                    className="block px-3 py-2 text-base text-gray-600 hover:text-gray-900 transition-colors"
-                  >
-                    About
-                  </Link>
-                </>
-              )}
-              {isNotLoggedIn && (
-                <div className="pt-4 flex flex-col space-y-2">
-                  <Link
                     href="/login"
-                    className="block px-3 py-2 text-base text-gray-900 hover:text-gray-600 transition-colors"
+                    className="text-sm text-gray-700 hover:text-gray-900 transition-colors duration-200 px-3 py-1.5 rounded-full hover:bg-white/30"
                   >
                     Log in
                   </Link>
                   <Link
                     href="/signup"
-                    className="block px-3 py-2 text-base text-white bg-gray-900 rounded-full hover:bg-gray-800 transition-colors text-center"
+                    className="text-sm px-4 py-2 bg-gray-900/90 backdrop-blur-sm text-white rounded-full hover:bg-gray-900 transition-all duration-200 shadow-sm"
                   >
                     Get Started
                   </Link>
-                </div>
+                </>
               )}
+              {!isNotLoggedIn && <AccountMenuButton name={name} />}
             </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden p-2 rounded-full hover:bg-white/20 transition-colors duration-200"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? (
+                <FaX className="h-4 w-4 text-gray-700" />
+              ) : (
+                <FaBars className="h-4 w-4 text-gray-700" />
+              )}
+            </button>
           </div>
-        )}
-      </nav>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden border-t border-white/20 bg-white/5 backdrop-blur-sm rounded-b-3xl">
+              <div className="px-6 py-4">
+                {isNotLoggedIn && (
+                  <div className="flex flex-col gap-2">
+                    <Link
+                      href="/login"
+                      className="text-sm text-gray-700 hover:text-gray-900 transition-colors duration-200 py-2 px-3 rounded-full hover:bg-white/20 text-center"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Log in
+                    </Link>
+                    <Link
+                      href="/signup"
+                      className="text-sm px-4 py-2.5 bg-gray-900/90 backdrop-blur-sm text-white rounded-full hover:bg-gray-900 transition-all duration-200 text-center shadow-sm"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Get Started
+                    </Link>
+                  </div>
+                )}
+                {!isNotLoggedIn && (
+                  <div className="py-2">
+                    <AccountMenuButton name={name} />
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </nav>
+      </div>
     </div>
   );
 };
