@@ -101,16 +101,13 @@ const AccountBox = ({ account }: { account: Account }) => {
           {/* Enhanced chip with glass effect */}
           <div className="flex justify-start">
             <div className="relative">
-              <div className="absolute inset-0 bg-white/30 backdrop-blur-sm rounded-lg transform rotate-1"></div>
-              <div className="relative bg-white/20 backdrop-blur-sm rounded-lg p-2 border border-white/40 shadow-lg">
-                <Image
-                  src="/chip.png"
-                  className="w-10 h-8 sm:w-12 sm:h-10 relative z-10"
-                  alt="chip"
-                  width={48}
-                  height={40}
-                />
-              </div>
+              <Image
+                src="/chip.png"
+                className="w-10 h-8 sm:w-12 sm:h-10 relative z-10"
+                alt="chip"
+                width={48}
+                height={40}
+              />
             </div>
           </div>
 
