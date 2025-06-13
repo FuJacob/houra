@@ -53,61 +53,78 @@ const AccountBox = ({ account }: { account: Account }) => {
     <div className="relative w-full h-48 sm:h-60">
       <button
         onClick={handleClick}
-        className={`w-full h-full relative group transition-all duration-300 transform hover:scale-105 ${
+        className={`w-full h-full relative group transition-all duration-500 transform hover:scale-105 ${
           !isAnySelected ? "" : isSelected ? "opacity-100" : "opacity-20"
         } ${showEditModal ? "pointer-events-none" : ""}`}
       >
-        {/* Edit button */}
+        {/* Enhanced edit button with glass morphism */}
         <button
           onClick={handleEditClick}
-          className="absolute top-4 left-4 z-10 w-8 h-8 bg-white/90 hover:bg-white rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          className="absolute top-4 left-4 z-10 w-10 h-10 bg-white/30 backdrop-blur-sm hover:bg-white/50 rounded-full shadow-lg shadow-black/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 border border-white/40 hover:scale-110"
         >
-          <FaGear className="w-3 h-3 text-gray-600" />
+          <FaGear className="w-4 h-4 text-gray-700" />
         </button>
 
-        {/* Card background */}
-        <div
-          className="absolute inset-0 rounded-xl shadow-lg"
-          style={{
-            background: `linear-gradient(to bottom right, ${currentAccount.colour}, ${currentAccount.colour}80)`,
-          }}
-        />
+        {/* Enhanced card background with glass morphism layers */}
+        <div className="absolute inset-0 rounded-2xl overflow-hidden">
+          {/* Base gradient background */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(135deg, ${currentAccount.colour}90, ${currentAccount.colour}60)`,
+            }}
+          />
 
-        {/* Card content */}
-        <div className="relative h-full p-4 sm:p-6 flex flex-col justify-between">
+          {/* Glass morphism overlay */}
+          <div className="absolute inset-0 bg-white/20 backdrop-blur-sm" />
+
+          {/* Inner glow */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent" />
+
+          {/* Border */}
+          <div className="absolute inset-0 rounded-2xl border border-white/30" />
+        </div>
+
+        {/* Enhanced card content */}
+        <div className="relative h-full p-6 flex flex-col justify-between z-10">
           {/* Header */}
           <div className="flex items-start justify-between">
-            <h2 className="text-foreground text-lg sm:text-xl font-medium tracking-wide">
+            <h2 className="text-gray-800 text-lg sm:text-xl font-medium tracking-wide drop-shadow-sm">
               {currentAccount.accountName}
             </h2>
-            <div className="flex items-center gap-2 text-sm px-2 py-1 rounded-lg bg-white/15 backdrop-blur-sm text-foreground/80">
+            <div className="flex items-center gap-2 text-sm px-3 py-2 rounded-xl bg-white/30 backdrop-blur-sm text-gray-700 border border-white/40 shadow-sm hover:bg-white/40 transition-all duration-300">
               <FaClock className="w-4 h-4" />
               <span className="font-semibold">{currentAccount.reloadFreq}</span>
             </div>
           </div>
 
-          {/* Chip */}
+          {/* Enhanced chip with glass effect */}
           <div className="flex justify-start">
-            <Image
-              src="/chip.png"
-              className="w-10 h-8 sm:w-14 sm:h-12"
-              alt="chip"
-              width={56}
-              height={48}
-            />
+            <div className="relative">
+              <div className="absolute inset-0 bg-white/30 backdrop-blur-sm rounded-lg transform rotate-1"></div>
+              <div className="relative bg-white/20 backdrop-blur-sm rounded-lg p-2 border border-white/40 shadow-lg">
+                <Image
+                  src="/chip.png"
+                  className="w-10 h-8 sm:w-12 sm:h-10 relative z-10"
+                  alt="chip"
+                  width={48}
+                  height={40}
+                />
+              </div>
+            </div>
           </div>
 
-          {/* Footer */}
+          {/* Enhanced footer */}
           <div className="flex justify-between items-end">
-            <span className="text-foreground/60 text-xs sm:text-sm">
+            <span className="text-gray-600 text-xs sm:text-sm font-medium drop-shadow-sm">
               •••• {currentAccount.accountNumber.toString().slice(-4)}
             </span>
             <div className="text-right">
-              <h3 className="text-foreground text-xl sm:text-2xl font-light mb-1">
+              <h3 className="text-gray-800 text-xl sm:text-2xl font-light mb-2 drop-shadow-sm">
                 {hours}h {minutes}m {seconds}s
               </h3>
-              <div className="text-xs px-2 py-1 rounded-lg bg-white/15 backdrop-blur-sm">
-                <span className="font-medium">
+              <div className="inline-block text-xs px-3 py-2 rounded-xl bg-white/30 backdrop-blur-sm border border-white/40 shadow-sm">
+                <span className="font-medium text-gray-700">
                   {nextReloadDate.toLocaleString("en-US", {
                     month: "short",
                     day: "numeric",
@@ -120,6 +137,11 @@ const AccountBox = ({ account }: { account: Account }) => {
             </div>
           </div>
         </div>
+
+        {/* Floating particles for visual interest */}
+        <div className="absolute top-3 right-3 w-1 h-1 bg-white/60 rounded-full animate-pulse opacity-60"></div>
+        <div className="absolute bottom-6 left-6 w-0.5 h-0.5 bg-white/40 rounded-full animate-pulse delay-700 opacity-60"></div>
+        <div className="absolute top-1/3 right-6 w-1.5 h-1.5 bg-white/50 rounded-full animate-pulse delay-1000 opacity-60"></div>
       </button>
 
       {/* Edit Modal */}

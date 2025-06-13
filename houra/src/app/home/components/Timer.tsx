@@ -173,72 +173,105 @@ export default function Timer() {
 
   // update time
   return (
-    <div
-      className={`relative flex flex-col items-center justify-center p-4 sm:p-12 transition-all duration-300 rounded-2xl`}
-      style={{
-        backgroundColor:
-          selectedAccount.accountNumber === 0
-            ? "background"
-            : `${selectedAccount.colour}20`,
-      }}
-    >
-      <div className="text-xl text-gray-500 font-medium  flex justify-center w-full h-[60px] text-center">
+    <div className="relative flex flex-col items-center justify-center p-6 sm:p-12 transition-all duration-500 rounded-3xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10">
+      {/* Enhanced account header */}
+      <div className="text-xl font-medium flex justify-center w-full h-[80px] text-center mb-8">
         {selectedAccount.accountNumber === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full space-y-2">
-            <p>Account Mode</p>{" "}
+          <div className="flex flex-col items-center justify-center h-full space-y-3">
+            <div className="px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl shadow-lg">
+              <p className="text-gray-700 font-medium">Account Mode</p>
+            </div>
             <Link
               href="/timer"
-              className="text-sm flex items-center justify-center underline decoration-1 underline-offset-2"
+              className="text-sm flex items-center justify-center text-gray-600 hover:text-gray-800 transition-colors underline decoration-1 underline-offset-2 font-medium"
             >
               Or go enter free mode →
             </Link>
           </div>
         ) : (
-          selectedAccount.accountName
+          <div className="flex flex-col items-center justify-center h-full space-y-2">
+            <div className="px-8 py-4 rounded-2xl shadow-lg border border-white/30 backdrop-blur-sm">
+              <h2 className="text-gray-800 font-medium text-xl">
+                {selectedAccount.accountName}
+              </h2>
+            </div>
+          </div>
         )}
       </div>
 
-      {/* Main timer display */}
-      <div className="text-center mb-8 p-4 sm:p-16">
-        <h1
-          className="font-mono text-[120px] sm:text-[200px] leading-none tracking-tighter text-gray-900 font-light"
-          style={{
-            color: `${
-              selectedAccount.accountNumber === 0
-                ? "#111827"
-                : selectedAccount.colour
-            }`,
-          }}
-        >
-          {hoursLeft < 10 ? `0${hoursLeft}` : hoursLeft}:
-          {minutesLeft < 10 ? `0${minutesLeft}` : minutesLeft}:
-          {secondsLeft < 10 ? `0${secondsLeft}` : secondsLeft}
-        </h1>
-        <p className="text-gray-500 mt-4 text-base sm:text-lg">
-          {state.timeLeft < 60
-            ? `${hoursLeft} hours, ${minutesLeft} minutes, ${secondsLeft} seconds remaining`
-            : `${hoursLeft} hours, ${minutesLeft} minutes remaining`}
-        </p>
+      {/* Enhanced main timer display */}
+      <div className="text-center mb-12 p-8 sm:p-16 relative">
+        {/* Timer background with glass morphism */}
+
+        <div className="relative z-10">
+          <h1
+            className="font-mono text-[120px] sm:text-[200px] leading-none tracking-tighter font-light drop-shadow-lg"
+            style={{
+              color: `${
+                selectedAccount.accountNumber === 0
+                  ? "#374151"
+                  : selectedAccount.colour
+              }`,
+            }}
+          >
+            {hoursLeft < 10 ? `0${hoursLeft}` : hoursLeft}:
+            {minutesLeft < 10 ? `0${minutesLeft}` : minutesLeft}:
+            {secondsLeft < 10 ? `0${secondsLeft}` : secondsLeft}
+          </h1>
+          <div className="mt-6 px-6 py-3">
+            <p className="text-gray-600 text-base sm:text-lg font-medium">
+              {state.timeLeft < 60
+                ? `${hoursLeft} hours, ${minutesLeft} minutes, ${secondsLeft} seconds remaining`
+                : `${hoursLeft} hours, ${minutesLeft} minutes remaining`}
+            </p>
+          </div>
+        </div>
+
+        {/* Floating particles */}
+        <div className="absolute top-6 right-6 w-2 h-2 bg-white/60 rounded-full animate-pulse"></div>
+        <div className="absolute bottom-8 left-8 w-1 h-1 bg-white/40 rounded-full animate-pulse delay-1000"></div>
+        <div className="absolute top-1/3 left-6 w-1.5 h-1.5 bg-white/50 rounded-full animate-pulse delay-500"></div>
       </div>
 
-      {/* Controls */}
-      <div className="flex items-center gap-6">
+      {/* Enhanced Controls */}
+      <div className="flex gap-6 mb-8">
         <button
           onClick={() => dispatch(setRunning(!state.running))}
-          className={`
-            px-12 py-4 rounded-full text-lg font-medium transition-all
-            ${
-              selectedAccount.accountNumber === 0
-                ? "bg-gray-50 text-gray-200 cursor-not-allowed"
-                : state.running
-                ? "bg-red-50 text-red-600 hover:bg-red-100"
-                : "bg-green-50 text-green-600 hover:bg-green-100"
-            }
-          `}
+          disabled={selectedAccount.accountNumber === 0}
+          className="group px-10 py-5 bg-gray-900/90 backdrop-blur-sm text-white rounded-2xl hover:bg-gray-900 transition-all duration-300 text-xl font-medium shadow-lg shadow-gray-900/25 hover:shadow-xl hover:shadow-gray-900/30 hover:scale-[1.05] border border-gray-800/20 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {state.running ? "Pause" : "Start"}
+          <span className="group-hover:text-white/90 transition-colors">
+            {state.running ? "Pause" : "Start"}
+          </span>
+        </button>
+
+        <button
+          onClick={() => {
+            dispatch(setRunning(false));
+            dispatch(setTimeLeft(selectedAccount.accountBalance));
+          }}
+          disabled={selectedAccount.accountNumber === 0}
+          className="group px-10 py-5 bg-white/20 backdrop-blur-sm border border-white/30 text-gray-800 rounded-2xl hover:bg-white/30 hover:border-white/40 transition-all duration-300 text-xl font-medium shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10 hover:scale-[1.05] disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span className="group-hover:text-gray-900 transition-colors">
+            Reset
+          </span>
         </button>
       </div>
+
+      {/* Enhanced account selection prompt */}
+      {selectedAccount.accountNumber === 0 && (
+        <div className="text-center">
+          <div className="inline-flex items-center rounded-full px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg">
+            <button
+              onClick={goToAccounts}
+              className=" p-2 text-gray-800 hover:text-gray-900 transition-colors flex items-center justify-center gap-2"
+            >
+              <FaArrowDown className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Fullscreen Button */}
       <button
@@ -252,30 +285,6 @@ export default function Timer() {
           <FaExpand className="w-4 h-4 text-gray-700" />
         )}
       </button>
-
-      <div className="flex text-2xl justify-between items-end w-full mt-8">
-        <div className="flex items-center text-foreground/60">
-          <span>
-            {selectedAccount.accountNumber !== 0
-              ? `•••• ${selectedAccount.accountNumber.toString().slice(-4)}`
-              : "\u00A0"}
-          </span>
-        </div>
-        <button
-          onClick={goToAccounts}
-          className="flex flex-col justify-center items-center gap-2 px-4 py-2 transition-colors group"
-        >
-          {/* <span className="font-medium text-gray-900 text-sm">
-            Go to my accounts
-          </span> */}
-          <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full group-hover:bg-gray-200 transition-colors">
-            <FaArrowDown className="w-5 h-5 text-black group-hover:translate-y-0.5 transition-transform" />
-          </div>{" "}
-        </button>
-        <h3 className="text-foreground font-light">
-          {selectedAccount.accountNumber === 0 ? "" : "Being used"}
-        </h3>
-      </div>
     </div>
   );
 }

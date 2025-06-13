@@ -37,7 +37,7 @@
 } */
 
 body {
-  background: var(--background);
+  background-image: linear-gradient(to bottom right, #f9fafb, #ffffff, #f3f4f6);
   color: var(--foreground);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
 }

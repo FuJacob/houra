@@ -4,47 +4,63 @@ import { FaGithub, FaTwitter, FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <div className="w-full border-t border-gray-100">
+    <div className="w-full border-t border-white/20 bg-gradient-to-t from-gray-50/50 to-transparent">
       <div className="flex justify-center w-full">
-        <div className="w-full max-w-7xl px-4 py-12">
+        <div className="w-full max-w-7xl px-4 py-16">
           {/* Creator Section */}
           <div className="flex flex-col items-center mb-16">
-            <div className="relative w-32 h-32 rounded-full overflow-hidden mb-6">
-              <Image
-                src="/jacob.JPG"
-                alt="Jacob Fu"
-                fill
-                className="object-cover"
-                priority
-              />
+            {/* Enhanced profile image with glass morphism */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-white/20 to-white/10 backdrop-blur-xl rounded-full transform rotate-2"></div>
+              <div className="relative w-32 h-32 rounded-full overflow-hidden mb-6 border-2 border-white/30 shadow-2xl shadow-black/10 bg-white/20 backdrop-blur-sm">
+                <Image
+                  src="/jacob.JPG"
+                  alt="Jacob Fu"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
             </div>
-            <h3 className="text-2xl font-light text-gray-900 mb-2">
+
+            <h3 className="text-2xl font-light bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-2">
               Built by Jacob Fu
             </h3>
-            <p className="text-gray-500 text-center max-w-md mb-6">
+            <p className="text-gray-500 text-center max-w-md mb-8 text-lg font-light">
               Make random things.
             </p>
-            <div className="flex items-center space-x-6">
+
+            {/* Enhanced social links with glass morphism */}
+            <div className="flex items-center space-x-4">
               <Link
                 href="https://twitter.com/jacobfu"
-                className="text-gray-400 hover:text-gray-900 transition-all transform hover:scale-110"
+                className="group p-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-gray-600 hover:text-gray-900 hover:bg-white/30 transition-all duration-300 transform hover:scale-110 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10"
                 target="_blank"
               >
-                <FaTwitter size={24} />
+                <FaTwitter
+                  size={20}
+                  className="group-hover:scale-110 transition-transform"
+                />
               </Link>
               <Link
                 href="https://github.com/jacobfu"
-                className="text-gray-400 hover:text-gray-900 transition-all transform hover:scale-110"
+                className="group p-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-gray-600 hover:text-gray-900 hover:bg-white/30 transition-all duration-300 transform hover:scale-110 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10"
                 target="_blank"
               >
-                <FaGithub size={24} />
+                <FaGithub
+                  size={20}
+                  className="group-hover:scale-110 transition-transform"
+                />
               </Link>
               <Link
                 href="https://linkedin.com/in/jacobfu"
-                className="text-gray-400 hover:text-gray-900 transition-all transform hover:scale-110"
+                className="group p-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-gray-600 hover:text-gray-900 hover:bg-white/30 transition-all duration-300 transform hover:scale-110 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10"
                 target="_blank"
               >
-                <FaLinkedin size={24} />
+                <FaLinkedin
+                  size={20}
+                  className="group-hover:scale-110 transition-transform"
+                />
               </Link>
             </div>
           </div>
@@ -100,11 +116,13 @@ const Footer = () => {
             </div>
           </div> */}
 
-          {/* Bottom Section */}
+          {/* Enhanced Bottom Section */}
           <div className="text-center">
-            <p className="text-sm text-gray-500">
-              © {new Date().getFullYear()} Houra · Built with ❤️ by Jacob Fu
-            </p>
+            <div className="inline-block px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full shadow-lg shadow-black/5">
+              <p className="text-sm text-gray-600 font-light">
+                © {new Date().getFullYear()} Houra · Built with ❤️ by Jacob Fu
+              </p>
+            </div>
           </div>
         </div>
       </div>
