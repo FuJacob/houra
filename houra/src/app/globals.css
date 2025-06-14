@@ -6,27 +6,26 @@
 }
 
 @theme inline {
-  --color-primary: #9FE870;
+  --color-primary: #9fe870;
   --color-secondary: #173303;
-  --color-accent: #E2F6D5;
-  --color-accent-2: #EFF1EE;
+  --color-accent: #e2f6d5;
+  --color-accent-2: #eff1ee;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-sans: var(--font-work-sans);
+  --font-sans: var(--font-inter);
+  --font-curly: var(--font-praise);
 
-      --color-account-blue: #3B82F6;
-      --color-account-green: #22C55E;
-      --color-account-yellow: #EAB308;
-      --color-account-coral: #F97316;
-      --color-account-red: #EF4444;
-      --color-account-lavender: #C4B5FD;
-      --color-account-peach: #FBCFE8;
-      --color-account-mint: #D1FAE5;
-      --color-account-blush-pink: #FBCFE8;
-      --color-account-pale-orange: #FDE68A;
-
+  --color-account-blue: #3b82f6;
+  --color-account-green: #22c55e;
+  --color-account-yellow: #eab308;
+  --color-account-coral: #f97316;
+  --color-account-red: #ef4444;
+  --color-account-lavender: #c4b5fd;
+  --color-account-peach: #fbcfe8;
+  --color-account-mint: #d1fae5;
+  --color-account-blush-pink: #fbcfe8;
+  --color-account-pale-orange: #fde68a;
 }
 
 /* @media (prefers-color-scheme: dark) {

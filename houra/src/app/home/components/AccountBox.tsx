@@ -1,11 +1,10 @@
 "use client";
-import { FaClock } from "react-icons/fa";
+import { FaClock, FaSyncAlt } from "react-icons/fa";
 import { selectedAccountContext } from "../contexts";
 import { useContext, useState } from "react";
 import { Account } from "@/types/types";
-import Image from "next/image";
 import EditAccountModal from "./EditAccountModal";
-import { FaGear } from "react-icons/fa6";
+import { FaArrowUp, FaGear } from "react-icons/fa6";
 import { reloadMap } from "../utils/reloadMap";
 import { dummyAccount } from "../utils/dummyAccount";
 
@@ -29,7 +28,6 @@ const AccountBox = ({ account }: { account: Account }) => {
       setSelectedAccount(dummyAccount);
     } else {
       setSelectedAccount(currentAccount);
-      bringToTimer();
     }
   };
 
@@ -65,6 +63,20 @@ const AccountBox = ({ account }: { account: Account }) => {
           <FaGear className="w-4 h-4 text-gray-700" />
         </button>
 
+        {isSelected && (
+          <div className="absolute inset-0 flex justify-center z-50 items-center">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                bringToTimer();
+              }}
+              className="bg-white/30 animate-bounce animate-duration-200 animate-ease-in-out animate-infinite backdrop-blur-sm hover:bg-white/50 rounded-full shadow-lg shadow-black/10 flex items-center justify-center transition-all duration-300 border border-white/40 hover:scale-110 w-10 h-10"
+            >
+              <FaArrowUp className="text-2xl text-gray-700 " />
+            </button>
+          </div>
+        )}
+
         {/* Enhanced card background with glass morphism layers */}
         <div className="absolute inset-0 rounded-2xl overflow-hidden">
           {/* Base gradient background */}
@@ -89,49 +101,50 @@ const AccountBox = ({ account }: { account: Account }) => {
         <div className="relative h-full p-6 flex flex-col justify-between z-10">
           {/* Header */}
           <div className="flex items-start justify-between">
-            <h2 className="text-gray-800 text-lg sm:text-xl font-medium tracking-wide drop-shadow-sm">
+            <h2 className="text-gray-800 text-start sm:text-3xl font-bold tracking-wide drop-shadow-sm">
               {currentAccount.accountName}
             </h2>
-            <div className="flex items-center gap-2 text-sm px-3 py-2 rounded-xl bg-white/30 backdrop-blur-sm text-gray-700 border border-white/40 shadow-sm hover:bg-white/40 transition-all duration-300">
-              <FaClock className="w-4 h-4" />
-              <span className="font-semibold">{currentAccount.reloadFreq}</span>
-            </div>
-          </div>
-
-          {/* Enhanced chip with glass effect */}
-          <div className="flex justify-start">
-            <div className="relative">
-              <Image
-                src="/chip.png"
-                className="w-10 h-8 sm:w-12 sm:h-10 relative z-10"
-                alt="chip"
-                width={48}
-                height={40}
-              />
-            </div>
+            <div className="flex items-center gap-2 text-sm px-3 py-2 rounded-xl bg-white/30 backdrop-blur-sm text-gray-700 border border-white/40 shadow-sm hover:bg-white/40 transition-all duration-300"></div>
           </div>
 
           {/* Enhanced footer */}
           <div className="flex justify-between items-end">
-            <span className="text-gray-600 text-xs sm:text-sm font-medium drop-shadow-sm">
-              •••• {currentAccount.accountNumber.toString().slice(-4)}
-            </span>
             <div className="text-right">
-              <h3 className="text-gray-800 text-xl sm:text-2xl font-light mb-2 drop-shadow-sm">
-                {hours}h {minutes}m {seconds}s
-              </h3>
-              <div className="inline-block text-xs px-3 py-2 rounded-xl bg-white/30 backdrop-blur-sm border border-white/40 shadow-sm">
-                <span className="font-medium text-gray-700">
-                  {nextReloadDate.toLocaleString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "2-digit",
-                    hour12: true,
-                  })}
-                </span>
+              <div className="inline-block flex flex-col space-y-2 justify-center text-xs px-3 py-2 rounded-xl bg-white/30 backdrop-blur-sm border border-white/40 shadow-sm">
+                <div className="flex items-center gap-2">
+                  <FaClock />
+                  <span className="font-semibold">
+                    {currentAccount.reloadFreq}
+                  </span>
+                </div>
+                <div className="font-medium text-gray-700 flex items-center gap-2">
+                  <FaSyncAlt />
+                  {(() => {
+                    const msPerDay = 1000 * 60 * 60 * 24;
+                    const daysLeft = Math.floor(
+                      (nextReloadDate.getTime() - Date.now()) / msPerDay
+                    );
+
+                    const timeStr = nextReloadDate.toLocaleTimeString("en-US", {
+                      hour: "numeric",
+                      minute: "2-digit",
+                      hour12: true,
+                    });
+
+                    if (daysLeft <= 0) return `Today at ${timeStr}`;
+                    if (daysLeft === 1) return `Tomorrow at ${timeStr}`;
+                    return `In ${daysLeft} days at ${timeStr}`;
+                  })()}
+                </div>
               </div>
             </div>
+            {/* <span className="text-gray-600 text-xs sm:text-sm font-medium drop-shadow-sm">
+              •••• {currentAccount.accountNumber.toString().slice(-4)}
+            </span> */}
+
+            <h3 className="text-gray-800 text-xl sm:text-3xl font-light mb-2 drop-shadow-sm">
+              {hours}h {minutes}m {seconds}s
+            </h3>
           </div>
         </div>
 

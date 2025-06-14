@@ -63,12 +63,12 @@ const Page = () => {
       }
     };
     reloadAccounts();
-  }, []);
+  }, [getAccessToken]);
 
   useEffect(() => {
     const accessToken = getAccessToken();
     if (!accessToken) router.push("/login");
-  }, []);
+  }, [getAccessToken, router]);
   const [showAddAccountModal, setShowAddAccountModal] = useState(false);
 
   useEffect(() => {

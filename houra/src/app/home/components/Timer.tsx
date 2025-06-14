@@ -5,12 +5,7 @@ import { reducer, setRunning, setTimeLeft } from "./TimeReducer";
 import { useContext } from "react";
 import { selectedAccountContext } from "../contexts";
 import { useAuth } from "@/hooks/useAuth";
-import {
-  FaArrowDown,
-  FaArrowRight,
-  FaExpand,
-  FaCompress,
-} from "react-icons/fa6";
+import { FaArrowDown, FaExpand, FaCompress } from "react-icons/fa6";
 import Link from "next/link";
 
 // Timer component displays and controls a countdown timer
@@ -171,9 +166,60 @@ export default function Timer() {
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
 
+  // Calculate progress percentage
+  const progressPercentage =
+    selectedAccount.accountNumber !== 0
+      ? ((selectedAccount.accountBalance - state.timeLeft) /
+          selectedAccount.accountBalance) *
+        100
+      : 0;
+
   // update time
   return (
     <div className="relative flex flex-col items-center justify-center p-6 sm:p-12 transition-all duration-500 rounded-3xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10">
+      {/* Progress Border */}
+      {selectedAccount.accountNumber !== 0 && (
+        <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
+          {/* Top border */}
+          <div
+            className="absolute top-0 left-0 h-1 transition-all duration-1000 ease-linear rounded-tl-3xl"
+            style={{
+              width: `${Math.min(progressPercentage * 4, 100)}%`,
+              backgroundColor: selectedAccount.colour,
+              boxShadow: `0 0 10px ${selectedAccount.colour}80`,
+            }}
+          />
+          {/* Right border */}
+          <div
+            className="absolute top-0 right-0 w-1 transition-all duration-1000 ease-linear rounded-tr-3xl"
+            style={{
+              height: `${Math.min(Math.max(progressPercentage * 4 - 100, 0), 100)}%`,
+              backgroundColor: selectedAccount.colour,
+              boxShadow: `0 0 10px ${selectedAccount.colour}80`,
+            }}
+          />
+          {/* Bottom border */}
+          <div
+            className="absolute bottom-0 right-0 h-1 transition-all duration-1000 ease-linear rounded-br-3xl"
+            style={{
+              width: `${Math.min(Math.max(progressPercentage * 4 - 200, 0), 100)}%`,
+              backgroundColor: selectedAccount.colour,
+              boxShadow: `0 0 10px ${selectedAccount.colour}80`,
+              transform: "scaleX(-1)",
+            }}
+          />
+          {/* Left border */}
+          <div
+            className="absolute bottom-0 left-0 w-1 transition-all duration-1000 ease-linear rounded-bl-3xl"
+            style={{
+              height: `${Math.min(Math.max(progressPercentage * 4 - 300, 0), 100)}%`,
+              backgroundColor: selectedAccount.colour,
+              boxShadow: `0 0 10px ${selectedAccount.colour}80`,
+              transform: "scaleY(-1)",
+            }}
+          />
+        </div>
+      )}
       {/* Enhanced account header */}
       <div className="text-xl font-medium flex justify-center w-full h-[80px] text-center mb-8">
         {selectedAccount.accountNumber === 0 ? (

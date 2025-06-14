@@ -14,10 +14,12 @@ const HeroSection = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <div className="w-screen">
-        <section className="pt-32 md:pt-40 pb-16 px-4">
+        <section className="pt-32 md:pt-64 pb-16 px-4">
           <div className="max-w-7xl mx-auto text-center">
-            <h1 className="max-w-6xl px-8 py-16 text-4xl sm:text-6xl md:text-9xl font-light mx-auto bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent leading-tight tracking-tight mb-12">
-              Time is money
+            <h1 className="px-8 py-16 text-3xl sm:text-6xl md:text-8xl font-medium font-serif mx-auto bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent leading-tight tracking-tight mb-12">
+              Think Like a <span className="font-black italic">Spender</span>.{" "}
+              <br /> <span className="font-serif italic">Live</span> like a{" "}
+              <span className="font-curly">Maker</span>.
             </h1>
 
             <div className="relative w-full max-w-7xl mx-auto flex flex-col items-center">
@@ -35,9 +37,13 @@ const HeroSection = () => {
                     href="/timer"
                     className="group flex-1 px-8 py-4 bg-white/20 backdrop-blur-sm border border-white/30 text-gray-800 rounded-full hover:bg-white/30 hover:border-white/40 transition-all duration-300 text-lg font-medium text-center shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10 hover:scale-[1.02]"
                   >
-                    <span className="group-hover:text-gray-900 transition-colors">
-                      Try as guest
-                    </span>
+                    <div className="group-hover:text-gray-900 transition-colors flex items-center gap-2">
+                      Try
+                      <span className="text-2xl font-curly m-0">
+                        Flex Mode
+                      </span>{" "}
+                      as a guest
+                    </div>
                   </Link>
                 </div>
               </div>

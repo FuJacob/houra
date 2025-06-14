@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { League_Spartan, Inter } from "next/font/google";
+import { League_Spartan, Inter, Praise } from "next/font/google";
 import "./globals.css";
-
 const work_sans = League_Spartan({
   variable: "--font-work-sans",
   subsets: ["latin"],
@@ -11,6 +10,12 @@ const work_sans = League_Spartan({
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+});
+
+const praise = Praise({
+  variable: "--font-praise",
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -26,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${work_sans.variable} antialiased max-w-7xl mx-auto px-2`}
+        className={`${inter.variable} ${work_sans.variable} ${praise.variable} antialiased max-w-7xl mx-auto px-2`}
       >
         {/* <Navigation /> */}
         {children}

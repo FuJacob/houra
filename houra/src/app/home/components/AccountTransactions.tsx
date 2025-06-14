@@ -32,33 +32,16 @@ const AccountTransactions = () => {
 
         <div className="relative z-10 p-8">
           <div className="flex items-center gap-6 w-max">
-            {selectedAccount.transactions.length !== 0 ? (
-              [...selectedAccount.transactions]
-                .reverse()
-                .map((transaction) => (
-                  <TransactionCard
-                    transaction={transaction}
-                    key={transaction.startTime}
-                  />
-                ))
-            ) : (
-              <div className="flex flex-col items-center justify-center py-16 px-12">
-                <div className="relative mb-6">
-                  <div className="absolute inset-0 bg-white/40 backdrop-blur-sm rounded-full transform rotate-3"></div>
-                  <div className="relative bg-white/30 backdrop-blur-sm rounded-full p-6 border border-white/40 shadow-lg">
-                    <div className="w-12 h-12 text-gray-400 text-4xl">⏱️</div>
-                  </div>
-                </div>
-                <div className="text-center">
-                  <h3 className="text-lg font-medium text-gray-600 mb-2">
-                    No activity yet
-                  </h3>
-                  <p className="text-gray-500">
-                    Start your first timer session to see your activity here
-                  </p>
-                </div>
-              </div>
-            )}
+            {selectedAccount.transactions.length !== 0
+              ? [...selectedAccount.transactions]
+                  .reverse()
+                  .map((transaction) => (
+                    <TransactionCard
+                      transaction={transaction}
+                      key={transaction.startTime}
+                    />
+                  ))
+              : null}
           </div>
         </div>
       </div>
