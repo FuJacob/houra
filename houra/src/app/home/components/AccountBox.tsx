@@ -8,10 +8,19 @@ import { FaArrowUp, FaGear } from "react-icons/fa6";
 import { reloadMap } from "../utils/reloadMap";
 import { dummyAccount } from "../utils/dummyAccount";
 
-const AccountBox = ({ account }: { account: Account }) => {
-  const { selectedAccount, setSelectedAccount, bringToTimer } = useContext(
-    selectedAccountContext
-  );
+const AccountBox = ({
+  account,
+  isDummy = false,
+}: {
+  account: Account;
+  isDummy?: boolean;
+}) => {
+  const context = useContext(selectedAccountContext);
+  const { selectedAccount, setSelectedAccount, bringToTimer } = context || {
+    selectedAccount: { accountNumber: 0 },
+    setSelectedAccount: () => {},
+    bringToTimer: () => {},
+  };
   const [showEditModal, setShowEditModal] = useState(false);
   const [currentAccount, setCurrentAccount] = useState(account);
 
@@ -20,10 +29,11 @@ const AccountBox = ({ account }: { account: Account }) => {
   const hours = Math.floor(currentAccount.accountBalance / 3600);
 
   const isSelected =
-    selectedAccount.accountNumber === currentAccount.accountNumber;
-  const isAnySelected = selectedAccount.accountNumber !== 0;
+    !isDummy && selectedAccount.accountNumber === currentAccount.accountNumber;
+  const isAnySelected = !isDummy && selectedAccount.accountNumber !== 0;
 
   const handleClick = () => {
+    if (isDummy) return;
     if (isSelected) {
       setSelectedAccount(dummyAccount);
     } else {
@@ -32,6 +42,7 @@ const AccountBox = ({ account }: { account: Account }) => {
   };
 
   const handleEditClick = (e: React.MouseEvent) => {
+    if (isDummy) return;
     e.stopPropagation();
     setShowEditModal(true);
   };
@@ -55,15 +66,17 @@ const AccountBox = ({ account }: { account: Account }) => {
           !isAnySelected ? "" : isSelected ? "opacity-100" : "opacity-20"
         } ${showEditModal ? "pointer-events-none" : ""}`}
       >
-        {/* Enhanced edit button with glass morphism */}
-        <button
-          onClick={handleEditClick}
-          className="absolute top-4 left-4 z-10 w-10 h-10 bg-white/30 backdrop-blur-sm hover:bg-white/50 rounded-full shadow-lg shadow-black/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 border border-white/40 hover:scale-110"
-        >
-          <FaGear className="w-4 h-4 text-gray-700" />
-        </button>
+        {/* Enhanced edit button with glass morphism - only show if not dummy */}
+        {!isDummy && (
+          <button
+            onClick={handleEditClick}
+            className="absolute top-4 left-4 z-10 w-10 h-10 bg-white/30 backdrop-blur-sm hover:bg-white/50 rounded-full shadow-lg shadow-black/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 border border-white/40 hover:scale-110"
+          >
+            <FaGear className="w-4 h-4 text-gray-700" />
+          </button>
+        )}
 
-        {isSelected && (
+        {isSelected && !isDummy && (
           <div className="absolute inset-0 flex justify-center z-50 items-center">
             <button
               onClick={(e) => {
@@ -154,8 +167,8 @@ const AccountBox = ({ account }: { account: Account }) => {
         <div className="absolute top-1/3 right-6 w-1.5 h-1.5 bg-white/50 rounded-full animate-pulse delay-1000 opacity-60"></div>
       </button>
 
-      {/* Edit Modal */}
-      {showEditModal && (
+      {/* Edit Modal - only show if not dummy */}
+      {showEditModal && !isDummy && (
         <EditAccountModal
           account={currentAccount}
           onClose={() => setShowEditModal(false)}

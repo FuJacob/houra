@@ -15,6 +15,8 @@ const dummyAccounts: Account[] = [
     colour: "#3B82F6",
     transactions: [],
     type: "growth",
+    lastReload: 0,
+    reloadAmount: 0,
   },
   {
     accountNumber: 987654321,
@@ -24,6 +26,8 @@ const dummyAccounts: Account[] = [
     colour: "#10B981",
     transactions: [],
     type: "savings",
+    lastReload: 0,
+    reloadAmount: 0,
   },
   {
     accountNumber: 1122334455,
@@ -33,6 +37,8 @@ const dummyAccounts: Account[] = [
     colour: "#F59E0B",
     transactions: [],
     type: "checking",
+    lastReload: 0,
+    reloadAmount: 0,
   },
   {
     accountNumber: 5566778899,
@@ -42,6 +48,8 @@ const dummyAccounts: Account[] = [
     colour: "#8B5CF6",
     transactions: [],
     type: "entertainment",
+    lastReload: 0,
+    reloadAmount: 0,
   },
   {
     accountNumber: 2233445566,
@@ -51,6 +59,8 @@ const dummyAccounts: Account[] = [
     colour: "#06B6D4",
     transactions: [],
     type: "education",
+    lastReload: 0,
+    reloadAmount: 0,
   },
   {
     accountNumber: 7788990011,
@@ -60,6 +70,8 @@ const dummyAccounts: Account[] = [
     colour: "#EF4444",
     transactions: [],
     type: "entertainment",
+    lastReload: 0,
+    reloadAmount: 0,
   },
 ];
 
