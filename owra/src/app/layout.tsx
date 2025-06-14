@@ -19,7 +19,7 @@ const praise = Praise({
 });
 
 export const metadata: Metadata = {
-  title: "Houra",
+  title: "Owra",
   description: "The next generation time management app",
 };
 

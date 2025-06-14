@@ -64,8 +64,8 @@ const Navigation = () => {
               href="/"
               className="flex items-center gap-2 text-lg font-medium tracking-tight text-gray-900 hover:text-gray-700 transition-colors duration-200"
             >
-              <img src="/logo.svg" className="w-4 h-4" alt="Houra" />
-              <span>houra</span>
+              <img src="/logo.svg" className="w-4 h-4" alt="Owra" />
+              <span className="">owra</span>
             </Link>
 
             {/* Current Time - Centered */}

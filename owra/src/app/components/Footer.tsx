@@ -46,7 +46,7 @@ const Footer = () => (
 
       {/* Bottom Section */}
       <p className="text-sm text-gray-600 font-light inline-block px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full shadow-lg shadow-black/5 select-none">
-        © {new Date().getFullYear()} Houra. All rights reserved.
+        © {new Date().getFullYear()} Owra. All rights reserved.
       </p>
     </div>
   </footer>

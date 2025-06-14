@@ -14,12 +14,12 @@ const TimeCard = ({ seconds }: TimeCardProps) => {
         {/* Card Header */}
         <div className="flex justify-between mb-4 items-center">
           <div className="flex flex-col text-start">
-            <p className="text-gray-500 font-light text-5xl mb-2">houra</p>
+            <p className="text-gray-500 font-light text-5xl mb-2">owra</p>
             <div className="text-base font-medium">
               It's been <span className="font-bold">{seconds} seconds</span>.
             </div>
           </div>
-          <img src="/logo.svg" className="w-10" alt="Houra logo" />
+          <img src="/logo.svg" className="w-10" alt="Owra logo" />
         </div>
 
         {/* Card Image */}

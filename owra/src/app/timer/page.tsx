@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useReducer, useState } from "react";
-import Navigation from "../../app/components/Navigation";
+import Navigation from "../components/Navigation";
 import AccountHistory from "../home/components/AccountTransactions";
 import DummyAllAccounts from "../home/components/DummyAllAccounts";
 import {
@@ -228,8 +228,8 @@ export default function Timer() {
                               currentAccount.colour === hex
                                 ? "border-gray-800 shadow-md scale-105"
                                 : hex === "#FFFFFF"
-                                ? "border-gray-400 opacity-90 hover:border-gray-600"
-                                : "border-gray-300 opacity-70 hover:border-gray-400"
+                                  ? "border-gray-400 opacity-90 hover:border-gray-600"
+                                  : "border-gray-300 opacity-70 hover:border-gray-400"
                             }`}
                             style={{ backgroundColor: hex }}
                             onClick={() =>

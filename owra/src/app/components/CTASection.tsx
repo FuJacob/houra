@@ -36,7 +36,7 @@ const CTASection = () => {
 
                   <Link
                     href="/signup"
-                    className=" mb-12 group inline-flex px-12 py-5 bg-gray-900/90 backdrop-blur-sm text-white rounded-full hover:bg-gray-900 transition-all duration-300 text-lg font-medium shadow-lg shadow-gray-900/25 hover:shadow-xl hover:shadow-gray-900/30 hover:scale-[1.05] border border-gray-800/20"
+                    className=" mb-22 group inline-flex px-12 py-5 bg-gray-900/90 backdrop-blur-sm text-white rounded-full hover:bg-gray-900 transition-all duration-300 text-lg font-medium shadow-lg shadow-gray-900/25 hover:shadow-xl hover:shadow-gray-900/30 hover:scale-[1.05] border border-gray-800/20"
                   >
                     <span className="group-hover:text-white/90 transition-colors">
                       Get Started Now

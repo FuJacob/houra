@@ -43,18 +43,18 @@ const Page = () => {
                 <div className="relative">
                   <div className="absolute inset-0 bg-white/40 backdrop-blur-sm rounded-full transform rotate-3"></div>
                   <div className="relative bg-white/60 backdrop-blur-sm p-3 rounded-full border border-white/30 shadow-lg">
-                    <img src="/logo.svg" className="w-8 h-8" alt="Houra logo" />
+                    <img src="/logo.svg" className="w-8 h-8" alt="Owra logo" />
                   </div>
                 </div>
                 <h1 className="text-4xl font-light bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent tracking-tight">
-                  houra
+                  owra
                 </h1>
               </div>
               <h2 className="text-3xl font-light text-gray-900 mb-4 leading-tight">
                 Welcome back
               </h2>
               <p className="text-gray-600 text-lg">
-                New to Houra?{" "}
+                New to Owra?{" "}
                 <Link
                   href="/signup"
                   className="text-gray-900 hover:text-gray-700 transition-colors font-medium underline decoration-2 underline-offset-4"

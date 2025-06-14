@@ -13,7 +13,7 @@ const Test = () => {
         <div className="flex flex-col items-center justify-center w-full">
           <div className="flex flex-row items-center justify-between w-full">
             <div className="flex flex-col ">
-              <p className="text-gray-500 font-light text-4xl mb-2">houra</p>
+              <p className="text-gray-500 font-light text-4xl mb-2">owra</p>
               <Link
                 href="/signup"
                 className=" flex-1 max-w-2/3 transition-colors text-sm font-medium"
