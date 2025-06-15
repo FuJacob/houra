@@ -7,7 +7,8 @@ import { selectedAccountContext } from "../contexts";
 import { useAuth } from "@/hooks/useAuth";
 import { FaArrowDown, FaExpand, FaCompress } from "react-icons/fa6";
 import Link from "next/link";
-import { addTransaction, updateAccount } from "@/actions";
+import { createClient } from "@/utils/supabase/client";
+
 // Timer component displays and controls a countdown timer
 export default function Timer() {
   const [start_time, setstart_time] = useState(0);
@@ -57,6 +58,21 @@ export default function Timer() {
     const syncTransaction = async () => {
       if (!state.running && start_time && start_time !== 0) {
         try {
+          const supabase = await createClient();
+
+          const {
+            data: { user },
+            error: userError,
+          } = await supabase.auth.getUser();
+
+          if (userError) {
+            throw new Error(userError.message);
+          }
+
+          if (!user) {
+            throw new Error("User not found");
+          }
+
           const end_time = Date.now();
 
           const newTransaction = {
@@ -66,13 +82,43 @@ export default function Timer() {
             duration: end_time - start_time,
           };
 
-          await addTransaction(newTransaction, selectedAccount.id!);
+          // Check if account belongs to user
+          const { data: account, error: accountError } = await supabase
+            .from("accounts")
+            .select("*")
+            .eq("id", selectedAccount.id)
+            .eq("user_id", user.id)
+            .single();
+
+          if (accountError || !account) {
+            throw new Error("Account does not belong to user");
+          }
+
+          // Add transaction
+          const { data: transactionData, error: transactionError } =
+            await supabase.from("transactions").insert({
+              ...newTransaction,
+              account_id: account.id,
+            });
+
+          if (transactionError) {
+            throw new Error(transactionError.message);
+          }
+
           setstart_time(0);
 
-          await updateAccount(selectedAccount.id!, {
-            ...selectedAccount,
-            account_balance: state.timeLeft,
-          });
+          // Update account
+          const { data: updateData, error: updateError } = await supabase
+            .from("accounts")
+            .update({
+              ...selectedAccount,
+              account_balance: state.timeLeft,
+            })
+            .eq("id", selectedAccount.id!);
+
+          if (updateError) {
+            throw new Error(updateError.message);
+          }
 
           console.log("Account updated successfully");
         } catch (error) {
@@ -173,18 +219,12 @@ export default function Timer() {
         </div>
       )}
       {/* Enhanced account header */}
-      <div className="text-xl font-medium flex justify-center w-full h-[80px] text-center mb-8">
+      <div className="text-xl font-medium flex flex-col gap-4 justify-center w-full h-[80px] text-center mb-2">
         {selectedAccount.id === "dummy-account" ? (
           <div className="flex flex-col items-center justify-center h-full space-y-3">
             <div className="px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl shadow-lg">
               <p className="text-gray-700 font-medium">Account Mode</p>
             </div>
-            <Link
-              href="/flex-mode"
-              className="text-sm flex items-center justify-center text-gray-600 hover:text-gray-800 transition-colors underline decoration-1 underline-offset-2 font-medium"
-            >
-              Or go enter free mode →
-            </Link>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full space-y-2">
@@ -195,6 +235,12 @@ export default function Timer() {
             </div>
           </div>
         )}
+        <Link
+          href="/flex-mode"
+          className="text-sm flex items-center justify-center text-gray-600 hover:text-gray-800 transition-colors underline decoration-1 underline-offset-2 font-medium"
+        >
+          Or switch to flex-mode →
+        </Link>
       </div>
 
       {/* Enhanced main timer display */}
@@ -219,7 +265,7 @@ export default function Timer() {
           <div className="mt-6 px-6 py-3">
             <p className="text-gray-600 text-base sm:text-lg font-medium">
               {state.timeLeft < 60
-                ? `${hoursLeft} hours, ${minutesLeft} minutes, ${secondsLeft} seconds remaining`
+                ? `Less than a minute remaining`
                 : `${hoursLeft} hours, ${minutesLeft} minutes remaining`}
             </p>
           </div>

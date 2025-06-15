@@ -1,10 +1,42 @@
+"use client";
 import React from "react";
 import AccountBox from "./AccountBox";
 import AddAccountButton from "./AddAccountButton";
-import { getAccounts } from "@/actions";
+import { createClient } from "@/utils/supabase/client";
+import { useEffect, useState } from "react";
 
-const AllAccounts = async () => {
-  const accounts = await getAccounts();
+const AllAccounts = () => {
+  const [accounts, setAccounts] = useState<any[]>([]);
+  useEffect(() => {
+    const getAccounts = async () => {
+      const supabase = await createClient();
+
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) {
+        throw new Error(userError.message);
+      }
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const { data, error } = await supabase
+        .from("accounts")
+        .select("*")
+        .eq("user_id", user.id);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+      return data;
+    };
+
+    getAccounts().then((accounts) => setAccounts(accounts));
+  }, []);
   return (
     <div className="mb-16">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-12 gap-6">

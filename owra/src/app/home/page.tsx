@@ -7,7 +7,6 @@ import AllAccounts from "./components/AllAccounts";
 import AccountHistory from "./components/AccountTransactions";
 import { User, Account } from "@/types/types";
 import Navigation from "../components/Navigation";
-import { useAuth } from "@/hooks/useAuth";
 import { dummyAccount } from "./utils/dummyAccount";
 import {
   showAddAccountModalContext,
@@ -16,7 +15,7 @@ import {
   HomeContext,
 } from "./contexts";
 
-import { getAccounts } from "@/actions";
+import { createClient } from "@/utils/supabase/client";
 
 const scrollToElement = (element: HTMLDivElement | null) => {
   if (element) {
@@ -42,6 +41,33 @@ const Page = () => {
   const [showAddAccountModal, setShowAddAccountModal] = useState(false);
 
   useEffect(() => {
+    const getAccounts = async () => {
+      const supabase = await createClient();
+
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) {
+        throw new Error(userError.message);
+      }
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const { data, error } = await supabase
+        .from("accounts")
+        .select("*")
+        .eq("user_id", user.id);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+      return data;
+    };
+
     getAccounts().then((accounts) => {
       setCurrentUser((prev) => ({
         ...prev,

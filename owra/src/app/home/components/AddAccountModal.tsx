@@ -3,15 +3,12 @@ import { useContext, useState } from "react";
 import { FaX } from "react-icons/fa6";
 import { Account, AddAccountModalProps } from "@/types/types";
 import { CurrentUserContext } from "../contexts";
-import { useAuth } from "@/hooks/useAuth";
-import { addAccount } from "@/actions";
+import { createClient } from "@/utils/supabase/client";
 
 export default function AddAccountModal({
   setShowAddAccountModal,
 }: AddAccountModalProps) {
-  const { isAuthenticated, user } = useAuth();
-
-  const [newAccount, setNewAccount] = useState<Account>({
+  const [newAccount, setNewAccount] = useState<Omit<Account, "id">>({
     account_name: "",
     account_balance: 0,
     reload_freq: 0,
@@ -38,11 +35,36 @@ export default function AddAccountModal({
     console.log("Submitting newAccount JSON:", JSON.stringify(newAccount));
 
     try {
-      const data = await addAccount(newAccount);
+      const supabase = await createClient();
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) {
+        throw new Error(userError.message);
+      }
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const { data, error } = await supabase
+        .from("accounts")
+        .insert({
+          user_id: user.id,
+          ...newAccount,
+        })
+        .select()
+        .single();
+
+      if (error) {
+        throw new Error(error.message);
+      }
 
       setCurrentUser((prev) => ({
         ...prev,
-        accounts: [...(prev.accounts || []), newAccount],
+        accounts: [...(prev.accounts || []), data],
       }));
 
       setShowAddAccountModal(false);
@@ -50,12 +72,11 @@ export default function AddAccountModal({
       console.error("Failed to create account:", error);
     }
   };
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type } = event.target;
+    const { name, value } = event.target;
     setNewAccount((prev) => ({
       ...prev,
-      [name]: type === "number" ? Number(value) : value,
+      [name]: value,
     }));
   };
 
@@ -82,15 +103,15 @@ export default function AddAccountModal({
             <div className="space-y-4">
               <div>
                 <label
-                  htmlFor="account_name"
+                  htmlFor="accountName"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Account Name
                 </label>
                 <input
                   onChange={handleChange}
-                  name="account_name"
-                  id="account_name"
+                  name="accountName"
+                  id="accountName"
                   type="text"
                   placeholder="e.g. YouTube"
                   required
@@ -186,7 +207,7 @@ export default function AddAccountModal({
 
                           setNewAccount((prev) => ({
                             ...prev,
-                            account_balance: totalSeconds,
+                            accountBalance: totalSeconds,
                           }));
                         }}
                       />
@@ -197,18 +218,17 @@ export default function AddAccountModal({
 
               <div>
                 <label
-                  htmlFor="reload_freq"
+                  htmlFor="reloadFreq"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Reload Frequency (seconds)
+                  Reload Frequency
                 </label>
                 <input
                   onChange={handleChange}
-                  name="reload_freq"
-                  id="reload_freq"
-                  type="number"
-                  placeholder="86400"
-                  min="0"
+                  name="reloadFreq"
+                  id="reloadFreq"
+                  type="text"
+                  placeholder="daily"
                   required
                   className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all"
                 />

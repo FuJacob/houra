@@ -2,9 +2,47 @@ import React from "react";
 import { useContext } from "react";
 import { selectedAccountContext } from "../contexts";
 import TransactionCard from "./TransactionCard";
+import { useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
 
 const AccountTransactions = () => {
   const { selectedAccount } = useContext(selectedAccountContext);
+  const [transactions, setTransactions] = useState<any[]>([]);
+  useEffect(() => {
+    if (selectedAccount) {
+      const getTransactions = async (accountId: string) => {
+        const supabase = await createClient();
+
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser();
+
+        if (userError) {
+          throw new Error(userError.message);
+        }
+
+        if (!user) {
+          throw new Error("User not found");
+        }
+
+        const { data, error } = await supabase
+          .from("transactions")
+          .select("*")
+          .eq("account_id", accountId);
+
+        if (error) {
+          throw new Error(error.message);
+        }
+
+        return data;
+      };
+
+      getTransactions(selectedAccount.id).then((transactions) =>
+        setTransactions(transactions)
+      );
+    }
+  }, [selectedAccount]);
   return (
     <div className="mb-24 w-full overflow-x-auto">
       <div className="flex justify-between items-center mb-12">
@@ -32,8 +70,8 @@ const AccountTransactions = () => {
 
         <div className="relative z-10 p-8">
           <div className="flex items-center gap-6 w-max">
-            {selectedAccount.transactions.length !== 0
-              ? [...selectedAccount.transactions]
+            {transactions.length !== 0
+              ? [...transactions]
                   .reverse()
                   .map((transaction) => (
                     <TransactionCard

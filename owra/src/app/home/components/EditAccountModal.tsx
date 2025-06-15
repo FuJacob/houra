@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useContext } from "react";
 import { Account } from "@/types/types";
-import { updateAccount } from "@/actions";
+import { createClient } from "@/utils/supabase/client";
 
 interface EditAccountModalProps {
   account: Account;
@@ -41,7 +41,28 @@ export default function EditAccountModal({
     event.preventDefault();
 
     try {
-      await updateAccount(editedAccount.id!, editedAccount);
+      const supabase = await createClient();
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) {
+        throw new Error(userError.message);
+      }
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const { data, error } = await supabase
+        .from("accounts")
+        .update(editedAccount)
+        .eq("id", editedAccount.id!);
+
+      if (error) {
+        throw new Error(error.message);
+      }
 
       onUpdate(editedAccount);
       onClose();

@@ -46,6 +46,11 @@ const AccountBox = ({
     setShowEditModal(true);
   };
 
+  const handleTimerClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    bringToTimer();
+  };
+
   const handleAccountUpdate = (updatedAccount: Account) => {
     setCurrentAccount(updatedAccount);
     if (selectedAccount.id === updatedAccount.id) {
@@ -60,9 +65,11 @@ const AccountBox = ({
 
   return (
     <div className="relative w-full h-48 sm:h-60">
-      <button
+      {/* Main clickable div instead of button */}
+      <div
         onClick={handleClick}
-        className={`w-full h-full relative group transition-all duration-500 transform hover:scale-105 ${
+        role="button"
+        className={`w-full h-full relative group transition-all duration-500 transform hover:scale-105 cursor-pointer ${
           !isAnySelected ? "" : isSelected ? "opacity-100" : "opacity-20"
         } ${showEditModal ? "pointer-events-none" : ""}`}
       >
@@ -79,10 +86,7 @@ const AccountBox = ({
         {isSelected && !isDummy && (
           <div className="absolute inset-0 flex justify-center z-50 items-center">
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                bringToTimer();
-              }}
+              onClick={handleTimerClick}
               className="bg-white/30 animate-bounce animate-duration-200 animate-ease-in-out animate-infinite backdrop-blur-sm hover:bg-white/50 rounded-full shadow-lg shadow-black/10 flex items-center justify-center transition-all duration-300 border border-white/40 hover:scale-110 w-10 h-10"
             >
               <FaArrowUp className="text-2xl text-gray-700 " />
@@ -151,9 +155,6 @@ const AccountBox = ({
                 </div>
               </div>
             </div>
-            {/* <span className="text-gray-600 text-xs sm:text-sm font-medium drop-shadow-sm">
-              •••• {currentAccount.id.toString().slice(-4)}
-            </span> */}
 
             <h3 className="text-gray-800 text-xl sm:text-3xl font-light mb-2 drop-shadow-sm">
               {hours}h {minutes}m {seconds}s
@@ -165,7 +166,7 @@ const AccountBox = ({
         <div className="absolute top-3 right-3 w-1 h-1 bg-white/60 rounded-full animate-pulse opacity-60"></div>
         <div className="absolute bottom-6 left-6 w-0.5 h-0.5 bg-white/40 rounded-full animate-pulse delay-700 opacity-60"></div>
         <div className="absolute top-1/3 right-6 w-1.5 h-1.5 bg-white/50 rounded-full animate-pulse delay-1000 opacity-60"></div>
-      </button>
+      </div>
 
       {/* Edit Modal - only show if not dummy */}
       {showEditModal && !isDummy && (

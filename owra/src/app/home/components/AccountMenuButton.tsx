@@ -4,7 +4,8 @@ import { FaAngleDown } from "react-icons/fa";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import { signOut } from "@/actions";
+import { createClient } from "@/utils/supabase/client";
+
 const AccountMenuButton = ({ name }: { name: string }) => {
   const [showAccountMenuModal, setShowAccountMenuModal] = useState(false);
   const router = useRouter();
@@ -15,7 +16,8 @@ const AccountMenuButton = ({ name }: { name: string }) => {
   };
 
   const logOut = async () => {
-    await signOut();
+    const supabase = await createClient();
+    await supabase.auth.signOut();
     router.push("/");
   };
 

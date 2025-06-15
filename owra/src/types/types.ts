@@ -21,7 +21,7 @@ export interface SelectedAccountContextType {
 }
 
 export interface Account {
-  id?: string;
+  id: string;
   created_at?: string; // timestamptz from database
   user_id?: string; // foreign key to users table
   account_name: string;

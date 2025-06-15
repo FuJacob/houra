@@ -1,10 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAccounts, addAccount } from "@/actions";
+import { createClient } from "@/utils/supabase/client";
 
 export async function GET() {
   try {
-    const accounts = await getAccounts();
-    return NextResponse.json({ accounts });
+    const supabase = await createClient();
+
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError) {
+      throw new Error(userError.message);
+    }
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const { data, error } = await supabase
+      .from("accounts")
+      .select("*")
+      .eq("user_id", user.id);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return NextResponse.json({ accounts: data });
   } catch (error) {
     return NextResponse.json(
       {
@@ -19,8 +42,31 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const account = await request.json();
-    const newAccount = await addAccount(account);
-    return NextResponse.json({ newAccount });
+
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError) {
+      throw new Error(userError.message);
+    }
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const { data, error } = await supabase.from("accounts").insert({
+      user_id: user.id,
+      ...account,
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return NextResponse.json({ newAccount: data });
   } catch (error) {
     return NextResponse.json(
       {

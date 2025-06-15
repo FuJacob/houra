@@ -1,13 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAccount, updateAccount, deleteAccount } from "@/actions";
+import { createClient } from "@/utils/supabase/client";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const account = await getAccount(params.id);
-    return NextResponse.json({ account });
+    const supabase = await createClient();
+
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError) {
+      throw new Error(userError.message);
+    }
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const { data, error } = await supabase
+      .from("accounts")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("id", params.id);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return NextResponse.json({ account: data });
   } catch (error) {
     return NextResponse.json(
       {
@@ -24,8 +48,31 @@ export async function PUT(
 ) {
   try {
     const account = await request.json();
-    const result = await updateAccount(params.id, account);
-    return NextResponse.json({ result });
+
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError) {
+      throw new Error(userError.message);
+    }
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const { data, error } = await supabase
+      .from("accounts")
+      .update(account)
+      .eq("id", params.id);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return NextResponse.json({ result: data });
   } catch (error) {
     return NextResponse.json(
       {
@@ -42,8 +89,30 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const result = await deleteAccount(params.id);
-    return NextResponse.json({ result });
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError) {
+      throw new Error(userError.message);
+    }
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const { data, error } = await supabase
+      .from("accounts")
+      .delete()
+      .eq("id", params.id);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return NextResponse.json({ result: data });
   } catch (error) {
     return NextResponse.json(
       {
