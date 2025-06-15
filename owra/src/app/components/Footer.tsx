@@ -29,19 +29,25 @@ const Footer = () => (
             href: "https://linkedin.com/in/jacobfu",
             icon: FaLinkedin,
           },
-        ].map(({ href, icon: Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            target="_blank"
-            className="group p-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-gray-600 hover:text-gray-900 hover:bg-white/30 transition duration-300 transform hover:scale-110 shadow-lg shadow-black/5"
-          >
-            <Icon
-              size={20}
-              className="group-hover:scale-110 transition-transform"
-            />
-          </Link>
-        ))}
+        ].map(({ href, icon }) => {
+          const Icon = icon as React.ComponentType<{
+            size?: number;
+            className?: string;
+          }>;
+          return (
+            <Link
+              key={href}
+              href={href}
+              target="_blank"
+              className="group p-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-gray-600 hover:text-gray-900 hover:bg-white/30 transition duration-300 transform hover:scale-110 shadow-lg shadow-black/5"
+            >
+              <Icon
+                size={20}
+                className="group-hover:scale-110 transition-transform"
+              />
+            </Link>
+          );
+        })}
       </div>
 
       {/* Bottom Section */}
