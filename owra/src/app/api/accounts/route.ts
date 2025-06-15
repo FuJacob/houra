@@ -1,9 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAccounts, addAccount } from "@/actions/accountsActions";
-
+import { createClient } from "@/utils/supabase/client";
 export async function GET() {
   try {
-    const accounts = await getAccounts();
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { data: accounts, error } = await supabase
+      .from("accounts")
+      .select("*")
+      .eq("user_id", user.id);
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
     return NextResponse.json({ accounts });
   } catch (error) {
     return NextResponse.json(
@@ -18,9 +34,27 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     const account = await request.json();
-    const result = await addAccount(account);
-    return NextResponse.json({ result });
+
+    const { data: newAccount, error } = await supabase
+      .from("accounts")
+      .insert({ ...account, user_id: user.id })
+      .select()
+      .single();
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ newAccount });
   } catch (error) {
     return NextResponse.json(
       {

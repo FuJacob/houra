@@ -1,5 +1,5 @@
 import { Transaction } from "@/types/types";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/client";
 
 export async function addTransaction(
   transaction: Transaction,

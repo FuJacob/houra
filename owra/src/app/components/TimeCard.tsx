@@ -30,7 +30,7 @@ const TimeCard = ({ seconds }: TimeCardProps) => {
         {/* Action buttons */}
         <div className="flex flex-col w-full gap-3">
           <Link
-            href="/signup"
+            href="/sign-in"
             className="w-full px-8 py-4 bg-black text-white rounded-full hover:bg-gray-800 transition-colors text-lg font-medium text-center"
           >
             Signup

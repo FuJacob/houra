@@ -1,29 +1,23 @@
-import { useCallback } from 'react';
+import { useCallback } from "react";
+import { createClient } from "@/utils/supabase/client";
+import { useEffect, useState } from "react";
 
 export const useAuth = () => {
-  const getAccessToken = useCallback((): string | null => {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem('accessToken');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) {
+        setIsAuthenticated(false);
+        setUser(null);
+      } else {
+        setIsAuthenticated(true);
+        setUser(user);
+      }
+    });
   }, []);
 
-  const setAccessToken = useCallback((token: string): void => {
-    if (typeof window === 'undefined') return;
-    localStorage.setItem('accessToken', token);
-  }, []);
-
-  const removeAccessToken = useCallback((): void => {
-    if (typeof window === 'undefined') return;
-    localStorage.removeItem('accessToken');
-  }, []);
-
-  const isAuthenticated = useCallback((): boolean => {
-    return getAccessToken() !== null;
-  }, [getAccessToken]);
-
-  return {
-    getAccessToken,
-    setAccessToken,
-    removeAccessToken,
-    isAuthenticated,
-  };
+  return { isAuthenticated, user };
 };

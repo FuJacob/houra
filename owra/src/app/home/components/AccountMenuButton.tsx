@@ -4,24 +4,19 @@ import { FaAngleDown } from "react-icons/fa";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-
+import { signOut } from "@/actions";
 const AccountMenuButton = ({ name }: { name: string }) => {
   const [showAccountMenuModal, setShowAccountMenuModal] = useState(false);
   const router = useRouter();
-  const { removeAccessToken } = useAuth();
 
   // Creative greeting variations
   const getGreeting = () => {
     return "Hello there";
   };
 
-  const logOut = () => {
-    try {
-      removeAccessToken();
-      router.push("/");
-    } catch (error) {
-      console.log(error);
-    }
+  const logOut = async () => {
+    await signOut();
+    router.push("/");
   };
 
   return (

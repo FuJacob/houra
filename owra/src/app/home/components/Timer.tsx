@@ -7,13 +7,13 @@ import { selectedAccountContext } from "../contexts";
 import { useAuth } from "@/hooks/useAuth";
 import { FaArrowDown, FaExpand, FaCompress } from "react-icons/fa6";
 import Link from "next/link";
-import { accountsApi, transactionsApi } from "@/lib/api";
-
+import { addTransaction } from "@/actions/transactionsActions";
+import { updateAccount } from "@/actions/accountsActions";
 // Timer component displays and controls a countdown timer
 export default function Timer() {
   const [start_time, setstart_time] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const { getAccessToken } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   // Account interface defines the expected structure of an account object
 
@@ -55,8 +55,8 @@ export default function Timer() {
   }, [state.running, state.timeLeft]);
 
   useEffect(() => {
-    if (!state.running && start_time && start_time != 0) {
-      const updateAccount = async () => {
+    const syncTransaction = async () => {
+      if (!state.running && start_time && start_time !== 0) {
         try {
           const end_time = Date.now();
 
@@ -66,13 +66,11 @@ export default function Timer() {
             end_time: new Date(end_time).toISOString(),
             duration: end_time - start_time,
           };
-          await transactionsApi.addTransaction(
-            newTransaction,
-            selectedAccount.id
-          );
+
+          await addTransaction(newTransaction, selectedAccount.id!);
           setstart_time(0);
 
-          await accountsApi.updateAccount(selectedAccount.id, {
+          await updateAccount(selectedAccount.id!, {
             ...selectedAccount,
             account_balance: state.timeLeft,
           });
@@ -81,9 +79,10 @@ export default function Timer() {
         } catch (error) {
           console.error("Failed to update account", error);
         }
-      };
-      updateAccount();
-    }
+      }
+    };
+
+    syncTransaction();
   }, [state.running, selectedAccount.id, start_time, state.timeLeft]);
 
   // Fullscreen functionality

@@ -1,9 +1,7 @@
 "use client";
 import React, { useState, useContext } from "react";
 import { Account } from "@/types/types";
-import { useAuth } from "@/hooks/useAuth";
-import { CurrentUserContext } from "../contexts";
-import { accountsApi } from "@/lib/api";
+import { updateAccount } from "@/actions/accountsActions";
 
 interface EditAccountModalProps {
   account: Account;
@@ -16,9 +14,6 @@ export default function EditAccountModal({
   onClose,
   onUpdate,
 }: EditAccountModalProps) {
-  const { getAccessToken } = useAuth();
-  const { setCurrentUser } = useContext(CurrentUserContext);
-
   const [editedAccount, setEditedAccount] = useState<Account>({
     ...account,
   });
@@ -46,7 +41,7 @@ export default function EditAccountModal({
     event.preventDefault();
 
     try {
-      await accountsApi.updateAccount(editedAccount.id, editedAccount);
+      await updateAccount(editedAccount.id!, editedAccount);
 
       onUpdate(editedAccount);
       onClose();

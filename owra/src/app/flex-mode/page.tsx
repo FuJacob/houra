@@ -266,7 +266,7 @@ export default function Timer() {
                       </p>
                     </div>
                     <Link
-                      href="/signup"
+                      href="/sign-in"
                       className="inline-flex items-center px-10 py-4 bg-white text-gray-900 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-200 transform hover:scale-105 shadow-2xl border-2 border-white/20"
                     >
                       Create Your Account

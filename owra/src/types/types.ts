@@ -21,7 +21,7 @@ export interface SelectedAccountContextType {
 }
 
 export interface Account {
-  id: string;
+  id?: string;
   created_at?: string; // timestamptz from database
   user_id?: string; // foreign key to users table
   account_name: string;
@@ -35,7 +35,7 @@ export interface Account {
 }
 
 export interface Transaction {
-  id: string; // uuid primary key
+  id?: string; // uuid primary key
   duration: number; // int8 from database
   start_time: string; // timestamptz from database
   end_time: string; // timestamptz from database

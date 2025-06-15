@@ -6,17 +6,13 @@ import { useAuth } from "@/hooks/useAuth";
 import AccountMenuButton from "../home/components/AccountMenuButton";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { authApi } from "@/lib/api";
 
 const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [currentTime, setCurrentTime] = useState("");
-  const { isAuthenticated } = useAuth();
-  const { getAccessToken } = useAuth();
-  const isNotLoggedIn = !isAuthenticated();
-  const [name, setName] = useState("");
   const router = useRouter();
+  const { isAuthenticated, user } = useAuth();
 
   // Update current time every second
   useEffect(() => {
@@ -34,21 +30,6 @@ const Navigation = () => {
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
   }, []);
-
-  useEffect(() => {
-    const fetchAccount = async () => {
-      try {
-        const data = await authApi.getCurrentUser();
-        setName(data.user.name || "Account");
-      } catch (error) {
-        console.error("Error fetching account:", error);
-      }
-    };
-
-    if (isAuthenticated()) {
-      fetchAccount();
-    }
-  }, [isAuthenticated]);
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 px-4 pt-6">
@@ -75,23 +56,19 @@ const Navigation = () => {
 
             {/* Desktop Auth */}
             <div className="hidden md:flex items-center gap-3 ml-auto">
-              {isNotLoggedIn && (
+              {!isAuthenticated && (
                 <>
                   <Link
                     href="/sign-in"
-                    className="text-sm text-gray-700 hover:text-gray-900 transition-colors duration-200 px-3 py-1.5 rounded-full hover:bg-white/30"
-                  >
-                    Log in
-                  </Link>
-                  <Link
-                    href="/sign-up"
                     className="text-sm px-4 py-2 bg-gray-900/90 backdrop-blur-sm text-white rounded-full hover:bg-gray-900 transition-all duration-200 shadow-sm"
                   >
                     Get Started
                   </Link>
                 </>
               )}
-              {!isNotLoggedIn && <AccountMenuButton name={name} />}
+              {isAuthenticated && (
+                <AccountMenuButton name={user.user_metadata.name} />
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -111,17 +88,17 @@ const Navigation = () => {
           {isMobileMenuOpen && (
             <div className="md:hidden border-t border-white/20 bg-white/5 backdrop-blur-sm rounded-b-3xl">
               <div className="px-6 py-4">
-                {isNotLoggedIn && (
+                {!isAuthenticated && (
                   <div className="flex flex-col gap-2">
                     <Link
-                      href="/login"
+                      href="/sign-in"
                       className="text-sm text-gray-700 hover:text-gray-900 transition-colors duration-200 py-2 px-3 rounded-full hover:bg-white/20 text-center"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Log in
                     </Link>
                     <Link
-                      href="/signup"
+                      href="/sign-in"
                       className="text-sm px-4 py-2.5 bg-gray-900/90 backdrop-blur-sm text-white rounded-full hover:bg-gray-900 transition-all duration-200 text-center shadow-sm"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
@@ -129,9 +106,9 @@ const Navigation = () => {
                     </Link>
                   </div>
                 )}
-                {!isNotLoggedIn && (
+                {isAuthenticated && (
                   <div className="py-2">
-                    <AccountMenuButton name={name} />
+                    <AccountMenuButton name={user.user_metadata.name} />
                   </div>
                 )}
               </div>

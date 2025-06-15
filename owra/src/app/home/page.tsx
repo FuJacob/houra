@@ -16,7 +16,7 @@ import {
   HomeContext,
 } from "./contexts";
 
-import { accountsApi } from "@/lib/api";
+import { getAccounts } from "@/actions/accountsActions";
 
 const scrollToElement = (element: HTMLDivElement | null) => {
   if (element) {
@@ -42,19 +42,12 @@ const Page = () => {
   const [showAddAccountModal, setShowAddAccountModal] = useState(false);
 
   useEffect(() => {
-    const fetchUserAccounts = async () => {
-      try {
-        const accounts = await accountsApi.getAccounts();
-        setCurrentUser((prev) => ({
-          ...prev,
-          accounts: accounts || [],
-        }));
-      } catch (error) {
-        console.error("Error fetching accounts:", error);
-      }
-    };
-
-    fetchUserAccounts();
+    getAccounts().then((accounts) => {
+      setCurrentUser((prev) => ({
+        ...prev,
+        accounts: accounts || [],
+      }));
+    });
   }, []);
 
   return (

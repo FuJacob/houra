@@ -15,7 +15,7 @@ const Test = () => {
             <div className="flex flex-col ">
               <p className="text-gray-500 font-light text-4xl mb-2">owra</p>
               <Link
-                href="/signup"
+                href="/sign-in"
                 className=" flex-1 max-w-2/3 transition-colors text-sm font-medium"
               >
                 It&apos;s been{" "}
@@ -30,7 +30,7 @@ const Test = () => {
         </div>
         <div className="flex flex-col w-full gap-1">
           <Link
-            href="/signup"
+            href="/sign-in"
             className="w-full px-8 py-4 bg-black text-white rounded-full hover:bg-gray-800 transition-colors text-1xl font-medium text-center"
           >
             Signup
