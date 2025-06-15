@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { reloadAccounts } from "@/actions/transactionsActions";
+import { reloadAccounts } from "@/actions";
 
 export async function POST() {
   try {

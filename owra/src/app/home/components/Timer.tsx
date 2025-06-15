@@ -7,8 +7,7 @@ import { selectedAccountContext } from "../contexts";
 import { useAuth } from "@/hooks/useAuth";
 import { FaArrowDown, FaExpand, FaCompress } from "react-icons/fa6";
 import Link from "next/link";
-import { addTransaction } from "@/actions/transactionsActions";
-import { updateAccount } from "@/actions/accountsActions";
+import { addTransaction, updateAccount } from "@/actions";
 // Timer component displays and controls a countdown timer
 export default function Timer() {
   const [start_time, setstart_time] = useState(0);

@@ -4,7 +4,8 @@ import { FaX } from "react-icons/fa6";
 import { Account, AddAccountModalProps } from "@/types/types";
 import { CurrentUserContext } from "../contexts";
 import { useAuth } from "@/hooks/useAuth";
-import { addAccount } from "@/actions/accountsActions";
+import { addAccount } from "@/actions";
+
 export default function AddAccountModal({
   setShowAddAccountModal,
 }: AddAccountModalProps) {

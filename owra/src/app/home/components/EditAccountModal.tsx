@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useContext } from "react";
 import { Account } from "@/types/types";
-import { updateAccount } from "@/actions/accountsActions";
+import { updateAccount } from "@/actions";
 
 interface EditAccountModalProps {
   account: Account;

@@ -16,7 +16,7 @@ import {
   HomeContext,
 } from "./contexts";
 
-import { getAccounts } from "@/actions/accountsActions";
+import { getAccounts } from "@/actions";
 
 const scrollToElement = (element: HTMLDivElement | null) => {
   if (element) {

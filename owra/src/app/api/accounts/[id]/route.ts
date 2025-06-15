@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  getAccount,
-  updateAccount,
-  deleteAccount,
-} from "@/actions/accountsActions";
+import { getAccount, updateAccount, deleteAccount } from "@/actions";
 
 export async function GET(
   request: NextRequest,

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { addTransaction } from "@/actions/transactionsActions";
+import { addTransaction } from "@/actions";
 
 export async function POST(request: NextRequest) {
   try {

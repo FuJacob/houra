@@ -1,8 +1,10 @@
 import React from "react";
 import AccountBox from "./AccountBox";
 import AddAccountButton from "./AddAccountButton";
+import { getAccounts } from "@/actions";
 
-const AllAccounts = () => {
+const AllAccounts = async () => {
+  const accounts = await getAccounts();
   return (
     <div className="mb-16">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-12 gap-6">
