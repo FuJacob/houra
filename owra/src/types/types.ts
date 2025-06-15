@@ -21,27 +21,32 @@ export interface SelectedAccountContextType {
 }
 
 export interface Account {
-  accountNumber: number;
-  accountName: string;
-  accountBalance: number;
-  reloadFreq: string;
-  lastReload: number;
-  reloadAmount: number;
+  id: string;
+  created_at?: string; // timestamptz from database
+  user_id?: string; // foreign key to users table
+  account_name: string;
+  account_balance: number; // int8 from database
+  reload_freq: number; // int8 from database (changed from string)
+  last_reload: number; // int8 from database
+  reload_amount: number; // int8 from database
   colour: string;
-  transactions: Transaction[];
   type: string;
+  transactions?: Transaction[]; // optional since it's a relation, not a direct field
 }
 
 export interface Transaction {
-  startTime: number;
-  endTime: number;
-  duration: number;
+  id: string; // uuid primary key
+  duration: number; // int8 from database
+  start_time: string; // timestamptz from database
+  end_time: string; // timestamptz from database
+  account_id?: string; // foreign key to accounts table
 }
+
 export interface User {
+  id?: string; // uuid primary key
+  created_at: string; // timestamptz from database
   name: string;
-  email: string;
-  password: string;
-  accounts: Account[];
+  accounts?: Account[]; // optional since it's a relation, not a direct field
 }
 
 export interface SidebarButtonProps {
@@ -51,9 +56,9 @@ export interface SidebarButtonProps {
 }
 
 export interface AccountBoxProps {
-  accountNumber: number;
-  accountName: string;
-  accountBalance: number;
+  id: number;
+  account_name: string;
+  account_balance: number;
 }
 
 export interface AddAccountModalProps {

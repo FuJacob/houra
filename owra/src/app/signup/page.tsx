@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import { authApi } from "@/lib/api";
 
 const Page = () => {
   const router = useRouter();
@@ -33,39 +34,21 @@ const Page = () => {
       setStep(step + 1);
       return;
     }
-    const response = await fetch("http://localhost:4500/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
 
-    if (response.ok) {
+    try {
+      await authApi.signup(formData);
       console.log("User created successfully");
 
-      const loginResponse = await fetch(
-        "http://localhost:4500/api/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: formData.email,
-            password: formData.password,
-          }),
-        }
-      );
+      const loginData = await authApi.login({
+        email: formData.email,
+        password: formData.password,
+      });
 
-      if (loginResponse.ok) {
-        const data = await loginResponse.json();
-        setAccessToken(data.accessToken);
-        console.log("Logged in");
-        router.push("/home");
-      } else {
-        console.log("Error logging in after signup");
-      }
-    } else {
-      console.log("Error creating user");
+      setAccessToken(loginData.accessToken);
+      console.log("Logged in");
+      router.push("/home");
+    } catch (error) {
+      console.error("Error during signup/login:", error);
     }
   };
 

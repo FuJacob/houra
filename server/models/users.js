@@ -7,19 +7,19 @@ const userSchema = new Schema({
   password: { type: String, required: true },
   accounts: [
     {
-      accountNumber: { type: Number, required: true },
-      accountName: { type: String, required: true },
-      accountBalance: { type: Number, required: true },
-      reloadFreq: { type: String, required: true },
-      lastReload: { type: Number, required: true },
+      id: { type: Number, required: true },
+      account_name: { type: String, required: true },
+      account_balance: { type: Number, required: true },
+      reload_freq: { type: String, required: true },
+      last_reload: { type: Number, required: true },
       reloadAmount: { type: Number, required: true },
       colour: { type: String, required: true },
       type: { type: String, required: true },
       transactions: [
         {
           duration: { type: Number, required: true },
-          startTime: { type: Number, required: true },
-          endTime: { type: Number, required: true },
+          start_time: { type: Number, required: true },
+          end_time: { type: Number, required: true },
         },
       ],
     },

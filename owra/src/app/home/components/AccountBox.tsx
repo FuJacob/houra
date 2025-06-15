@@ -17,20 +17,19 @@ const AccountBox = ({
 }) => {
   const context = useContext(selectedAccountContext);
   const { selectedAccount, setSelectedAccount, bringToTimer } = context || {
-    selectedAccount: { accountNumber: 0 },
+    selectedAccount: { id: 0 },
     setSelectedAccount: () => {},
     bringToTimer: () => {},
   };
   const [showEditModal, setShowEditModal] = useState(false);
   const [currentAccount, setCurrentAccount] = useState(account);
 
-  const seconds = currentAccount.accountBalance % 60;
-  const minutes = Math.floor(currentAccount.accountBalance / 60) % 60;
-  const hours = Math.floor(currentAccount.accountBalance / 3600);
+  const seconds = currentAccount.account_balance % 60;
+  const minutes = Math.floor(currentAccount.account_balance / 60) % 60;
+  const hours = Math.floor(currentAccount.account_balance / 3600);
 
-  const isSelected =
-    !isDummy && selectedAccount.accountNumber === currentAccount.accountNumber;
-  const isAnySelected = !isDummy && selectedAccount.accountNumber !== 0;
+  const isSelected = !isDummy && selectedAccount.id === currentAccount.id;
+  const isAnySelected = !isDummy && selectedAccount.id !== "dummy-account";
 
   const handleClick = () => {
     if (isDummy) return;
@@ -49,13 +48,14 @@ const AccountBox = ({
 
   const handleAccountUpdate = (updatedAccount: Account) => {
     setCurrentAccount(updatedAccount);
-    if (selectedAccount.accountNumber === updatedAccount.accountNumber) {
+    if (selectedAccount.id === updatedAccount.id) {
       setSelectedAccount(updatedAccount);
     }
   };
 
   const nextReloadDate = new Date(
-    currentAccount.lastReload + (reloadMap.get(currentAccount.reloadFreq) || 0)
+    new Date(currentAccount.last_reload).getTime() +
+      (currentAccount.reload_freq || 0)
   );
 
   return (
@@ -115,7 +115,7 @@ const AccountBox = ({
           {/* Header */}
           <div className="flex items-start justify-between">
             <h2 className="text-gray-800 text-start sm:text-3xl font-bold tracking-wide drop-shadow-sm">
-              {currentAccount.accountName}
+              {currentAccount.account_name}
             </h2>
             <div className="flex items-center gap-2 text-sm px-3 py-2 rounded-xl bg-white/30 backdrop-blur-sm text-gray-700 border border-white/40 shadow-sm hover:bg-white/40 transition-all duration-300"></div>
           </div>
@@ -127,7 +127,7 @@ const AccountBox = ({
                 <div className="flex items-center gap-2">
                   <FaClock />
                   <span className="font-semibold">
-                    {currentAccount.reloadFreq}
+                    {currentAccount.reload_freq}
                   </span>
                 </div>
                 <div className="font-medium text-gray-700 flex items-center gap-2">
@@ -152,7 +152,7 @@ const AccountBox = ({
               </div>
             </div>
             {/* <span className="text-gray-600 text-xs sm:text-sm font-medium drop-shadow-sm">
-              •••• {currentAccount.accountNumber.toString().slice(-4)}
+              •••• {currentAccount.id.toString().slice(-4)}
             </span> */}
 
             <h3 className="text-gray-800 text-xl sm:text-3xl font-light mb-2 drop-shadow-sm">

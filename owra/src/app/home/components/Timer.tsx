@@ -7,10 +7,11 @@ import { selectedAccountContext } from "../contexts";
 import { useAuth } from "@/hooks/useAuth";
 import { FaArrowDown, FaExpand, FaCompress } from "react-icons/fa6";
 import Link from "next/link";
+import { accountsApi, transactionsApi } from "@/lib/api";
 
 // Timer component displays and controls a countdown timer
 export default function Timer() {
-  const [startTime, setStartTime] = useState(0);
+  const [start_time, setstart_time] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const { getAccessToken } = useAuth();
 
@@ -22,7 +23,7 @@ export default function Timer() {
   // Reducer state contains whether the timer is running and the time left in seconds
   const [state, dispatch] = useReducer(reducer, {
     running: false,
-    timeLeft: selectedAccount.accountBalance, // Initial time in seconds (17 minutes)
+    timeLeft: selectedAccount.account_balance, // Initial time in seconds (17 minutes)
   });
 
   // Separate state values for hours, minutes, and seconds display
@@ -33,7 +34,7 @@ export default function Timer() {
   // changed selected Account?
   useEffect(() => {
     dispatch(setRunning(false));
-    dispatch(setTimeLeft(selectedAccount.accountBalance));
+    dispatch(setTimeLeft(selectedAccount.account_balance));
     console.log("CHANGED ACCOUNT");
     console.log(selectedAccount);
     console.log(`border-${selectedAccount.colour}`);
@@ -54,83 +55,36 @@ export default function Timer() {
   }, [state.running, state.timeLeft]);
 
   useEffect(() => {
-    const updateAccount = async () => {
-      try {
-        const accessToken = getAccessToken();
+    if (!state.running && start_time && start_time != 0) {
+      const updateAccount = async () => {
+        try {
+          const end_time = Date.now();
 
-        if (selectedAccount.accountNumber === 0) return;
-
-        if (startTime === 0 && state.running === true) {
-          setStartTime(new Date().getTime());
-        } else if (state.running === false && startTime !== 0) {
-          const endTime = new Date().getTime();
-          const response = await fetch(
-            "http://localhost:4500/api/accounts/addAccountTransaction",
-            {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-              },
-              body: JSON.stringify({
-                accountNumber: selectedAccount.accountNumber,
-                startTime: startTime,
-                endTime: endTime,
-                duration: endTime - startTime,
-              }),
-            }
+          const newTransaction = {
+            id: selectedAccount.id,
+            start_time: new Date(start_time).toISOString(),
+            end_time: new Date(end_time).toISOString(),
+            duration: end_time - start_time,
+          };
+          await transactionsApi.addTransaction(
+            newTransaction,
+            selectedAccount.id
           );
-          console.log({
-            accountNumber: selectedAccount.accountNumber,
-            startTime: startTime,
-            endTime: endTime,
-            duration: endTime - startTime,
+          setstart_time(0);
+
+          await accountsApi.updateAccount(selectedAccount.id, {
+            ...selectedAccount,
+            account_balance: state.timeLeft,
           });
-          if (response.ok) {
-            const data = await response.json();
-            console.log("data", data);
-          } else {
-            console.error(
-              "Failed to add account transaction",
-              response.statusText
-            );
-          }
-          setStartTime(0);
-        }
 
-        const response = await fetch(
-          "http://localhost:4500/api/accounts/updateAccount",
-          {
-            method: "PATCH",
-            body: JSON.stringify({
-              accountNumber: selectedAccount.accountNumber,
-              accountBalance: state.timeLeft,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log(data);
-        } else {
-          console.error("Failed to update account", response.statusText);
+          console.log("Account updated successfully");
+        } catch (error) {
+          console.error("Failed to update account", error);
         }
-      } catch (error) {
-        console.error("Failed to update account", error);
-      }
-    };
-    updateAccount();
-  }, [
-    state.running,
-    selectedAccount.accountNumber,
-    startTime,
-    state.timeLeft,
-    getAccessToken,
-  ]);
+      };
+      updateAccount();
+    }
+  }, [state.running, selectedAccount.id, start_time, state.timeLeft]);
 
   // Fullscreen functionality
   const toggleFullscreen = () => {
@@ -168,9 +122,9 @@ export default function Timer() {
 
   // Calculate progress percentage
   const progressPercentage =
-    selectedAccount.accountNumber !== 0
-      ? ((selectedAccount.accountBalance - state.timeLeft) /
-          selectedAccount.accountBalance) *
+    selectedAccount.id !== "dummy-account"
+      ? ((selectedAccount.account_balance - state.timeLeft) /
+          selectedAccount.account_balance) *
         100
       : 0;
 
@@ -178,7 +132,7 @@ export default function Timer() {
   return (
     <div className="relative flex flex-col items-center justify-center p-6 sm:p-12 transition-all duration-500 rounded-3xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10">
       {/* Progress Border */}
-      {selectedAccount.accountNumber !== 0 && (
+      {selectedAccount.id !== "dummy-account" && (
         <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
           {/* Top border */}
           <div
@@ -222,7 +176,7 @@ export default function Timer() {
       )}
       {/* Enhanced account header */}
       <div className="text-xl font-medium flex justify-center w-full h-[80px] text-center mb-8">
-        {selectedAccount.accountNumber === 0 ? (
+        {selectedAccount.id === "dummy-account" ? (
           <div className="flex flex-col items-center justify-center h-full space-y-3">
             <div className="px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl shadow-lg">
               <p className="text-gray-700 font-medium">Account Mode</p>
@@ -238,7 +192,7 @@ export default function Timer() {
           <div className="flex flex-col items-center justify-center h-full space-y-2">
             <div className="px-8 py-4 rounded-2xl shadow-lg border border-white/30 backdrop-blur-sm">
               <h2 className="text-gray-800 font-medium text-xl">
-                {selectedAccount.accountName}
+                {selectedAccount.account_name}
               </h2>
             </div>
           </div>
@@ -254,7 +208,7 @@ export default function Timer() {
             className="font-mono text-[120px] sm:text-[200px] leading-none tracking-tighter font-light drop-shadow-lg"
             style={{
               color: `${
-                selectedAccount.accountNumber === 0
+                selectedAccount.id === "dummy-account"
                   ? "#374151"
                   : selectedAccount.colour
               }`,
@@ -283,7 +237,7 @@ export default function Timer() {
       <div className="flex gap-6 mb-8">
         <button
           onClick={() => dispatch(setRunning(!state.running))}
-          disabled={selectedAccount.accountNumber === 0}
+          disabled={selectedAccount.id === "dummy-account"}
           className="group px-10 py-5 bg-gray-900/90 backdrop-blur-sm text-white rounded-2xl hover:bg-gray-900 transition-all duration-300 text-xl font-medium shadow-lg shadow-gray-900/25 hover:shadow-xl hover:shadow-gray-900/30 hover:scale-[1.05] border border-gray-800/20 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span className="group-hover:text-white/90 transition-colors">
@@ -294,9 +248,9 @@ export default function Timer() {
         <button
           onClick={() => {
             dispatch(setRunning(false));
-            dispatch(setTimeLeft(selectedAccount.accountBalance));
+            dispatch(setTimeLeft(selectedAccount.account_balance));
           }}
-          disabled={selectedAccount.accountNumber === 0}
+          disabled={selectedAccount.id === "dummy-account"}
           className="group px-10 py-5 bg-white/20 backdrop-blur-sm border border-white/30 text-gray-800 rounded-2xl hover:bg-white/30 hover:border-white/40 transition-all duration-300 text-xl font-medium shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10 hover:scale-[1.05] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span className="group-hover:text-gray-900 transition-colors">
@@ -306,7 +260,7 @@ export default function Timer() {
       </div>
 
       {/* Enhanced account selection prompt */}
-      {selectedAccount.accountNumber === 0 && (
+      {selectedAccount.id === "dummy-account" && (
         <div className="text-center">
           <div className="inline-flex items-center rounded-full px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg">
             <button

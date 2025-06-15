@@ -20,10 +20,10 @@ const createDefaultRef = (): React.RefObject<HTMLDivElement | null> => ({
 export const selectedAccountContext = createContext<SelectedAccountContextType>(
   {
     selectedAccount: {
-      accountNumber: 0,
-      accountName: "",
-      accountBalance: 0,
-      reloadFreq: "",
+      id: 0,
+      account_name: "",
+      account_balance: 0,
+      reload_freq: "",
       colour: "background",
       transactions: [],
       type: "",

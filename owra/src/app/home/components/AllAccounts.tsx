@@ -57,7 +57,7 @@ const AllAccounts = () => {
         <div className="relative z-10 p-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {currentUser.accounts?.map((account) => (
-              <AccountBox key={account.accountNumber} account={account} />
+              <AccountBox key={account.id} account={account} />
             ))}
             {currentUser.accounts?.length === 0 && (
               <div className="col-span-full text-center py-16">

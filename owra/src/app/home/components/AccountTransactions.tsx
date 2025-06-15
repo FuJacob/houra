@@ -38,7 +38,7 @@ const AccountTransactions = () => {
                   .map((transaction) => (
                     <TransactionCard
                       transaction={transaction}
-                      key={transaction.startTime}
+                      key={transaction.start_time}
                     />
                   ))
               : null}

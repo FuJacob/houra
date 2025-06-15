@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import AccountMenuButton from "../home/components/AccountMenuButton";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { authApi } from "@/lib/api";
 
 const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -36,22 +37,17 @@ const Navigation = () => {
 
   useEffect(() => {
     const fetchAccount = async () => {
-      const accessToken = getAccessToken();
       try {
-        const response = await fetch("http://localhost:4500/api/auth/getUser", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        const data = await response.json();
+        const data = await authApi.getCurrentUser();
         setName(data.user.name || "Account");
       } catch (error) {
         console.error("Error fetching account:", error);
       }
     };
-    fetchAccount();
+
+    if (isAuthenticated()) {
+      fetchAccount();
+    }
   }, [isAuthenticated]);
 
   return (
@@ -82,13 +78,13 @@ const Navigation = () => {
               {isNotLoggedIn && (
                 <>
                   <Link
-                    href="/login"
+                    href="/sign-in"
                     className="text-sm text-gray-700 hover:text-gray-900 transition-colors duration-200 px-3 py-1.5 rounded-full hover:bg-white/30"
                   >
                     Log in
                   </Link>
                   <Link
-                    href="/signup"
+                    href="/sign-up"
                     className="text-sm px-4 py-2 bg-gray-900/90 backdrop-blur-sm text-white rounded-full hover:bg-gray-900 transition-all duration-200 shadow-sm"
                   >
                     Get Started

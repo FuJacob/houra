@@ -22,18 +22,18 @@ const TransactionCard = ({ transaction }: TransactionCardProps) => {
 
       <div className="flex flex-col flex-1">
         <div className="flex justify-between text-sm font-medium text-gray-800 mb-2 drop-shadow-sm">
-          <span>{selectedAccount.accountName}</span>
+          <span>{selectedAccount.account_name}</span>
           <span className="px-3 py-1 bg-white/40 rounded-full border border-white/40 text-gray-700">
             {formattedDuration}
           </span>
         </div>
         <div className="flex justify-between text-xs text-gray-600">
           <span>
-            {new Date(transaction.startTime).toLocaleTimeString()} –{" "}
-            {new Date(transaction.endTime).toLocaleTimeString()}
+            {new Date(transaction.start_time).toLocaleTimeString()} –{" "}
+            {new Date(transaction.end_time).toLocaleTimeString()}
           </span>
           <span className="font-medium">
-            {new Date(transaction.startTime).toLocaleDateString("en-US", {
+            {new Date(transaction.start_time).toLocaleDateString("en-US", {
               month: "short",
               day: "numeric",
             })}

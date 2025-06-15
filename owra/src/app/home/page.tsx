@@ -16,6 +16,8 @@ import {
   HomeContext,
 } from "./contexts";
 
+import { accountsApi } from "@/lib/api";
+
 const scrollToElement = (element: HTMLDivElement | null) => {
   if (element) {
     element.scrollIntoView({ behavior: "smooth" });
@@ -34,82 +36,21 @@ const Page = () => {
 
   const [selectedPage, setSelectedPage] = useState("Home");
   const [currentUser, setCurrentUser] = useState<User>({
+    created_at: "",
     name: "",
-    email: "",
-    password: "",
     accounts: [],
   });
-
-  useEffect(() => {
-    const reloadAccounts = async () => {
-      try {
-        const accessToken = getAccessToken();
-        if (!accessToken) return;
-
-        const response = await fetch(
-          "http://localhost:4500/api/accounts/reloadAccounts",
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        const data = await response.json();
-        console.log(data);
-      } catch (error) {
-        console.error("Error reloading accounts:", error);
-      }
-    };
-    reloadAccounts();
-  }, [getAccessToken]);
+  const [showAddAccountModal, setShowAddAccountModal] = useState(false);
 
   useEffect(() => {
     const accessToken = getAccessToken();
     if (!accessToken) router.push("/login");
   }, [getAccessToken, router]);
-  const [showAddAccountModal, setShowAddAccountModal] = useState(false);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const accessToken = getAccessToken();
-      if (!accessToken) return;
-
-      const response = await fetch("http://localhost:4500/api/auth/getUser", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      const data = await response.json();
-
-      if (data.error) {
-        console.error(data.error);
-        return;
-      }
-      setCurrentUser(data.user);
-    };
-
-    const getAccounts = async () => {
+    const fetchUserAccounts = async () => {
       try {
-        const accessToken = getAccessToken();
-        if (!accessToken) return;
-
-        const response = await fetch(
-          "http://localhost:4500/api/accounts/getAccounts",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        const data = await response.json();
-        const accounts = data.accounts;
-
+        const accounts = await accountsApi.getAccounts();
         setCurrentUser((prev) => ({
           ...prev,
           accounts: accounts || [],
@@ -119,9 +60,8 @@ const Page = () => {
       }
     };
 
-    fetchUser();
-    getAccounts();
-  }, [getAccessToken]);
+    fetchUserAccounts();
+  }, []);
 
   return (
     <HomeContext.Provider value={{ selectedPage, setSelectedPage }}>
@@ -144,7 +84,7 @@ const Page = () => {
                 className="flex justify-center w-screen "
                 style={{
                   backgroundColor:
-                    selectedAccount.accountNumber === 0
+                    selectedAccount.id === "dummy-account"
                       ? "background"
                       : `${selectedAccount.colour}10`,
                 }}

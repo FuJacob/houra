@@ -12,14 +12,13 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 // Import JWT authentication middleware
 const authenticateToken = require("../middleware/authenticateToken").default;
-const generateAccountNumber =
-  require("./utils/generateAccountNumber.tsx").default;
+const generateid = require("./utils/generateid.tsx").default;
 const reloadMap = require("./utils/reloadMap.ts").default;
 router.get("/getAccount", authenticateToken, async (req, res) => {
-  // GET /getAccount - Retrieves a specific account by accountNumber for the authenticated user
+  // GET /getAccount - Retrieves a specific account by id for the authenticated user
   try {
     // Extract email from JWT-authenticated user
-    const accountNumber = req.params.accountNumber;
+    const id = req.params.id;
     // Query the database for user data
     const user = await User.findOne({ email: email }).select("accounts");
     // Handle case where user or account is not found
@@ -27,9 +26,7 @@ router.get("/getAccount", authenticateToken, async (req, res) => {
       // Return appropriate success or error response
       return res.status(404).json({ message: "User not found." });
     }
-    const account = user.accounts.find(
-      (acc) => acc.accountNumber === accountNumber
-    );
+    const account = user.accounts.find((acc) => acc.id === id);
     // Handle case where user or account is not found
     if (!account) {
       // Return appropriate success or error response
@@ -75,29 +72,33 @@ router.post("/addAccount", authenticateToken, async (req, res) => {
     const data = req.body; // Assuming req.json() is a custom method or middleware to parse JSON. Standard express uses req.body
     // Extract email from JWT-authenticated user
     const email = req.user.email;
-    if (!data.accountName || data.accountBalance == null || !data.reloadFreq) {
+    if (
+      !data.account_name ||
+      data.account_balance == null ||
+      !data.reload_freq
+    ) {
       // Return appropriate success or error response
       return res.status(400).json({ message: "Missing account fields." });
     }
 
-    let accountNumber;
+    let id;
     while (true) {
-      const randomNumber = generateAccountNumber();
+      const randomNumber = generateid();
 
       const userExists = await User.findOne({
-        "accounts.accountNumber": randomNumber,
+        "accounts.id": randomNumber,
       });
       if (!userExists) {
-        accountNumber = randomNumber;
+        id = randomNumber;
         break;
       }
     }
 
     const newAccount = {
-      accountNumber: accountNumber,
-      accountName: data.accountName,
-      accountBalance: data.accountBalance, // Make sure 'balance' is the correct field name from the request
-      reloadFreq: data.reloadFreq,
+      id: id,
+      account_name: data.account_name,
+      account_balance: data.account_balance, // Make sure 'balance' is the correct field name from the request
+      reload_freq: data.reload_freq,
       colour: data.colour, // Add this line
       type: data.type, // Add this line
     };
@@ -131,12 +132,12 @@ router.post("/addAccount", authenticateToken, async (req, res) => {
 });
 
 router.delete("/deleteAccount", authenticateToken, async (req, res) => {
-  // DELETE /deleteAccount - Deletes an account by accountName for the authenticated user
+  // DELETE /deleteAccount - Deletes an account by account_name for the authenticated user
   try {
     // Extract email from JWT-authenticated user
     const email = req.user.email;
-    const { accountName } = req.body; // Assuming the account name is sent in the request body
-    if (!accountName) {
+    const { account_name } = req.body; // Assuming the account name is sent in the request body
+    if (!account_name) {
       // Return appropriate success or error response
       return res.status(400).json({ message: "Missing account name." });
     }
@@ -149,7 +150,7 @@ router.delete("/deleteAccount", authenticateToken, async (req, res) => {
     }
     // Check if account exists in user's accounts list
     const accountExists = user.accounts.some(
-      (acc) => acc.accountName === accountName
+      (acc) => acc.account_name === account_name
     );
     // Handle case where user or account is not found
     if (!accountExists) {
@@ -159,7 +160,7 @@ router.delete("/deleteAccount", authenticateToken, async (req, res) => {
 
     const updatedUser = await User.findOneAndUpdate(
       { email: email },
-      { $pull: { accounts: { accountName: accountName } } },
+      { $pull: { accounts: { account_name: account_name } } },
       { new: true, runValidators: true } // Options: return the updated document and run schema validators
     );
 
@@ -180,16 +181,10 @@ router.delete("/deleteAccount", authenticateToken, async (req, res) => {
 router.patch("/updateAccount", authenticateToken, async (req, res) => {
   try {
     const email = req.user.email;
-    const {
-      accountNumber,
-      accountBalance,
-      accountName,
-      reloadFreq,
-      colour,
-      type,
-    } = req.body;
+    const { id, account_balance, account_name, reload_freq, colour, type } =
+      req.body;
 
-    if (!accountNumber) {
+    if (!id) {
       return res.status(400).json({ message: "Missing account number." });
     }
 
@@ -199,18 +194,16 @@ router.patch("/updateAccount", authenticateToken, async (req, res) => {
       return res.status(404).json({ message: "User not found." });
     }
 
-    const account = user.accounts.find(
-      (acc) => acc.accountNumber == accountNumber
-    );
+    const account = user.accounts.find((acc) => acc.id == id);
 
     if (!account) {
       return res.status(404).json({ message: "Account not found." });
     }
 
     // Update only provided fields
-    if (accountBalance != null) account.accountBalance = accountBalance;
-    if (accountName) account.accountName = accountName;
-    if (reloadFreq) account.reloadFreq = reloadFreq;
+    if (account_balance != null) account.account_balance = account_balance;
+    if (account_name) account.account_name = account_name;
+    if (reload_freq) account.reload_freq = reload_freq;
     if (colour) account.colour = colour;
     if (type) account.type = type;
 
@@ -263,7 +256,7 @@ router.patch("/asd", authenticateToken, async (req, res) => {
 router.patch("/addAccountTransaction", authenticateToken, async (req, res) => {
   try {
     const email = req.user.email;
-    const { accountNumber, startTime, endTime, duration } = req.body;
+    const { id, start_time, end_time, duration } = req.body;
 
     const user = await User.findOne({ email });
 
@@ -271,17 +264,15 @@ router.patch("/addAccountTransaction", authenticateToken, async (req, res) => {
       return res.status(404).json({ message: "User not found." });
     }
 
-    const account = user.accounts.find(
-      (acc) => acc.accountNumber == accountNumber
-    );
+    const account = user.accounts.find((acc) => acc.id == id);
 
     if (!account) {
       return res.status(400).json({ message: "Account not found." });
     }
 
     account.transactions.push({
-      startTime: startTime,
-      endTime: endTime,
+      start_time: start_time,
+      end_time: end_time,
       duration: duration,
     });
 
@@ -308,10 +299,10 @@ router.patch("/reloadAccounts", authenticateToken, async (req, res) => {
     }
 
     user.accounts.forEach((acc) => {
-      const reloadInterval = reloadMap.get(acc.reloadFreq);
-      if (currentTime - lastReload >= reloadInterval) {
-        acc.accountBalance = acc.accountBalance + acc.reloadAmount;
-        acc.lastReload = currentTime;
+      const reloadInterval = reloadMap.get(acc.reload_freq);
+      if (currentTime - last_reload >= reloadInterval) {
+        acc.account_balance = acc.account_balance + acc.reloadAmount;
+        acc.last_reload = currentTime;
       }
     });
     const updatedUser = await user.save();
@@ -353,7 +344,7 @@ router.post("/generateMockAccounts", authenticateToken, async (req, res) => {
       "creative",
       "planning",
     ];
-    const reloadFrequencies = [
+    const reload_frequencies = [
       "hourly",
       "12hourly",
       "daily",
@@ -377,27 +368,27 @@ router.post("/generateMockAccounts", authenticateToken, async (req, res) => {
     // Generate 8 mock timer activities
     for (let i = 0; i < 8; i++) {
       // Generate unique account number (activity ID)
-      let accountNumber;
+      let id;
       while (true) {
-        const randomNumber = generateAccountNumber();
+        const randomNumber = generateid();
         const userExists = await User.findOne({
-          "accounts.accountNumber": randomNumber,
+          "accounts.id": randomNumber,
         });
         if (!userExists) {
-          accountNumber = randomNumber;
+          id = randomNumber;
           break;
         }
       }
 
       const mockActivity = {
-        accountNumber,
-        accountName: activityNames[i],
-        accountBalance: Math.floor(Math.random() * 7200000) + 1800000, // 30 minutes to 2 hours in milliseconds
-        reloadFreq:
-          reloadFrequencies[
-            Math.floor(Math.random() * reloadFrequencies.length)
+        id,
+        account_name: activityNames[i],
+        account_balance: Math.floor(Math.random() * 7200000) + 1800000, // 30 minutes to 2 hours in milliseconds
+        reload_freq:
+          reload_frequencies[
+            Math.floor(Math.random() * reload_frequencies.length)
           ],
-        lastReload: currentTime - Math.floor(Math.random() * 86400000), // Within last 24 hours
+        last_reload: currentTime - Math.floor(Math.random() * 86400000), // Within last 24 hours
         reloadAmount: Math.floor(Math.random() * 3600000) + 900000, // 15 minutes to 1 hour in milliseconds
         colour: colours[i],
         type: activityTypes[Math.floor(Math.random() * activityTypes.length)],

@@ -3,6 +3,7 @@ import React, { FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import { login } from "./actions";
 
 const Page = () => {
   const router = useRouter();
@@ -12,24 +13,8 @@ const Page = () => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const email = formData.get("email");
-    const password = formData.get("password");
-
-    const response = await fetch("http://localhost:4500/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      setAccessToken(data.accessToken);
-      router.push("/home");
-    } else {
-      console.log("Login failed");
-    }
+    await login(formData);
+    return;
   };
 
   return (
@@ -73,7 +58,6 @@ const Page = () => {
               <div className="relative bg-white/30 backdrop-blur-2xl border border-white/40 rounded-3xl p-10 shadow-2xl shadow-black/10 hover:shadow-3xl hover:shadow-black/15 transition-all duration-500">
                 {/* Inner glow */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/50 via-transparent to-transparent rounded-3xl pointer-events-none"></div>
-
                 <div className="relative z-10">
                   <form onSubmit={handleSubmit} className="space-y-8">
                     <div>

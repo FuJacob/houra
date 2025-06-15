@@ -3,6 +3,7 @@ import React, { useState, useContext } from "react";
 import { Account } from "@/types/types";
 import { useAuth } from "@/hooks/useAuth";
 import { CurrentUserContext } from "../contexts";
+import { accountsApi } from "@/lib/api";
 
 interface EditAccountModalProps {
   account: Account;
@@ -24,7 +25,7 @@ export default function EditAccountModal({
 
   // Separate state for time inputs
   const [timeInputs, setTimeInputs] = useState(() => {
-    const totalSeconds = account.accountBalance;
+    const totalSeconds = account.account_balance;
     const days = Math.floor(totalSeconds / 86400);
     const hours = Math.floor((totalSeconds % 86400) / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -45,40 +46,11 @@ export default function EditAccountModal({
     event.preventDefault();
 
     try {
-      const accessToken = getAccessToken();
-      if (!accessToken) {
-        console.error("No access token found");
-        return;
-      }
+      await accountsApi.updateAccount(editedAccount.id, editedAccount);
 
-      const response = await fetch(
-        "http://localhost:4500/api/accounts/updateAccount",
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
-            accountNumber: editedAccount.accountNumber,
-            accountName: editedAccount.accountName,
-            accountBalance: editedAccount.accountBalance,
-            reloadFreq: editedAccount.reloadFreq,
-            colour: editedAccount.colour,
-            type: editedAccount.type,
-          }),
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        setCurrentUser(data.user);
-        onUpdate(editedAccount);
-        onClose();
-        console.log("Account updated successfully");
-      } else {
-        console.error("Failed to update account:", response.statusText);
-      }
+      onUpdate(editedAccount);
+      onClose();
+      console.log("Account updated successfully");
     } catch (error) {
       console.error("Error updating account:", error);
     }
@@ -100,17 +72,17 @@ export default function EditAccountModal({
         <form onSubmit={handleSubmit} className="space-y-3 text-sm">
           <div>
             <label
-              htmlFor="accountName"
+              htmlFor="account_name"
               className="block text-xs font-medium text-gray-700 mb-1"
             >
               Account Name
             </label>
             <input
               onChange={handleChange}
-              name="accountName"
-              id="accountName"
+              name="account_name"
+              id="account_name"
               type="text"
-              value={editedAccount.accountName}
+              value={editedAccount.account_name}
               required
               className="w-full px-3 py-1.5 text-sm rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all"
             />
@@ -190,7 +162,7 @@ export default function EditAccountModal({
 
                       setEditedAccount((prev) => ({
                         ...prev,
-                        accountBalance: totalSeconds,
+                        account_balance: totalSeconds,
                       }));
                     }}
                   />
@@ -201,17 +173,17 @@ export default function EditAccountModal({
 
           <div>
             <label
-              htmlFor="reloadFreq"
+              htmlFor="reload_freq"
               className="block text-xs font-medium text-gray-700 mb-1"
             >
               Reload Frequency
             </label>
             <input
               onChange={handleChange}
-              name="reloadFreq"
-              id="reloadFreq"
+              name="reload_freq"
+              id="reload_freq"
               type="text"
-              value={editedAccount.reloadFreq}
+              value={editedAccount.reload_freq}
               required
               className="w-full px-3 py-1.5 text-sm rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all"
             />

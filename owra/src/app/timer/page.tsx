@@ -25,7 +25,7 @@ import { FaArrowRight, FaExpand, FaCompress } from "react-icons/fa6";
 export default function Timer() {
   // Temporary account object with default balance and color
   const tempAccount = {
-    accountBalance: 1500, // 25 minutes default
+    account_balance: 1500, // 25 minutes default
     colour: "#FFFFFF", // Default color for the timer (white)
   };
 
@@ -34,7 +34,7 @@ export default function Timer() {
   // state.timeLeft holds remaining time in seconds
   const [state, dispatch] = useReducer(reducer, {
     running: false,
-    timeLeft: tempAccount.accountBalance, // Initial time in seconds (25 minutes)
+    timeLeft: tempAccount.account_balance, // Initial time in seconds (25 minutes)
   });
 
   // Calculate hours, minutes, and seconds from timeLeft for display
