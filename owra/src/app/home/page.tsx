@@ -26,7 +26,6 @@ const scrollToElement = (element: HTMLDivElement | null) => {
 
 const Page = () => {
   const router = useRouter();
-  const { getAccessToken } = useAuth();
   const timerRef = useRef<HTMLDivElement | null>(null);
   const accountsRef = useRef<HTMLDivElement | null>(null);
 
@@ -41,11 +40,6 @@ const Page = () => {
     accounts: [],
   });
   const [showAddAccountModal, setShowAddAccountModal] = useState(false);
-
-  useEffect(() => {
-    const accessToken = getAccessToken();
-    if (!accessToken) router.push("/login");
-  }, [getAccessToken, router]);
 
   useEffect(() => {
     const fetchUserAccounts = async () => {

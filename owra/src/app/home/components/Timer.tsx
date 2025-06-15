@@ -182,7 +182,7 @@ export default function Timer() {
               <p className="text-gray-700 font-medium">Account Mode</p>
             </div>
             <Link
-              href="/timer"
+              href="/flex-mode"
               className="text-sm flex items-center justify-center text-gray-600 hover:text-gray-800 transition-colors underline decoration-1 underline-offset-2 font-medium"
             >
               Or go enter free mode →

@@ -24,7 +24,7 @@ const HeroSection = () => {
                     </span>
                   </Link>
                   <Link
-                    href="/timer"
+                    href="/flex-mode"
                     className="group flex-1 px-8 py-4 bg-white/20 backdrop-blur-sm border border-white/30 text-gray-800 rounded-full hover:bg-white/30 hover:border-white/40 transition-all duration-300 text-lg font-medium text-center shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10 hover:scale-[1.02]"
                   >
                     <div className="group-hover:text-gray-900 transition-colors flex items-center gap-2 justify-center">

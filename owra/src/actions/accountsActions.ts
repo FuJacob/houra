@@ -1,5 +1,5 @@
 import { Account } from "@/types/types";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/client";
 
 export async function getAccounts() {
   const supabase = await createClient();
@@ -58,7 +58,7 @@ export async function getAccount(accountId: string) {
 
 export async function addAccount(account: Account) {
   const supabase = await createClient();
-
+  console.log("asidjaiodsioaiodjasiosdjioasiodiaosiosaioioioasdio");
   const {
     data: { user },
     error: userError,
@@ -71,6 +71,7 @@ export async function addAccount(account: Account) {
   if (!user) {
     throw new Error("User not found");
   }
+  console.log(user);
 
   const { data, error } = await supabase.from("accounts").insert({
     user_id: user.id,

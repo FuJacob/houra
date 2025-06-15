@@ -36,7 +36,7 @@ const Test = () => {
             Signup
           </Link>
           <Link
-            href="/timer"
+            href="/flex-mode"
             className="w-full px-8 py-4 border-2 border-gray-300 text-gray-700 rounded-full hover:border-gray-400 hover:text-gray-900 transition-colors text-1xl font-medium text-center"
           >
             Or try as a guest
