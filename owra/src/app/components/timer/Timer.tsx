@@ -33,9 +33,6 @@ export default function Timer() {
   useEffect(() => {
     dispatch(setRunning(false));
     dispatch(setTimeLeft(selectedAccount.account_balance));
-    console.log("CHANGED ACCOUNT");
-    console.log(selectedAccount);
-    console.log(`border-${selectedAccount.colour}`);
   }, [selectedAccount]);
 
   // update time if timer is running
@@ -57,30 +54,28 @@ export default function Timer() {
       if (!state.running && start_time && start_time !== 0) {
         try {
           const supabase = await createClient();
-
           const {
             data: { user },
             error: userError,
           } = await supabase.auth.getUser();
 
-          if (userError) {
-            throw new Error(userError.message);
-          }
-
-          if (!user) {
-            throw new Error("User not found");
+          if (userError || !user) {
+            console.error(
+              "Authentication error:",
+              userError?.message || "No user found"
+            );
+            return;
           }
 
           const end_time = Date.now();
-
           const newTransaction = {
-            id: selectedAccount.id,
+            account_id: selectedAccount.id,
             start_time: new Date(start_time).toISOString(),
             end_time: new Date(end_time).toISOString(),
             duration: end_time - start_time,
           };
 
-          // Check if account belongs to user
+          // Verify account ownership
           const { data: account, error: accountError } = await supabase
             .from("accounts")
             .select("*")
@@ -89,74 +84,46 @@ export default function Timer() {
             .single();
 
           if (accountError || !account) {
-            throw new Error("Account does not belong to user");
+            console.error(
+              "Account verification failed:",
+              accountError?.message
+            );
+            return;
           }
 
-          // Add transaction
+          // Insert transaction
           const { error: transactionError } = await supabase
             .from("transactions")
-            .insert({
-              ...newTransaction,
-              account_id: account.id,
-            });
+            .insert(newTransaction);
 
           if (transactionError) {
-            throw new Error(transactionError.message);
+            console.error(
+              "Transaction insertion failed:",
+              transactionError.message
+            );
+            return;
+          }
+
+          // Update account balance
+          const { error: updateError } = await supabase
+            .from("accounts")
+            .update({ account_balance: state.timeLeft })
+            .eq("id", selectedAccount.id);
+
+          if (updateError) {
+            console.error("Account update failed:", updateError.message);
+            return;
           }
 
           setstart_time(0);
-
-          // Update account
-          const { error: updateError } = await supabase
-            .from("accounts")
-            .update({
-              ...selectedAccount,
-              account_balance: state.timeLeft,
-            })
-            .eq("id", selectedAccount.id!);
-
-          if (updateError) {
-            throw new Error(updateError.message);
-          }
-
-          console.log("Account updated successfully");
         } catch (error) {
-          console.error("Failed to update account", error);
+          console.error("Transaction sync failed:", error);
         }
       }
     };
 
     syncTransaction();
-  }, [
-    state.running,
-    selectedAccount.id,
-    start_time,
-    state.timeLeft,
-    selectedAccount,
-  ]);
-
-  // Fullscreen functionality
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement
-        .requestFullscreen()
-        .then(() => {
-          setIsFullscreen(true);
-        })
-        .catch((err) => {
-          console.error("Error attempting to enable fullscreen:", err);
-        });
-    } else {
-      document
-        .exitFullscreen()
-        .then(() => {
-          setIsFullscreen(false);
-        })
-        .catch((err) => {
-          console.error("Error attempting to exit fullscreen:", err);
-        });
-    }
-  };
+  }, [state.running, selectedAccount.id, start_time, state.timeLeft]);
 
   // Listen for fullscreen changes
   useEffect(() => {
@@ -285,7 +252,12 @@ export default function Timer() {
       {/* Enhanced Controls */}
       <div className="flex gap-6 mb-8">
         <button
-          onClick={() => dispatch(setRunning(!state.running))}
+          onClick={() => {
+            if (!state.running && start_time === 0) {
+              setstart_time(Date.now());
+            }
+            dispatch(setRunning(!state.running));
+          }}
           disabled={state.timeLeft <= 0}
           className="group px-10 py-5 bg-gray-900/90 backdrop-blur-sm text-white rounded-2xl hover:bg-gray-900 transition-all duration-300 text-xl font-medium shadow-lg shadow-gray-900/25 hover:shadow-xl hover:shadow-gray-900/30 hover:scale-[1.05] border border-gray-800/20 disabled:opacity-50 disabled:cursor-not-allowed"
         >
@@ -298,6 +270,7 @@ export default function Timer() {
           onClick={() => {
             dispatch(setRunning(false));
             dispatch(setTimeLeft(selectedAccount.account_balance));
+            setstart_time(0);
           }}
           disabled={selectedAccount.id === "dummy-account"}
           className="group px-10 py-5 bg-white/20 backdrop-blur-sm border border-white/30 text-gray-800 rounded-2xl hover:bg-white/30 hover:border-white/40 transition-all duration-300 text-xl font-medium shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10 hover:scale-[1.05] disabled:opacity-50 disabled:cursor-not-allowed"
@@ -321,19 +294,6 @@ export default function Timer() {
           </div>
         </div>
       )}
-
-      {/* Fullscreen Button */}
-      <button
-        onClick={toggleFullscreen}
-        className="absolute bottom-4 right-4 p-3 bg-white/80 hover:bg-white/90 rounded-full shadow-lg transition-all duration-200 hover:scale-105 border border-gray-200"
-        title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
-      >
-        {isFullscreen ? (
-          <FaCompress className="w-4 h-4 text-gray-700" />
-        ) : (
-          <FaExpand className="w-4 h-4 text-gray-700" />
-        )}
-      </button>
     </div>
   );
 }

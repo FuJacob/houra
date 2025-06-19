@@ -6,7 +6,7 @@ export default function Page() {
       <Navigation />
       <div className="flex flex-col items-center justify-center min-h-screen">
         <p className="flex px-8 py-16 gap-12 mx-auto text-3xl sm:text-6xl md:text-8xl font-light bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent leading-tight tracking-tight">
-          Welcome to Owra
+          Welcome to owra
         </p>
         <p className="font-light text-3xl text-center text-gray-600 mb-12">
           Choose how you want to start

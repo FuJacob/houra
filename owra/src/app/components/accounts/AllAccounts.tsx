@@ -48,7 +48,6 @@ const AllAccounts = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-white/50 via-transparent to-transparent rounded-2xl pointer-events-none"></div>
 
             <div className="relative z-10 flex items-center gap-3">
-              <div className="w-2 h-2 bg-gray-600 rounded-full animate-pulse"></div>
               <h2 className="text-2xl font-light bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
                 Your Time Accounts
               </h2>
