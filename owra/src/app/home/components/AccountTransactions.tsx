@@ -4,15 +4,7 @@ import { selectedAccountContext } from "../contexts";
 import TransactionCard from "./TransactionCard";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-
-interface Transaction {
-  id: string;
-  account_id: string;
-  start_time: string;
-  end_time: string;
-  amount: number;
-  created_at: string;
-}
+import { Transaction } from "@/types/types";
 
 const AccountTransactions = () => {
   const { selectedAccount } = useContext(selectedAccountContext);

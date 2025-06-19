@@ -1,8 +1,7 @@
 "use client";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { FaX } from "react-icons/fa6";
 import { Account, AddAccountModalProps } from "@/types/types";
-import { CurrentUserContext } from "../contexts";
 import { createClient } from "@/utils/supabase/client";
 
 export default function AddAccountModal({
@@ -26,8 +25,6 @@ export default function AddAccountModal({
     seconds: 0,
   });
 
-  const { setCurrentUser } = useContext(CurrentUserContext);
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -49,7 +46,7 @@ export default function AddAccountModal({
         throw new Error("User not found");
       }
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("accounts")
         .insert({
           user_id: user.id,
@@ -62,16 +59,16 @@ export default function AddAccountModal({
         throw new Error(error.message);
       }
 
-      setCurrentUser((prev) => ({
-        ...prev,
-        accounts: [...(prev.accounts || []), data],
-      }));
-
+      // Close modal after successful creation
       setShowAddAccountModal(false);
+
+      // Refresh the page to show the new account
+      window.location.reload();
     } catch (error) {
       console.error("Failed to create account:", error);
     }
   };
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setNewAccount((prev) => ({

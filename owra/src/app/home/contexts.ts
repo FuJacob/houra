@@ -1,7 +1,6 @@
 import { createContext } from "react";
 import {
   SelectedAccountContextType,
-  CurrentUserContextType,
   showAddAccountModalContextType,
   HomeContextType,
 } from "@/types/types";
@@ -20,10 +19,12 @@ const createDefaultRef = (): React.RefObject<HTMLDivElement | null> => ({
 export const selectedAccountContext = createContext<SelectedAccountContextType>(
   {
     selectedAccount: {
-      id: 0,
+      id: "0",
       account_name: "",
       account_balance: 0,
-      reload_freq: "",
+      reload_freq: 0,
+      last_reload: 0,
+      reload_amount: 0,
       colour: "background",
       transactions: [],
       type: "",
@@ -35,16 +36,6 @@ export const selectedAccountContext = createContext<SelectedAccountContextType>(
     goToAccounts: () => {},
   }
 );
-
-export const CurrentUserContext = createContext<CurrentUserContextType>({
-  currentUser: {
-    name: "",
-    email: "",
-    password: "",
-    accounts: [],
-  },
-  setCurrentUser: () => {},
-});
 
 export const HomeContext = createContext<HomeContextType>({
   selectedPage: "Home",

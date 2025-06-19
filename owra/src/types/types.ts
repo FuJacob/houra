@@ -48,12 +48,6 @@ export interface User {
   accounts?: Account[]; // optional since it's a relation, not a direct field
 }
 
-export interface SidebarButtonProps {
-  id: string;
-  icon: React.ReactNode;
-  label: string;
-}
-
 export interface AccountBoxProps {
   id: number;
   account_name: string;
@@ -62,11 +56,6 @@ export interface AccountBoxProps {
 
 export interface AddAccountModalProps {
   setShowAddAccountModal: Dispatch<SetStateAction<boolean>>;
-}
-
-export interface CurrentUserContextType {
-  currentUser: User;
-  setCurrentUser: Dispatch<SetStateAction<User>>;
 }
 
 export interface HomeContextType {
