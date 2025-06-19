@@ -1,7 +1,7 @@
 import HeroSection from "./HeroSection";
 
 import CTASection from "./CTASection";
-import Footer from "./Footer";
+import Footer from "../layout/Footer";
 
 const Hero = () => {
   return (

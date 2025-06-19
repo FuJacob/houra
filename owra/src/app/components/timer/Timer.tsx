@@ -3,7 +3,7 @@
 import { useReducer, useEffect, useState } from "react";
 import { reducer, setRunning, setTimeLeft } from "./TimeReducer";
 import { useContext } from "react";
-import { selectedAccountContext } from "../contexts";
+import { selectedAccountContext } from "../../accounts-mode/contexts";
 import { FaArrowDown, FaExpand, FaCompress } from "react-icons/fa6";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";

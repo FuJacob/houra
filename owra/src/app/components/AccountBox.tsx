@@ -1,11 +1,11 @@
 "use client";
 import { FaClock, FaSyncAlt } from "react-icons/fa";
-import { selectedAccountContext } from "../contexts";
+import { selectedAccountContext } from "../accounts-mode/contexts";
 import { useContext, useState } from "react";
 import { Account } from "@/types/types";
-import EditAccountModal from "./EditAccountModal";
+import EditAccountModal from "./accounts/EditAccountModal";
 import { FaArrowUp, FaGear } from "react-icons/fa6";
-import { dummyAccount } from "../utils/dummyAccount";
+import { dummyAccount } from "../accounts-mode/utils/dummyAccount";
 
 const AccountBox = ({
   account,
@@ -130,7 +130,7 @@ const AccountBox = ({
           {/* Enhanced footer */}
           <div className="flex justify-between items-end">
             <div className="text-right">
-              <div className="inline-block flex flex-col space-y-2 justify-center text-xs px-3 py-2 rounded-xl bg-white/30 backdrop-blur-sm border border-white/40 shadow-sm">
+              <div className="flex flex-col space-y-2 justify-center text-xs px-3 py-2 rounded-xl bg-white/30 backdrop-blur-sm border border-white/40 shadow-sm">
                 <div className="flex items-center gap-2">
                   <FaClock />
                   <span className="font-semibold">

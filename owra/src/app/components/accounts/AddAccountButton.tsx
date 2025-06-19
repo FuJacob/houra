@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { showAddAccountModalContext } from "../contexts";
+import { showAddAccountModalContext } from "../../accounts-mode/contexts";
 const AddAccountButton = () => {
   const { setShowAddAccountModal } = useContext(showAddAccountModalContext);
   return (

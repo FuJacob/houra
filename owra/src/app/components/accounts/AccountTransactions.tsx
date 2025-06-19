@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext } from "react";
-import { selectedAccountContext } from "../contexts";
+import { selectedAccountContext } from "../../accounts-mode/contexts";
 import TransactionCard from "./TransactionCard";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";

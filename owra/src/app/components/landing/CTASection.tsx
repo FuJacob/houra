@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import DummyAccountsStacked from "./DummyAccountsStacked";
+import DummyAccountsStacked from "../accounts/DummyAccountsStacked";
 
 const CTASection = () => {
   const [seconds, setSeconds] = useState(0);

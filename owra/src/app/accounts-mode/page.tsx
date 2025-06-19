@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useRef } from "react";
-import Timer from "./components/Timer";
-import AddAccountModal from "./components/AddAccountModal";
-import AllAccounts from "./components/AllAccounts";
-import AccountHistory from "./components/AccountTransactions";
+import Timer from "../components/timer/Timer";
+import AddAccountModal from "../components/accounts/AddAccountModal";
+import AllAccounts from "../components/accounts/AllAccounts";
+import AccountHistory from "../components/accounts/AccountTransactions";
 import { Account } from "@/types/types";
-import Navigation from "../components/Navigation";
+import Navigation from "../components/layout/Navigation";
 import { dummyAccount } from "./utils/dummyAccount";
 import {
   showAddAccountModalContext,

@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useEffect, useReducer, useState } from "react";
-import Navigation from "../components/Navigation";
+import Navigation from "../components/layout/Navigation";
 import {
   reducer,
   setRunning,
   setTimeLeft,
-} from "../accounts-mode/components/TimeReducer";
+} from "../components/timer/TimeReducer";
 import {
   formatTimeToHHMMSS,
   getTimeFromSeconds,
