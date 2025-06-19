@@ -64,7 +64,7 @@ const Navigation = () => {
                 </>
               )}
               {isAuthenticated && (
-                <AccountMenuButton name={user.user_metadata.name} />
+                <AccountMenuButton name={user?.user_metadata.name} />
               )}
             </div>
 
@@ -105,7 +105,7 @@ const Navigation = () => {
                 )}
                 {isAuthenticated && (
                   <div className="py-2">
-                    <AccountMenuButton name={user.user_metadata.name} />
+                    <AccountMenuButton name={user?.user_metadata.name} />
                   </div>
                 )}
               </div>
