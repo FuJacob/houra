@@ -1,91 +1,39 @@
-"use client";
-import React, { useState, useRef } from "react";
-import Timer from "./components/Timer";
-import AddAccountModal from "./components/AddAccountModal";
-import AllAccounts from "./components/AllAccounts";
-import AccountHistory from "./components/AccountTransactions";
-import { Account } from "@/types/types";
+import Link from "next/link";
 import Navigation from "../components/Navigation";
-import { dummyAccount } from "./utils/dummyAccount";
-import {
-  showAddAccountModalContext,
-  selectedAccountContext,
-  HomeContext,
-} from "./contexts";
-
-const scrollToElement = (element: HTMLDivElement | null) => {
-  if (element) {
-    element.scrollIntoView({ behavior: "smooth" });
-  }
-};
-
-const Page = () => {
-  const timerRef = useRef<HTMLDivElement | null>(null);
-  const accountsRef = useRef<HTMLDivElement | null>(null);
-
-  const bringToTimer = () => scrollToElement(timerRef.current);
-  const goToAccounts = () => scrollToElement(accountsRef.current);
-  const [selectedAccount, setSelectedAccount] = useState<Account>(dummyAccount);
-
-  const [selectedPage, setSelectedPage] = useState("Home");
-  const [showAddAccountModal, setShowAddAccountModal] = useState(false);
-
+export default function Page() {
   return (
-    <HomeContext.Provider value={{ selectedPage, setSelectedPage }}>
-      <showAddAccountModalContext.Provider
-        value={{ showAddAccountModal, setShowAddAccountModal }}
-      >
-        <selectedAccountContext.Provider
-          value={{
-            selectedAccount,
-            setSelectedAccount,
-            timerRef,
-            accountsRef,
-            bringToTimer,
-            goToAccounts,
-          }}
-        >
-          <div className="min-h-screen flex flex-col justify-center items-center">
-            <div
-              className="flex justify-center w-screen "
-              style={{
-                backgroundColor:
-                  selectedAccount.id === "dummy-account"
-                    ? "background"
-                    : `${selectedAccount.colour}10`,
-              }}
-              ref={timerRef}
-            >
-              <div className="w-full max-w-7xl">
-                {/* Header */}
-                <Navigation />
-
-                {/* Main Content */}
-                <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24">
-                  <div className="py-12">
-                    {/* Timer Section */}
-                    <div className="mb-24">
-                      <Timer />
-                    </div>
-                    <AccountHistory />
-                    <div ref={accountsRef}>
-                      <AllAccounts />
-                    </div>
-                  </div>
-                </main>
-
-                {showAddAccountModal && (
-                  <AddAccountModal
-                    setShowAddAccountModal={setShowAddAccountModal}
-                  />
-                )}
-              </div>
+    <>
+      <Navigation />
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <p className="flex px-8 py-16 gap-12 mx-auto text-3xl sm:text-6xl md:text-8xl font-light bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent leading-tight tracking-tight">
+          Welcome to Owra
+        </p>
+        <p className="font-light text-3xl text-center text-gray-600 mb-12">
+          Choose how you want to start
+        </p>
+        <div className="relative w-full max-w-7xl mx-auto flex flex-col items-center">
+          <div className="w-full flex justify-center mb-16">
+            <div className="flex w-full max-w-2xl gap-6 px-4">
+              <Link
+                href="/accounts-mode"
+                className="group flex-1 flex justify-center items-center px-8 py-4 font-light italic text-3xl text-center text-white bg-gray-900/90 border border-gray-800/20 rounded-full backdrop-blur-sm shadow-lg shadow-gray-900/25 transition-all duration-300 hover:bg-gray-900 hover:shadow-xl hover:shadow-gray-900/30 hover:scale-[1.02]"
+              >
+                <span className="group-hover:text-white/90 transition-colors">
+                  Accounts Mode
+                </span>
+              </Link>
+              <Link
+                href="/flex-mode"
+                className="group flex-1 flex justify-center items-center px-8 py-4 font-light text-3xl text-center text-gray-800 bg-white/20 border border-white/30 rounded-full backdrop-blur-sm shadow-lg shadow-black/5 transition-all duration-300 hover:bg-white/30 hover:border-white/40 hover:shadow-xl hover:shadow-black/10 hover:scale-[1.02]"
+              >
+                <div className="flex items-center justify-center gap-2 text-5xl font-curly group-hover:text-gray-900 transition-colors">
+                  Flex Mode
+                </div>
+              </Link>
             </div>
           </div>
-        </selectedAccountContext.Provider>
-      </showAddAccountModalContext.Provider>
-    </HomeContext.Provider>
+        </div>
+      </div>
+    </>
   );
-};
-
-export default Page;
+}

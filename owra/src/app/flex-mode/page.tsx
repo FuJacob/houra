@@ -3,7 +3,11 @@
 import Link from "next/link";
 import { useEffect, useReducer, useState } from "react";
 import Navigation from "../components/Navigation";
-import { reducer, setRunning, setTimeLeft } from "../home/components/TimeReducer";
+import {
+  reducer,
+  setRunning,
+  setTimeLeft,
+} from "../accounts-mode/components/TimeReducer";
 import {
   formatTimeToHHMMSS,
   getTimeFromSeconds,
@@ -26,7 +30,9 @@ export default function Timer() {
     timeLeft: tempAccount.account_balance,
   });
 
-  const [hoursLeft, minutesLeft, secondsLeft] = getTimeFromSeconds(state.timeLeft);
+  const [hoursLeft, minutesLeft, secondsLeft] = getTimeFromSeconds(
+    state.timeLeft
+  );
   const [inputValue, setInputValue] = useState("");
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -73,11 +79,13 @@ export default function Timer() {
     };
 
     document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    return () =>
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
 
   const currentTime = formatTimeToHHMMSS(hoursLeft, minutesLeft, secondsLeft);
-  const [currentAccount, setCurrentAccount] = useState<Partial<Account>>(tempAccount);
+  const [currentAccount, setCurrentAccount] =
+    useState<Partial<Account>>(tempAccount);
 
   return (
     <div className="h-screen flex flex-col items-center justify-end">
@@ -85,7 +93,9 @@ export default function Timer() {
         className="flex justify-center w-screen h-full pt-36"
         style={{
           backgroundColor:
-            currentAccount.colour === "#FFFFFF" ? "background" : `${currentAccount.colour}40`,
+            currentAccount.colour === "#FFFFFF"
+              ? "background"
+              : `${currentAccount.colour}40`,
         }}
       >
         <div className="w-full max-w-7xl">
@@ -102,7 +112,7 @@ export default function Timer() {
                       </div>
                     </div>
                     <Link
-                      href="/home"
+                      href="/accounts-mode"
                       className="text-sm flex items-center justify-center text-gray-600 hover:text-gray-800 transition-colors underline decoration-1 underline-offset-2 font-medium"
                     >
                       Or go enter account mode →
@@ -115,7 +125,9 @@ export default function Timer() {
                         type="text"
                         value={formatRawInput(inputValue)}
                         onChange={(e) => setInputValue(e.target.value)}
-                        onBlur={() => dispatch(setTimeLeft(parseTimeString(inputValue)))}
+                        onBlur={() =>
+                          dispatch(setTimeLeft(parseTimeString(inputValue)))
+                        }
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
                             dispatch(setTimeLeft(parseTimeString(inputValue)));
@@ -125,7 +137,10 @@ export default function Timer() {
                         autoFocus
                         className="text-center border-0 outline-none font-mono font-light text-[120px] sm:text-[200px] leading-none tracking-tighter w-full min-w-0 transition-transform duration-500 ease-in-out transform scale-95 focus:scale-100 bg-transparent drop-shadow-lg"
                         style={{
-                          color: currentAccount.colour === "#FFFFFF" ? "#374151" : `${currentAccount.colour}`,
+                          color:
+                            currentAccount.colour === "#FFFFFF"
+                              ? "#374151"
+                              : `${currentAccount.colour}`,
                         }}
                       />
                       <div className="mt-6 px-6 py-3">
@@ -156,19 +171,26 @@ export default function Timer() {
                       onClick={() => {
                         dispatch(setRunning(false));
                         dispatch(
-                          setTimeLeft(currentAccount.account_balance || tempAccount.account_balance)
+                          setTimeLeft(
+                            currentAccount.account_balance ||
+                              tempAccount.account_balance
+                          )
                         );
                       }}
                       className="group px-10 py-5 bg-white/20 backdrop-blur-sm border border-white/30 text-gray-800 rounded-2xl hover:bg-white/30 hover:border-white/40 transition-all duration-300 text-xl font-medium shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10 hover:scale-[1.05]"
                     >
-                      <span className="group-hover:text-gray-900 transition-colors">Reset</span>
+                      <span className="group-hover:text-gray-900 transition-colors">
+                        Reset
+                      </span>
                     </button>
                   </div>
 
                   <div className="flex text-2xl justify-between items-end w-full mt-8">
                     <div className="flex flex-col items-start space-y-4">
                       <div className="px-4 py-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl shadow-lg">
-                        <h3 className="text-lg font-medium text-gray-700">Choose Timer Color</h3>
+                        <h3 className="text-lg font-medium text-gray-700">
+                          Choose Timer Color
+                        </h3>
                       </div>
                       <div className="grid grid-cols-5 gap-2 p-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl shadow-lg">
                         {[
@@ -190,14 +212,16 @@ export default function Timer() {
                               currentAccount.colour === hex
                                 ? "border-gray-800 shadow-xl scale-105 ring-2 ring-white/50"
                                 : hex === "#FFFFFF"
-                                ? "border-gray-400 opacity-90 hover:border-gray-600"
-                                : "border-white/30 opacity-80 hover:border-white/50"
+                                  ? "border-gray-400 opacity-90 hover:border-gray-600"
+                                  : "border-white/30 opacity-80 hover:border-white/50"
                             }`}
                             style={{
                               backgroundColor: hex,
                               boxShadow: `0 4px 15px ${hex}40`,
                             }}
-                            onClick={() => setCurrentAccount({ ...tempAccount, colour: hex })}
+                            onClick={() =>
+                              setCurrentAccount({ ...tempAccount, colour: hex })
+                            }
                           />
                         ))}
                       </div>
@@ -207,7 +231,9 @@ export default function Timer() {
                   <button
                     onClick={toggleFullscreen}
                     className="absolute bottom-4 right-4 p-3 bg-white/80 hover:bg-white/90 rounded-full shadow-lg transition-all duration-200 hover:scale-105 border border-gray-200"
-                    title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+                    title={
+                      isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"
+                    }
                   >
                     {isFullscreen ? (
                       <FaCompress className="w-4 h-4 text-gray-700" />

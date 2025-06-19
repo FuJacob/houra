@@ -1,4 +1,4 @@
-import AccountBox from "../home/components/AccountBox";
+import AccountBox from "../accounts-mode/components/AccountBox";
 import { Account } from "@/types/types";
 
 const dummyAccounts: Account[] = [

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { useUser } from "@/contexts/UserContext";
-import AccountMenuButton from "../home/components/AccountMenuButton";
+import AccountMenuButton from "../accounts-mode/components/AccountMenuButton";
 import { useEffect } from "react";
 
 const Navigation = () => {
