@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 
 const Test = () => {
-  let seconds = 500;
+  const seconds = 500;
   return (
     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-9/10 ">
       <p className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto">
@@ -22,11 +22,11 @@ const Test = () => {
                 <span className="font-bold">{seconds} seconds</span>.
               </Link>
             </div>
-            <img src="logo.svg" className="w-12" />
+            <img src="logo.svg" className="w-12" alt="Owra logo" />
           </div>
         </div>
         <div className="flex justify-end w-full px-6">
-          <img src="vertical_card.png" alt="" className="w-12" />
+          <img src="vertical_card.png" alt="Vertical card" className="w-12" />
         </div>
         <div className="flex flex-col w-full gap-1">
           <Link

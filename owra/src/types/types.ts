@@ -1,4 +1,3 @@
-import { IconType } from "react-icons";
 import { Dispatch, SetStateAction } from "react";
 
 export interface showAddAccountModalContextType {
@@ -51,7 +50,7 @@ export interface User {
 
 export interface SidebarButtonProps {
   id: string;
-  icon: IconType;
+  icon: React.ReactNode;
   label: string;
 }
 

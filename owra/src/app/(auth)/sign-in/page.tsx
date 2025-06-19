@@ -1,5 +1,4 @@
-import React, { FormEvent } from "react";
-import Link from "next/link";
+import React from "react";
 import { loginWithGoogle } from "./actions";
 
 const Page = () => {
@@ -22,17 +21,8 @@ const Page = () => {
                 </h1>
               </div>
               <h2 className="text-3xl font-light text-gray-900 mb-4 leading-tight">
-                Let's start saving time.
+                Let&apos;s start saving time.
               </h2>
-              {/* <p className="text-gray-600 text-lg">
-                New to Owra?{" "}
-                <Link
-                  href="/sign-in"
-                  className="text-gray-900 hover:text-gray-700 transition-colors font-medium underline decoration-2 underline-offset-4"
-                >
-                  Sign up
-                </Link>
-              </p> */}
             </div>
 
             {/* Enhanced Login Form Card */}
@@ -44,52 +34,7 @@ const Page = () => {
               <div className="relative bg-white/30 backdrop-blur-2xl border border-white/40 rounded-3xl p-10 shadow-2xl shadow-black/10 hover:shadow-3xl hover:shadow-black/15 transition-all duration-500">
                 {/* Inner glow */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/50 via-transparent to-transparent rounded-3xl pointer-events-none"></div>
-                <div className="relative z-10">
-                  {/* <form onSubmit={} className="space-y-8">
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm font-medium text-gray-800 mb-3"
-                      >
-                        Email address
-                      </label>
-                      <input
-                        required
-                        id="email"
-                        name="email"
-                        type="email"
-                        className="w-full px-6 py-4 rounded-2xl bg-white/40 backdrop-blur-sm border border-white/50 focus:outline-none focus:ring-2 focus:ring-gray-800/20 focus:border-gray-800/30 transition-all duration-300 placeholder-gray-500"
-                        placeholder="you@example.com"
-                      />
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="password"
-                        className="block text-sm font-medium text-gray-800 mb-3"
-                      >
-                        Password
-                      </label>
-                      <input
-                        required
-                        id="password"
-                        name="password"
-                        type="password"
-                        className="w-full px-6 py-4 rounded-2xl bg-white/40 backdrop-blur-sm border border-white/50 focus:outline-none focus:ring-2 focus:ring-gray-800/20 focus:border-gray-800/30 transition-all duration-300 placeholder-gray-500"
-                        placeholder="••••••••"
-                      />
-                    </div>
-                    <button onClick={loginWithGoogle}>Login with Google</button>
-                    <button
-                      type="submit"
-                      className="group w-full px-8 py-5 bg-gray-900/90 backdrop-blur-sm text-white rounded-2xl hover:bg-gray-900 transition-all duration-300 text-lg font-medium shadow-lg shadow-gray-900/25 hover:shadow-xl hover:shadow-gray-900/30 hover:scale-[1.02] border border-gray-800/20"
-                    >
-                      <span className="group-hover:text-white/90 transition-colors">
-                        Log in
-                      </span>
-                    </button>
-                  </form> */}
-                </div>
+                <div className="relative z-10"></div>
                 <button
                   className="group w-full px-8 py-5 bg-gray-900/90 backdrop-blur-sm text-white rounded-2xl hover:bg-gray-900 transition-all duration-300 text-lg font-medium shadow-lg shadow-gray-900/25 hover:shadow-xl hover:shadow-gray-900/30 hover:scale-[1.02] border border-gray-800/20"
                   onClick={loginWithGoogle}

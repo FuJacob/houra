@@ -5,7 +5,6 @@ import { useContext, useState } from "react";
 import { Account } from "@/types/types";
 import EditAccountModal from "./EditAccountModal";
 import { FaArrowUp, FaGear } from "react-icons/fa6";
-import { reloadMap } from "../utils/reloadMap";
 import { dummyAccount } from "../utils/dummyAccount";
 
 const AccountBox = ({

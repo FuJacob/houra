@@ -1,17 +1,14 @@
 "use client";
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { FaBars, FaX, FaClock, FaRocket, FaUser } from "react-icons/fa6";
+import { FaBars, FaXmark } from "react-icons/fa6";
 import { useAuth } from "@/hooks/useAuth";
 import AccountMenuButton from "../home/components/AccountMenuButton";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 
 const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
   const [currentTime, setCurrentTime] = useState("");
-  const router = useRouter();
   const { isAuthenticated, user } = useAuth();
 
   // Update current time every second
@@ -77,7 +74,7 @@ const Navigation = () => {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? (
-                <FaX className="h-4 w-4 text-gray-700" />
+                <FaXmark className="h-4 w-4 text-gray-700" />
               ) : (
                 <FaBars className="h-4 w-4 text-gray-700" />
               )}

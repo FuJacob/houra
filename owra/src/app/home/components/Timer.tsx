@@ -4,7 +4,6 @@ import { useReducer, useEffect, useState } from "react";
 import { reducer, setRunning, setTimeLeft } from "./TimeReducer";
 import { useContext } from "react";
 import { selectedAccountContext } from "../contexts";
-import { useAuth } from "@/hooks/useAuth";
 import { FaArrowDown, FaExpand, FaCompress } from "react-icons/fa6";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";
@@ -13,7 +12,6 @@ import { createClient } from "@/utils/supabase/client";
 export default function Timer() {
   const [start_time, setstart_time] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const { isAuthenticated, user } = useAuth();
 
   // Account interface defines the expected structure of an account object
 
@@ -95,8 +93,9 @@ export default function Timer() {
           }
 
           // Add transaction
-          const { data: transactionData, error: transactionError } =
-            await supabase.from("transactions").insert({
+          const { error: transactionError } = await supabase
+            .from("transactions")
+            .insert({
               ...newTransaction,
               account_id: account.id,
             });
@@ -108,7 +107,7 @@ export default function Timer() {
           setstart_time(0);
 
           // Update account
-          const { data: updateData, error: updateError } = await supabase
+          const { error: updateError } = await supabase
             .from("accounts")
             .update({
               ...selectedAccount,
@@ -128,7 +127,13 @@ export default function Timer() {
     };
 
     syncTransaction();
-  }, [state.running, selectedAccount.id, start_time, state.timeLeft]);
+  }, [
+    state.running,
+    selectedAccount.id,
+    start_time,
+    state.timeLeft,
+    selectedAccount,
+  ]);
 
   // Fullscreen functionality
   const toggleFullscreen = () => {
@@ -281,7 +286,7 @@ export default function Timer() {
       <div className="flex gap-6 mb-8">
         <button
           onClick={() => dispatch(setRunning(!state.running))}
-          disabled={selectedAccount.id === "dummy-account"}
+          disabled={state.timeLeft <= 0}
           className="group px-10 py-5 bg-gray-900/90 backdrop-blur-sm text-white rounded-2xl hover:bg-gray-900 transition-all duration-300 text-xl font-medium shadow-lg shadow-gray-900/25 hover:shadow-xl hover:shadow-gray-900/30 hover:scale-[1.05] border border-gray-800/20 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span className="group-hover:text-white/90 transition-colors">

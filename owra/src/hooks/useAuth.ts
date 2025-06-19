@@ -1,10 +1,12 @@
-import { useCallback } from "react";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
+import type { User } from "@supabase/auth-js";
+
+
 
 export const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const getCurrentUser = async () => {

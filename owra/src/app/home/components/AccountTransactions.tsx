@@ -5,9 +5,18 @@ import TransactionCard from "./TransactionCard";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 
+interface Transaction {
+  id: string;
+  account_id: string;
+  start_time: string;
+  end_time: string;
+  amount: number;
+  created_at: string;
+}
+
 const AccountTransactions = () => {
   const { selectedAccount } = useContext(selectedAccountContext);
-  const [transactions, setTransactions] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   useEffect(() => {
     if (selectedAccount) {
       const getTransactions = async (accountId: string) => {

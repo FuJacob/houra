@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Account } from "@/types/types";
 import { createClient } from "@/utils/supabase/client";
 
@@ -55,7 +55,7 @@ export default function EditAccountModal({
         throw new Error("User not found");
       }
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("accounts")
         .update(editedAccount)
         .eq("id", editedAccount.id!);

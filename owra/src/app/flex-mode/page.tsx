@@ -19,7 +19,7 @@ import {
 } from "./getTimeFromSeconds";
 
 import { Account } from "@/types/types";
-import { FaArrowRight, FaExpand, FaCompress } from "react-icons/fa6";
+import { FaExpand, FaCompress } from "react-icons/fa6";
 
 // Timer component displays and controls a countdown timer
 export default function Timer() {

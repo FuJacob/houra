@@ -4,9 +4,10 @@ import AccountBox from "./AccountBox";
 import AddAccountButton from "./AddAccountButton";
 import { createClient } from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
+import { Account } from "@/types/types";
 
 const AllAccounts = () => {
-  const [accounts, setAccounts] = useState<any[]>([]);
+  const [accounts, setAccounts] = useState<Account[]>([]);
   useEffect(() => {
     const getAccounts = async () => {
       const supabase = await createClient();
@@ -65,7 +66,7 @@ const AllAccounts = () => {
 
         <div className="relative z-10 p-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {accounts.map((account: any) => (
+            {accounts.map((account: Account) => (
               <AccountBox key={account.id} account={account} />
             ))}
             {accounts.length === 0 && (

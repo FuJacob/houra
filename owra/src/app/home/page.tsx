@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
 import Timer from "./components/Timer";
 import AddAccountModal from "./components/AddAccountModal";
 import AllAccounts from "./components/AllAccounts";
@@ -24,7 +23,6 @@ const scrollToElement = (element: HTMLDivElement | null) => {
 };
 
 const Page = () => {
-  const router = useRouter();
   const timerRef = useRef<HTMLDivElement | null>(null);
   const accountsRef = useRef<HTMLDivElement | null>(null);
 

@@ -3,17 +3,11 @@ import React from "react";
 import { FaAngleDown } from "react-icons/fa";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 import { createClient } from "@/utils/supabase/client";
 
 const AccountMenuButton = ({ name }: { name: string }) => {
   const [showAccountMenuModal, setShowAccountMenuModal] = useState(false);
   const router = useRouter();
-
-  // Creative greeting variations
-  const getGreeting = () => {
-    return "Hello there";
-  };
 
   const logOut = async () => {
     const supabase = await createClient();
