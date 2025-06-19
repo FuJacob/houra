@@ -12,7 +12,7 @@ export default function Page() {
           Choose how you want to start
         </p>
         <div className="relative w-full max-w-7xl mx-auto flex flex-col items-center">
-          <div className="w-full flex justify-center mb-16">
+          <div className="w-full flex justify-center mb-8">
             <div className="flex w-full max-w-2xl gap-6 px-4">
               <Link
                 href="/accounts-mode"
@@ -30,6 +30,33 @@ export default function Page() {
                   Flex Mode
                 </div>
               </Link>
+            </div>
+          </div>
+
+          {/* Explanation boxes */}
+          <div className="w-full flex justify-center mb-16">
+            <div className="flex w-full max-w-2xl gap-6 px-4">
+              {/* Accounts Mode explanation */}
+              <div className="flex-1 p-6 bg-gray-50/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl shadow-lg">
+                <h3 className="text-xl font-medium text-gray-900 mb-3">
+                  Accounts Mode
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  Virtual time cards for activities. Each has a balance that
+                  auto-reloads.
+                </p>
+              </div>
+
+              {/* Flex Mode explanation */}
+              <div className="flex-1 p-6 bg-white/30 backdrop-blur-sm border border-white/40 rounded-2xl shadow-lg">
+                <h3 className="text-xl font-medium text-gray-800 mb-3">
+                  Flex Mode
+                </h3>
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  Simple timer you can edit to any duration. Customize colors
+                  and start timing without creating accounts.
+                </p>
+              </div>
             </div>
           </div>
         </div>

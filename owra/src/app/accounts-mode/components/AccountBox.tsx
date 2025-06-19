@@ -28,8 +28,8 @@ const AccountBox = ({
   const hours = Math.floor(currentAccount.account_balance / 3600);
 
   const isSelected = !isDummy && selectedAccount.id === currentAccount.id;
-  const isAnySelected = !isDummy && selectedAccount.id !== "dummy-account";
-
+  const isNoneSelected =
+    !isDummy && selectedAccount.id === "929089c6-124d-4011-a9d2-e7161d8944a1";
   const handleClick = () => {
     if (isDummy) return;
     if (isSelected) {
@@ -69,7 +69,11 @@ const AccountBox = ({
         onClick={handleClick}
         role="button"
         className={`w-full h-full relative group transition-all duration-500 transform hover:scale-105 cursor-pointer ${
-          !isAnySelected ? "" : isSelected ? "opacity-100" : "opacity-20"
+          isNoneSelected
+            ? "opacity-100"
+            : isSelected
+              ? "opacity-100"
+              : "opacity-20"
         } ${showEditModal ? "pointer-events-none" : ""}`}
       >
         {/* Enhanced edit button with glass morphism - only show if not dummy */}
