@@ -2,14 +2,14 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { FaBars, FaXmark } from "react-icons/fa6";
-import { useAuth } from "@/hooks/useAuth";
+import { useUser } from "@/contexts/UserContext";
 import AccountMenuButton from "../home/components/AccountMenuButton";
 import { useEffect } from "react";
 
 const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState("");
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user } = useUser();
 
   // Update current time every second
   useEffect(() => {

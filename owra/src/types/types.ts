@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import type { User } from "@supabase/auth-js";
 
 export interface showAddAccountModalContextType {
   showAddAccountModal: boolean;
@@ -17,6 +18,12 @@ export interface SelectedAccountContextType {
   accountsRef: React.RefObject<HTMLDivElement | null>;
   bringToTimer: () => void;
   goToAccounts: () => void;
+}
+
+export interface UserContextType {
+  user: User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
 }
 
 export interface Account {
@@ -41,7 +48,7 @@ export interface Transaction {
   account_id?: string; // foreign key to accounts table
 }
 
-export interface User {
+export interface AppUser {
   id?: string; // uuid primary key
   created_at: string; // timestamptz from database
   name: string;

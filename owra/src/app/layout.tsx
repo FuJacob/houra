@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { League_Spartan, Inter, Praise } from "next/font/google";
 import "./globals.css";
+import { UserProvider } from "@/contexts/UserContext";
+
 const work_sans = League_Spartan({
   variable: "--font-work-sans",
   subsets: ["latin"],
@@ -33,8 +35,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${work_sans.variable} ${praise.variable} antialiased max-w-7xl mx-auto px-2`}
       >
-        {/* <Navigation /> */}
-        {children}
+        <UserProvider>{children}</UserProvider>
       </body>
     </html>
   );
