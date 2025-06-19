@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import {
   League_Spartan,
-  Inter,
+  Lexend_Deca as Inter,
   Praise,
   Cherry_Bomb_One,
 } from "next/font/google";

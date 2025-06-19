@@ -6,8 +6,9 @@ const HeroSection = () => {
       <div className="w-screen">
         <section className="pt-32 md:pt-64 pb-16 px-4">
           <div className="max-w-7xl mx-auto text-center">
-            <h1 className="px-8 py-16 text-3xl sm:text-6xl md:text-8xl font-medium font-serif mx-auto bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent leading-tight tracking-tight mb-12">
-              Think like a <span className="font-black italic">Spender</span>.{" "}
+            <h1 className="px-8 py-16 text-3xl sm:text-6xl md:text-8xl font-medium mx-auto bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent leading-tight tracking-tight mb-12">
+              Think like a{" "}
+              <span className="font-black font-serif italic">Spender</span>.{" "}
               <br /> <span className="font-serif italic">Live</span> like a{" "}
               <span className="font-curly">Maker</span>.
             </h1>

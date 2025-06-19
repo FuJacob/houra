@@ -13,10 +13,19 @@ export default function Page() {
         </p>
         <div className="relative w-full max-w-7xl mx-auto flex flex-col items-center">
           <div className="w-full flex justify-center mb-8">
-            <div className="flex w-full max-w-2xl gap-6 px-4">
+            <div className="relative flex w-full max-w-2xl gap-6 px-4">
+              {/* Left arrow pointing to Accounts Mode */}
+              <div className="absolute left-0 top-1/2 -translate-x-16 ">
+                <img
+                  src="/up-arrow.png"
+                  alt="Arrow pointing to Accounts Mode"
+                  className="w-24 h-24 rotate-[-45deg]"
+                />
+              </div>
+
               <Link
                 href="/accounts-mode"
-                className="group flex-1 flex justify-center items-center px-8 py-4 font-light italic text-3xl text-center text-white bg-gray-900/90 border border-gray-800/20 rounded-full backdrop-blur-sm shadow-lg shadow-gray-900/25 transition-all duration-300 hover:bg-gray-900 hover:shadow-xl hover:shadow-gray-900/30 hover:scale-[1.02]"
+                className="group flex-1 flex justify-center items-center px-8 py-4 text-3xl font-black text-center text-white bg-gray-900/90 border border-gray-800/20 rounded-full backdrop-blur-sm shadow-lg shadow-gray-900/25 transition-all duration-300 hover:bg-gray-900 hover:shadow-xl hover:shadow-gray-900/30 hover:scale-[1.02]"
               >
                 <span className="group-hover:text-white/90 transition-colors">
                   Accounts Mode
@@ -30,6 +39,15 @@ export default function Page() {
                   Flex Mode
                 </div>
               </Link>
+
+              {/* Right arrow pointing to Flex Mode */}
+              <div className="absolute right-0 top-1/2 translate-x-16">
+                <img
+                  src="/up-arrow.png"
+                  alt="Arrow pointing to Flex Mode"
+                  className="w-24 h-24 rotate-[45deg] scale-x-[-1]"
+                />
+              </div>
             </div>
           </div>
 
@@ -39,22 +57,22 @@ export default function Page() {
               {/* Accounts Mode explanation */}
               <div className="flex-1 p-6 bg-gray-50/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl shadow-lg">
                 <h3 className="text-xl font-medium text-gray-900 mb-3">
-                  Accounts Mode
+                  Your time, but like money
                 </h3>
                 <p className="text-gray-600 text-sm leading-relaxed">
-                  Virtual time cards for activities. Each has a balance that
-                  auto-reloads.
+                  Create time cards for anything — focus, fun, rest. Customize
+                  and track your time like money.
                 </p>
               </div>
 
               {/* Flex Mode explanation */}
-              <div className="flex-1 p-6 bg-white/30 backdrop-blur-sm border border-white/40 rounded-2xl shadow-lg">
+              <div className="flex-1 p-6 bg-gray-50/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl shadow-lg">
                 <h3 className="text-xl font-medium text-gray-800 mb-3">
-                  Flex Mode
+                  Focus your way
                 </h3>
                 <p className="text-gray-700 text-sm leading-relaxed">
-                  Simple timer you can edit to any duration. Customize colors
-                  and start timing without creating accounts.
+                  Launch a simple, quick timer instantly with any duration. No
+                  setup — just pick a time and go.
                 </p>
               </div>
             </div>

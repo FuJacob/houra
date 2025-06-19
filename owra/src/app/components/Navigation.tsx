@@ -36,7 +36,7 @@ const Navigation = () => {
             {/* Logo */}
             <Link
               href="/"
-              className="flex items-center gap-2 text-lg font-medium tracking-tight text-gray-900 hover:text-gray-700 transition-colors duration-200"
+              className="flex items-center gap-2 text-lg hover:underline hover:underline-offset-2 font-medium tracking-tight text-gray-900 hover:text-gray-700 transition-all ease-in-out duration-400"
             >
               <img src="/logo.svg" className="w-4 h-4" alt="Owra" />
               <span className="">owra</span>

@@ -19,7 +19,7 @@ const CTASection = () => {
       <div className="flex justify-center w-full">
         <div className="w-full px-4 py-32">
           <div className="text-center">
-            <h1 className="text-3xl sm:text-6xl md:text-6xl font-medium font-serif mx-auto bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent leading-tight tracking-tight">
+            <h1 className="text-3xl sm:text-6xl md:text-6xl font-medium mx-auto bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent leading-tight tracking-tight">
               You&apos;ve already spent{" "}
               <span className="font-curly text-[10rem] mx-4">{seconds}</span>{" "}
               seconds here.
