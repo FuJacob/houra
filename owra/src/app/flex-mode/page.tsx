@@ -17,7 +17,6 @@ import {
 } from "./getTimeFromSeconds";
 
 import { Account } from "@/types/types";
-import { FaExpand, FaCompress } from "react-icons/fa6";
 
 export default function Timer() {
   const tempAccount = {
@@ -34,7 +33,6 @@ export default function Timer() {
     state.timeLeft
   );
   const [inputValue, setInputValue] = useState("");
-  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     if (state.running && state.timeLeft > 0) {
@@ -50,38 +48,6 @@ export default function Timer() {
   useEffect(() => {
     setInputValue(numberTimeToString(state.timeLeft));
   }, [state.timeLeft]);
-
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement
-        .requestFullscreen()
-        .then(() => {
-          setIsFullscreen(true);
-        })
-        .catch((err) => {
-          console.error("Error attempting to enable fullscreen:", err);
-        });
-    } else {
-      document
-        .exitFullscreen()
-        .then(() => {
-          setIsFullscreen(false);
-        })
-        .catch((err) => {
-          console.error("Error attempting to exit fullscreen:", err);
-        });
-    }
-  };
-
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () =>
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
-  }, []);
 
   const currentTime = formatTimeToHHMMSS(hoursLeft, minutesLeft, secondsLeft);
   const [currentAccount, setCurrentAccount] =
@@ -227,20 +193,6 @@ export default function Timer() {
                       </div>
                     </div>
                   </div>
-
-                  <button
-                    onClick={toggleFullscreen}
-                    className="absolute bottom-4 right-4 p-3 bg-white/80 hover:bg-white/90 rounded-full shadow-lg transition-all duration-200 hover:scale-105 border border-gray-200"
-                    title={
-                      isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"
-                    }
-                  >
-                    {isFullscreen ? (
-                      <FaCompress className="w-4 h-4 text-gray-700" />
-                    ) : (
-                      <FaExpand className="w-4 h-4 text-gray-700" />
-                    )}
-                  </button>
                 </div>
               </div>
             </div>

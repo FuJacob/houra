@@ -4,14 +4,15 @@ import { useReducer, useEffect, useState } from "react";
 import { reducer, setRunning, setTimeLeft } from "./TimeReducer";
 import { useContext } from "react";
 import { selectedAccountContext } from "../../accounts-mode/contexts";
-import { FaArrowDown, FaExpand, FaCompress } from "react-icons/fa6";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";
+import StartPauseButton from "./StartPauseButton";
+import ResetButton from "./ResetButton";
+import AccountSelectionPrompt from "./AccountSelectionPrompt";
 
 // Timer component displays and controls a countdown timer
 export default function Timer() {
   const [start_time, setstart_time] = useState(0);
-  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Account interface defines the expected structure of an account object
 
@@ -125,17 +126,6 @@ export default function Timer() {
     syncTransaction();
   }, [state.running, selectedAccount.id, start_time, state.timeLeft]);
 
-  // Listen for fullscreen changes
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () =>
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
-  }, []);
-
   // Calculate progress percentage
   const progressPercentage =
     selectedAccount.id !== "dummy-account"
@@ -223,11 +213,7 @@ export default function Timer() {
           <h1
             className="font-mono text-[120px] sm:text-[200px] leading-none tracking-tighter font-light drop-shadow-lg"
             style={{
-              color: `${
-                selectedAccount.id === "dummy-account"
-                  ? "#374151"
-                  : selectedAccount.colour
-              }`,
+              color: `${selectedAccount.colour}`,
             }}
           >
             {hoursLeft < 10 ? `0${hoursLeft}` : hoursLeft}:
@@ -251,48 +237,30 @@ export default function Timer() {
 
       {/* Enhanced Controls */}
       <div className="flex gap-6 mb-8">
-        <button
+        <StartPauseButton
+          isRunning={state.running}
+          timeLeft={state.timeLeft}
           onClick={() => {
             if (!state.running && start_time === 0) {
               setstart_time(Date.now());
             }
             dispatch(setRunning(!state.running));
           }}
-          disabled={state.timeLeft <= 0}
-          className="group px-10 py-5 bg-gray-900/90 backdrop-blur-sm text-white rounded-2xl hover:bg-gray-900 transition-all duration-300 text-xl font-medium shadow-lg shadow-gray-900/25 hover:shadow-xl hover:shadow-gray-900/30 hover:scale-[1.05] border border-gray-800/20 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <span className="group-hover:text-white/90 transition-colors">
-            {state.running ? "Pause" : "Start"}
-          </span>
-        </button>
+        />
 
-        <button
+        <ResetButton
           onClick={() => {
             dispatch(setRunning(false));
             dispatch(setTimeLeft(selectedAccount.account_balance));
             setstart_time(0);
           }}
           disabled={selectedAccount.id === "dummy-account"}
-          className="group px-10 py-5 bg-white/20 backdrop-blur-sm border border-white/30 text-gray-800 rounded-2xl hover:bg-white/30 hover:border-white/40 transition-all duration-300 text-xl font-medium shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10 hover:scale-[1.05] disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <span className="group-hover:text-gray-900 transition-colors">
-            Reset
-          </span>
-        </button>
+        />
       </div>
 
       {/* Enhanced account selection prompt */}
       {selectedAccount.id === "dummy-account" && (
-        <div className="text-center">
-          <div className="inline-flex items-center rounded-full px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg">
-            <button
-              onClick={goToAccounts}
-              className=" p-2 text-gray-800 hover:text-gray-900 transition-colors flex items-center justify-center gap-2"
-            >
-              <FaArrowDown className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
+        <AccountSelectionPrompt onGoToAccounts={goToAccounts} />
       )}
     </div>
   );
