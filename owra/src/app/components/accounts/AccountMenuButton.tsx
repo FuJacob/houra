@@ -21,7 +21,7 @@ const AccountMenuButton = ({ name }: { name: string }) => {
         onClick={() => setShowAccountMenuModal((prev) => !prev)}
         className="flex items-center space-x-3 text-gray-700 hover:text-gray-900 transition-colors group"
       >
-        <span className="leading-tight">Hello {name}</span>
+        <span className="leading-tight">{name}</span>
         <FaAngleDown
           className={`transition-transform ${
             showAccountMenuModal ? "rotate-180" : ""

@@ -3,7 +3,7 @@ import { FaClock, FaSyncAlt } from "react-icons/fa";
 import { selectedAccountContext } from "../../accounts-mode/contexts";
 import { useContext, useState } from "react";
 import { Account } from "@/types/types";
-import EditAccountModal from "./EditAccountModal";
+import AccountModal from "./AccountModal";
 import { FaArrowUp, FaGear } from "react-icons/fa6";
 import { dummyAccount } from "../../accounts-mode/utils/dummyAccount";
 
@@ -41,8 +41,8 @@ const AccountBox = ({
 
   const handleEditClick = (e: React.MouseEvent) => {
     if (isDummy) return;
-    e.preventDefault();
     e.stopPropagation();
+    console.log("Edit clicked");
     setShowEditModal(true);
   };
 
@@ -78,18 +78,14 @@ const AccountBox = ({
                 : "opacity-20"
           } ${showEditModal ? "pointer-events-none" : ""}`}
         >
-          {/* Enhanced edit button with glass morphism - only show if not dummy */}
-          {!isDummy && (
-            <button
-              onClick={handleEditClick}
-              className="absolute top-4 left-4 z-10 w-10 h-10 bg-white/30 backdrop-blur-sm hover:bg-white/50 rounded-full shadow-lg shadow-black/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 border border-white/40 hover:scale-110"
-            >
-              <FaGear className="w-4 h-4 text-gray-700" />
-            </button>
-          )}
-
           {isSelected && !isDummy && (
             <div className="absolute inset-0 flex justify-center z-50 items-center">
+              <button
+                onClick={handleEditClick}
+                className="absolute top-4 left-4 z-10 w-10 h-10 bg-white/30 backdrop-blur-sm hover:bg-white/50 rounded-full shadow-lg shadow-black/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 border border-white/40 hover:scale-110"
+              >
+                <FaGear className="w-4 h-4 text-gray-700" />
+              </button>
               <button
                 onClick={handleTimerClick}
                 className="bg-white/30 animate-bounce animate-duration-200 animate-ease-in-out animate-infinite backdrop-blur-sm hover:bg-white/50 rounded-full shadow-lg shadow-black/10 flex items-center justify-center transition-all duration-300 border border-white/40 hover:scale-110 w-10 h-10"
@@ -179,14 +175,13 @@ const AccountBox = ({
 
       {/* Edit Modal - Full screen overlay */}
       {showEditModal && !isDummy && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
-            <EditAccountModal
-              account={currentAccount}
-              onClose={() => setShowEditModal(false)}
-              onUpdate={handleAccountUpdate}
-            />
-          </div>
+        <div className="z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm inset-0 fixed ">
+          <AccountModal
+            mode="edit"
+            account={currentAccount}
+            onClose={() => setShowEditModal(false)}
+            onUpdate={handleAccountUpdate}
+          />
         </div>
       )}
     </>

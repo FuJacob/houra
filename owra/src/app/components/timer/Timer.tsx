@@ -161,32 +161,31 @@ export default function Timer() {
   return (
     <div className="relative flex flex-col items-center justify-center p-6 sm:p-12 transition-all duration-500 rounded-3xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10">
       {/* Header with Settings, Account Name, and Reload Info */}
-      <div className="w-full max-w-2xl mx-auto mb-8 relative">
-        <div className="flex items-center justify-center px-4">
-          {/* Settings Button - Left (Absolute positioned) */}
-          <button
-            onClick={handleEditAccount}
-            className="absolute left-8 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full shadow-lg shadow-black/5 p-3 text-gray-700 hover:text-gray-900 hover:bg-white/20 transition-colors"
-            disabled={selectedAccount.id === "dummy-account"}
-          >
-            <FaGear className="w-5 h-5" />
-          </button>
+      {/* Header: Gear | Account Name | Reload */}
+      <div className="w-full max-w-2xl mx-auto mb-8 px-4 flex items-center justify-center gap-4">
+        {/* Gear (left) */}
+        <button
+          onClick={handleEditAccount}
+          className="absolute left-3/5 p-3 rounded-full shadow bg-white/10 border border-white/20 text-gray-700 hover:text-gray-900 hover:bg-white/20 transition-colors"
+          disabled={selectedAccount.id === "dummy-account"}
+        >
+          <FaGear className="w-5 h-5" />
+        </button>
 
-          {/* Account Name - Center (Always centered) */}
-          <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full shadow-lg shadow-black/5 px-8 py-3">
-            <span className="text-lg font-medium text-gray-800">
-              {selectedAccount.id === "dummy-account"
-                ? "Account Mode"
-                : selectedAccount.account_name}
-            </span>
-          </div>
-
-          {/* Reload Info - Right (Absolute positioned) */}
-          <div className="absolute right-8 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full shadow-lg shadow-black/5 px-4 py-3 flex items-center gap-2 text-sm text-gray-700">
-            <FaSyncAlt className="w-4 h-4" />
+        {/* Account Name (center, grows) */}
+        <div className="relative text-center bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full shadow px-8 py-3 flex items-center justify-center flex-col">
+          <span className="text-lg font-medium text-gray-800">
+            {selectedAccount.id === "dummy-account"
+              ? "Account Mode"
+              : selectedAccount.account_name}
+          </span>
+          <div className=" flex items-center gap-2 text-xs text-gray-700">
+            <FaSyncAlt className="w-3 h-3" />
             <span className="font-medium">{getNextReloadTime()}</span>
           </div>
         </div>
+
+        {/* Reload info (right) */}
       </div>
 
       {/* Flex Mode Link */}

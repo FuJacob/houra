@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useRef } from "react";
 import Timer from "../components/timer/Timer";
-import AddAccountModal from "../components/accounts/AddAccountModal";
+import AccountModal from "../components/accounts/AccountModal";
 import AllAccounts from "../components/accounts/AllAccounts";
 import AccountHistory from "../components/accounts/AccountTransactions";
 import { Account } from "@/types/types";
@@ -12,6 +12,8 @@ import {
   selectedAccountContext,
   HomeContext,
 } from "./contexts";
+import { createClient } from "@/utils/supabase/client";
+import AccountMenuButton from "../components/accounts/AccountMenuButton";
 
 const scrollToElement = (element: HTMLDivElement | null) => {
   if (element) {
@@ -75,9 +77,12 @@ const Page = () => {
                 </main>
 
                 {showAddAccountModal && (
-                  <AddAccountModal
-                    setShowAddAccountModal={setShowAddAccountModal}
-                  />
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
+                    <AccountModal
+                      mode="add"
+                      onClose={() => setShowAddAccountModal(false)}
+                    />
+                  </div>
                 )}
               </div>
             </div>

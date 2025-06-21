@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
 import type { User } from "@supabase/auth-js";
 
 export interface showAddAccountModalContextType {
@@ -59,10 +58,6 @@ export interface AccountBoxProps {
   id: number;
   account_name: string;
   account_balance: number;
-}
-
-export interface AddAccountModalProps {
-  setShowAddAccountModal: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface HomeContextType {
