@@ -9,6 +9,8 @@ import { createClient } from "@/utils/supabase/client";
 import StartPauseButton from "./StartPauseButton";
 import ResetButton from "./ResetButton";
 import AccountSelectionPrompt from "./AccountSelectionPrompt";
+import { FaGear } from "react-icons/fa6";
+import { FaSyncAlt } from "react-icons/fa";
 
 // Timer component displays and controls a countdown timer
 export default function Timer() {
@@ -126,80 +128,72 @@ export default function Timer() {
     syncTransaction();
   }, [state.running, selectedAccount.id, start_time, state.timeLeft]);
 
-  // Calculate progress percentage
-  const progressPercentage =
-    selectedAccount.id !== "dummy-account"
-      ? ((selectedAccount.account_balance - state.timeLeft) /
-          selectedAccount.account_balance) *
-        100
-      : 0;
+  // Helper function to get next reload time
+  const getNextReloadTime = () => {
+    if (selectedAccount.id === "dummy-account") return "Select an account";
+
+    const nextReloadDate = new Date(
+      selectedAccount.last_reload + selectedAccount.reload_freq
+    );
+
+    const msPerDay = 1000 * 60 * 60 * 24;
+    const daysLeft = Math.floor(
+      (nextReloadDate.getTime() - Date.now()) / msPerDay
+    );
+
+    const timeStr = nextReloadDate.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+
+    if (daysLeft <= 0) return `Today at ${timeStr}`;
+    if (daysLeft === 1) return `Tomorrow at ${timeStr}`;
+    return `In ${daysLeft} days at ${timeStr}`;
+  };
+
+  const handleEditAccount = () => {
+    // Handle edit account logic here
+    console.log("Edit account clicked");
+  };
 
   // update time
   return (
     <div className="relative flex flex-col items-center justify-center p-6 sm:p-12 transition-all duration-500 rounded-3xl bg-white/10 backdrop-blur-sm border border-white/20 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10">
-      {/* Progress Border */}
-      {selectedAccount.id !== "dummy-account" && (
-        <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
-          {/* Top border */}
-          <div
-            className="absolute top-0 left-0 h-1 transition-all duration-1000 ease-linear rounded-tl-3xl"
-            style={{
-              width: `${Math.min(progressPercentage * 4, 100)}%`,
-              backgroundColor: selectedAccount.colour,
-              boxShadow: `0 0 10px ${selectedAccount.colour}80`,
-            }}
-          />
-          {/* Right border */}
-          <div
-            className="absolute top-0 right-0 w-1 transition-all duration-1000 ease-linear rounded-tr-3xl"
-            style={{
-              height: `${Math.min(Math.max(progressPercentage * 4 - 100, 0), 100)}%`,
-              backgroundColor: selectedAccount.colour,
-              boxShadow: `0 0 10px ${selectedAccount.colour}80`,
-            }}
-          />
-          {/* Bottom border */}
-          <div
-            className="absolute bottom-0 right-0 h-1 transition-all duration-1000 ease-linear rounded-br-3xl"
-            style={{
-              width: `${Math.min(Math.max(progressPercentage * 4 - 200, 0), 100)}%`,
-              backgroundColor: selectedAccount.colour,
-              boxShadow: `0 0 10px ${selectedAccount.colour}80`,
-              transform: "scaleX(-1)",
-            }}
-          />
-          {/* Left border */}
-          <div
-            className="absolute bottom-0 left-0 w-1 transition-all duration-1000 ease-linear rounded-bl-3xl"
-            style={{
-              height: `${Math.min(Math.max(progressPercentage * 4 - 300, 0), 100)}%`,
-              backgroundColor: selectedAccount.colour,
-              boxShadow: `0 0 10px ${selectedAccount.colour}80`,
-              transform: "scaleY(-1)",
-            }}
-          />
+      {/* Header with Settings, Account Name, and Reload Info */}
+      <div className="w-full max-w-2xl mx-auto mb-8 relative">
+        <div className="flex items-center justify-center px-4">
+          {/* Settings Button - Left (Absolute positioned) */}
+          <button
+            onClick={handleEditAccount}
+            className="absolute left-8 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full shadow-lg shadow-black/5 p-3 text-gray-700 hover:text-gray-900 hover:bg-white/20 transition-colors"
+            disabled={selectedAccount.id === "dummy-account"}
+          >
+            <FaGear className="w-5 h-5" />
+          </button>
+
+          {/* Account Name - Center (Always centered) */}
+          <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full shadow-lg shadow-black/5 px-8 py-3">
+            <span className="text-lg font-medium text-gray-800">
+              {selectedAccount.id === "dummy-account"
+                ? "Account Mode"
+                : selectedAccount.account_name}
+            </span>
+          </div>
+
+          {/* Reload Info - Right (Absolute positioned) */}
+          <div className="absolute right-8 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full shadow-lg shadow-black/5 px-4 py-3 flex items-center gap-2 text-sm text-gray-700">
+            <FaSyncAlt className="w-4 h-4" />
+            <span className="font-medium">{getNextReloadTime()}</span>
+          </div>
         </div>
-      )}
-      {/* Enhanced account header */}
-      <div className="text-xl font-medium flex flex-col gap-4 justify-center w-full h-[80px] text-center mb-2">
-        {selectedAccount.id === "dummy-account" ? (
-          <div className="flex flex-col items-center justify-center h-full space-y-3">
-            <div className="px-6 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl shadow-lg">
-              <p className="text-gray-700 font-medium">Account Mode</p>
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full space-y-2">
-            <div className="px-8 py-4 rounded-2xl shadow-lg border border-white/30 backdrop-blur-sm">
-              <h2 className="text-gray-800 font-medium text-xl">
-                {selectedAccount.account_name}
-              </h2>
-            </div>
-          </div>
-        )}
+      </div>
+
+      {/* Flex Mode Link */}
+      <div className="text-center mb-4">
         <Link
           href="/flex-mode"
-          className="text-sm flex items-center justify-center text-gray-600 hover:text-gray-800 transition-colors underline decoration-1 underline-offset-2 font-medium"
+          className="text-sm text-gray-600 hover:text-gray-800 transition-colors underline decoration-1 underline-offset-2 font-medium"
         >
           Or switch to flex-mode →
         </Link>

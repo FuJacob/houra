@@ -1,12 +1,16 @@
+"use client";
 import Link from "next/link";
 import Navigation from "../components/layout/Navigation";
+import { useUser } from "@/contexts/UserContext";
+
 export default function Page() {
+  const { user } = useUser();
   return (
     <>
       <Navigation />
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <p className="flex px-8 py-16 gap-12 mx-auto text-3xl sm:text-6xl md:text-8xl font-light bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent leading-tight tracking-tight">
-          Welcome to owra
+        <p className="flex px-8 py-16 gap-12 mx-auto text-3xl sm:text-5xl md:text-7xl font-light bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent leading-tight tracking-tight">
+          Welcome {user?.user_metadata.full_name.split(" ")[0]}
         </p>
         <p className="font-light text-3xl text-center text-gray-600 mb-12">
           Choose how you want to start
