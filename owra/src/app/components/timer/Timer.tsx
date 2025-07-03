@@ -1,7 +1,6 @@
 "use client"; // Enables client-side rendering for this component
 
-import { useReducer, useEffect, useState } from "react";
-import { reducer, setRunning, setTimeLeft } from "./TimeReducer";
+import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { selectedAccountContext } from "../../accounts-mode/contexts";
 import Link from "next/link";
@@ -11,6 +10,8 @@ import ResetButton from "./ResetButton";
 import AccountSelectionPrompt from "./AccountSelectionPrompt";
 import { FaGear } from "react-icons/fa6";
 import { FaSyncAlt } from "react-icons/fa";
+import { usePictureInPicture } from "./popup/usePictureInPicture";
+import { formatTime } from "@/utils/timer";
 
 // Timer component displays and controls a countdown timer
 export default function Timer() {
@@ -21,40 +22,48 @@ export default function Timer() {
   // Accessing the selected account from context
   const { selectedAccount, goToAccounts } = useContext(selectedAccountContext);
 
-  // Reducer state contains whether the timer is running and the time left in seconds
-  const [state, dispatch] = useReducer(reducer, {
-    running: false,
-    timeLeft: selectedAccount.account_balance, // Initial time in seconds (17 minutes)
-  });
+  // Timer state
+  const [isRunning, setIsRunning] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(selectedAccount.account_balance);
 
   // Separate state values for hours, minutes, and seconds display
-  const hoursLeft = Math.floor(state.timeLeft / 3600);
-  const minutesLeft = Math.floor((state.timeLeft % 3600) / 60);
-  const secondsLeft = state.timeLeft % 60;
+  const hoursLeft = Math.floor(timeLeft / 3600);
+  const minutesLeft = Math.floor((timeLeft % 3600) / 60);
+  const secondsLeft = timeLeft % 60;
+
+  // Use Picture-in-Picture hook
+  usePictureInPicture({
+    selectedAccount,
+    state: { running: isRunning, timeLeft },
+    hoursLeft,
+    minutesLeft,
+    secondsLeft,
+    formatTime,
+  });
 
   // changed selected Account?
   useEffect(() => {
-    dispatch(setRunning(false));
-    dispatch(setTimeLeft(selectedAccount.account_balance));
+    setIsRunning(false);
+    setTimeLeft(selectedAccount.account_balance);
   }, [selectedAccount]);
 
   // update time if timer is running
   useEffect(() => {
-    if (state.timeLeft <= 0) {
-      dispatch(setRunning(false));
+    if (timeLeft <= 0) {
+      setIsRunning(false);
     }
 
-    if (state.running) {
+    if (isRunning) {
       const interval = setInterval(() => {
-        dispatch(setTimeLeft(state.timeLeft - 1));
+        setTimeLeft((prev) => prev - 1);
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, [state.running, state.timeLeft]);
+  }, [isRunning, timeLeft]);
 
   useEffect(() => {
     const syncTransaction = async () => {
-      if (!state.running && start_time && start_time !== 0) {
+      if (!isRunning && start_time && start_time !== 0) {
         try {
           const supabase = await createClient();
           const {
@@ -110,7 +119,7 @@ export default function Timer() {
           // Update account balance
           const { error: updateError } = await supabase
             .from("accounts")
-            .update({ account_balance: state.timeLeft })
+            .update({ account_balance: timeLeft })
             .eq("id", selectedAccount.id);
 
           if (updateError) {
@@ -126,7 +135,7 @@ export default function Timer() {
     };
 
     syncTransaction();
-  }, [state.running, selectedAccount.id, start_time, state.timeLeft]);
+  }, [isRunning, selectedAccount.id, start_time, timeLeft]);
 
   // Helper function to get next reload time
   const getNextReloadTime = () => {
@@ -215,7 +224,7 @@ export default function Timer() {
           </h1>
           <div className="mt-6 px-6 py-3">
             <p className="text-gray-600 text-base sm:text-lg font-medium">
-              {state.timeLeft < 60
+              {timeLeft < 60
                 ? `Less than a minute remaining`
                 : `${hoursLeft} hours, ${minutesLeft} minutes remaining`}
             </p>
@@ -231,20 +240,20 @@ export default function Timer() {
       {/* Enhanced Controls */}
       <div className="flex gap-6 mb-8">
         <StartPauseButton
-          isRunning={state.running}
-          timeLeft={state.timeLeft}
+          isRunning={isRunning}
+          timeLeft={timeLeft}
           onClick={() => {
-            if (!state.running && start_time === 0) {
+            if (!isRunning && start_time === 0) {
               setstart_time(Date.now());
             }
-            dispatch(setRunning(!state.running));
+            setIsRunning(!isRunning);
           }}
         />
 
         <ResetButton
           onClick={() => {
-            dispatch(setRunning(false));
-            dispatch(setTimeLeft(selectedAccount.account_balance));
+            setIsRunning(false);
+            setTimeLeft(selectedAccount.account_balance);
             setstart_time(0);
           }}
           disabled={selectedAccount.id === "dummy-account"}

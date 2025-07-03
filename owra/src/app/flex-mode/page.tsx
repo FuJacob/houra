@@ -1,20 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import Navigation from "../components/layout/Navigation";
-import {
-  reducer,
-  setRunning,
-  setTimeLeft,
-} from "../components/timer/TimeReducer";
 import {
   formatTimeToHHMMSS,
   getTimeFromSeconds,
   numberTimeToString,
   parseTimeString,
   formatRawInput,
-} from "./getTimeFromSeconds";
+} from "@/utils/timer";
 
 import { Account } from "@/types/types";
 
@@ -24,30 +19,26 @@ export default function Timer() {
     colour: "#FFFFFF",
   };
 
-  const [state, dispatch] = useReducer(reducer, {
-    running: false,
-    timeLeft: tempAccount.account_balance,
-  });
+  const [isRunning, setIsRunning] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(tempAccount.account_balance);
 
-  const [hoursLeft, minutesLeft, secondsLeft] = getTimeFromSeconds(
-    state.timeLeft
-  );
+  const [hoursLeft, minutesLeft, secondsLeft] = getTimeFromSeconds(timeLeft);
   const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
-    if (state.running && state.timeLeft > 0) {
+    if (isRunning && timeLeft > 0) {
       const interval = setInterval(() => {
-        dispatch(setTimeLeft(state.timeLeft - 1));
+        setTimeLeft((prev) => prev - 1);
       }, 1000);
       return () => clearInterval(interval);
-    } else if (state.timeLeft <= 0) {
-      dispatch(setRunning(false));
+    } else if (timeLeft <= 0) {
+      setIsRunning(false);
     }
-  }, [state.running, state.timeLeft]);
+  }, [isRunning, timeLeft]);
 
   useEffect(() => {
-    setInputValue(numberTimeToString(state.timeLeft));
-  }, [state.timeLeft]);
+    setInputValue(numberTimeToString(timeLeft));
+  }, [timeLeft]);
 
   const currentTime = formatTimeToHHMMSS(hoursLeft, minutesLeft, secondsLeft);
   const [currentAccount, setCurrentAccount] =
@@ -91,12 +82,10 @@ export default function Timer() {
                         type="text"
                         value={formatRawInput(inputValue)}
                         onChange={(e) => setInputValue(e.target.value)}
-                        onBlur={() =>
-                          dispatch(setTimeLeft(parseTimeString(inputValue)))
-                        }
+                        onBlur={() => setTimeLeft(parseTimeString(inputValue))}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
-                            dispatch(setTimeLeft(parseTimeString(inputValue)));
+                            setTimeLeft(parseTimeString(inputValue));
                           }
                         }}
                         placeholder={currentTime}
@@ -111,7 +100,7 @@ export default function Timer() {
                       />
                       <div className="mt-6 px-6 py-3">
                         <p className="text-gray-600 text-base sm:text-lg font-medium">
-                          {state.timeLeft < 60
+                          {timeLeft < 60
                             ? `Less than a minute remaining`
                             : `${hoursLeft} hours, ${minutesLeft} minutes remaining`}
                         </p>
@@ -125,22 +114,20 @@ export default function Timer() {
 
                   <div className="flex gap-6 mb-8">
                     <button
-                      onClick={() => dispatch(setRunning(!state.running))}
+                      onClick={() => setIsRunning(!isRunning)}
                       className="group px-10 py-5 bg-gray-900/90 backdrop-blur-sm text-white rounded-2xl hover:bg-gray-900 transition-all duration-300 text-xl font-medium shadow-lg shadow-gray-900/25 hover:shadow-xl hover:shadow-gray-900/30 hover:scale-[1.05] border border-gray-800/20"
                     >
                       <span className="group-hover:text-white/90 transition-colors">
-                        {state.running ? "Pause" : "Start"}
+                        {isRunning ? "Pause" : "Start"}
                       </span>
                     </button>
 
                     <button
                       onClick={() => {
-                        dispatch(setRunning(false));
-                        dispatch(
-                          setTimeLeft(
-                            currentAccount.account_balance ||
-                              tempAccount.account_balance
-                          )
+                        setIsRunning(false);
+                        setTimeLeft(
+                          currentAccount.account_balance ||
+                            tempAccount.account_balance
                         );
                       }}
                       className="group px-10 py-5 bg-white/20 backdrop-blur-sm border border-white/30 text-gray-800 rounded-2xl hover:bg-white/30 hover:border-white/40 transition-all duration-300 text-xl font-medium shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-black/10 hover:scale-[1.05]"
